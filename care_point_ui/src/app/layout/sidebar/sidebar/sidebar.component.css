@@ -1,19 +1,548 @@
+/* =========================================================
+Sidebar
+========================================================= */
+
 .sidebar-content {
-    width: 100%;
-    height: 100%;
-    overflow-y: auto;
+height: 100vh;
+width: 100%;
+
+display: flex;
+flex-direction: column;
+
+background: #ffffff;
+
+border-right: 1px solid #e7edf4;
+
+color: #344054;
+
+overflow: hidden;
 }
+
+/* =========================================================
+Sidebar Header
+========================================================= */
 
 .sidebar-header {
-    padding: 20px;
-    border-bottom: 1px solid #e5e7eb;
+min-height: 82px;
+
+display: flex;
+align-items: center;
+
+gap: 12px;
+
+padding: 18px 20px;
+
+border-bottom: 1px solid #eef2f6;
+
+background: linear-gradient(
+180deg,
+#ffffff 0%,
+#f9fbfd 100%
+);
 }
 
-.sidebar-header h3 {
-    margin: 0;
+/* Brand Icon */
+
+.brand-icon {
+width: 42px;
+height: 42px;
+
+min-width: 42px;
+
+display: flex;
+align-items: center;
+justify-content: center;
+
+border-radius: 11px;
+
+background: var(--theme-color, #0d6efd);
+
+color: #ffffff;
+
+font-size: 19px;
+
+box-shadow:
+0 5px 12px rgba(13, 110, 253, 0.20);
 }
 
-.sidebar-header span {
-    font-size: 12px;
-    color: #6b7280;
+/* Brand Text */
+
+.brand-details {
+min-width: 0;
+
+display: flex;
+flex-direction: column;
+}
+
+.brand-details h3 {
+margin: 0;
+
+font-size: 19px;
+
+font-weight: 700;
+
+line-height: 1.3;
+
+color: #123b5d;
+}
+
+.brand-details span {
+margin-top: 2px;
+
+font-size: 10px;
+
+font-weight: 500;
+
+color: #98a2b3;
+
+letter-spacing: 0.2px;
+
+white-space: nowrap;
+}
+
+/* =========================================================
+Navigation
+========================================================= */
+
+.sidebar-navigation {
+flex: 1;
+
+padding: 20px 12px;
+
+overflow-y: auto;
+
+overflow-x: hidden;
+}
+
+/* Navigation heading */
+
+.navigation-title {
+padding: 0 12px;
+
+margin-bottom: 10px;
+}
+
+.navigation-title span {
+font-size: 10px;
+
+font-weight: 700;
+
+letter-spacing: 0.8px;
+
+color: #98a2b3;
+}
+
+/* =========================================================
+PrimeNG Panel Menu
+========================================================= */
+
+:host ::ng-deep .hms-panel-menu {
+border: none !important;
+
+background: transparent !important;
+}
+
+/* Remove default panel borders */
+
+:host ::ng-deep .hms-panel-menu .p-panelmenu-panel {
+border: none !important;
+
+margin-bottom: 4px;
+
+background: transparent !important;
+}
+
+/* Menu header */
+
+:host ::ng-deep .hms-panel-menu .p-panelmenu-header-content {
+border: none !important;
+
+border-radius: 9px;
+
+background: transparent !important;
+
+transition:
+background-color 0.2s ease,
+color 0.2s ease,
+transform 0.2s ease;
+}
+
+/* Header link */
+
+:host ::ng-deep .hms-panel-menu .p-panelmenu-header-link {
+min-height: 45px;
+
+padding: 11px 12px !important;
+
+gap: 10px;
+
+border-radius: 9px;
+
+color: #475467 !important;
+
+font-size: 13px;
+
+font-weight: 500;
+
+text-decoration: none;
+
+transition:
+background-color 0.2s ease,
+color 0.2s ease;
+}
+
+/* Header icon */
+
+:host ::ng-deep .hms-panel-menu .p-panelmenu-header-link .p-menuitem-icon {
+width: 20px;
+
+font-size: 16px;
+
+color: #667085;
+
+transition: color 0.2s ease;
+}
+
+/* Arrow */
+
+:host ::ng-deep .hms-panel-menu
+.p-panelmenu-header-link
+.p-submenu-icon {
+margin-left: auto;
+
+font-size: 11px;
+
+color: #98a2b3;
+}
+
+/* Hover */
+
+:host ::ng-deep .hms-panel-menu
+.p-panelmenu-header-content:hover {
+background: #f2f7fc !important;
+}
+
+:host ::ng-deep .hms-panel-menu
+.p-panelmenu-header-content:hover
+.p-panelmenu-header-link {
+color: var(--theme-color, #0d6efd) !important;
+}
+
+:host ::ng-deep .hms-panel-menu
+.p-panelmenu-header-content:hover
+.p-menuitem-icon {
+color: var(--theme-color, #0d6efd);
+}
+
+/* =========================================================
+Active / Expanded Menu
+========================================================= */
+
+:host ::ng-deep .hms-panel-menu
+.p-panelmenu-header-content.p-highlight {
+background: #edf5ff !important;
+}
+
+:host ::ng-deep .hms-panel-menu
+.p-panelmenu-header-content.p-highlight
+.p-panelmenu-header-link {
+color: var(--theme-color, #0d6efd) !important;
+
+font-weight: 600;
+}
+
+:host ::ng-deep .hms-panel-menu
+.p-panelmenu-header-content.p-highlight
+.p-menuitem-icon {
+color: var(--theme-color, #0d6efd);
+}
+
+/* =========================================================
+Sub Menu
+========================================================= */
+
+:host ::ng-deep .hms-panel-menu
+.p-panelmenu-content {
+border: none !important;
+
+background: transparent !important;
+
+padding: 4px 0 5px 0;
+}
+
+/* Submenu items */
+
+:host ::ng-deep .hms-panel-menu
+.p-panelmenu-content
+.p-menuitem-content {
+margin: 2px 0;
+
+border-radius: 8px;
+
+background: transparent;
+
+transition: background-color 0.2s ease;
+}
+
+/* Submenu links */
+
+:host ::ng-deep .hms-panel-menu
+.p-panelmenu-content
+.p-menuitem-link {
+min-height: 40px;
+
+padding: 9px 12px 9px 43px !important;
+
+border-radius: 8px;
+
+color: #667085 !important;
+
+font-size: 12.5px;
+
+font-weight: 450;
+
+transition:
+background-color 0.2s ease,
+color 0.2s ease,
+padding-left 0.2s ease;
+}
+
+/* Submenu icons */
+
+:host ::ng-deep .hms-panel-menu
+.p-panelmenu-content
+.p-menuitem-icon {
+margin-right: 8px;
+
+font-size: 12px;
+
+color: #98a2b3;
+
+transition: color 0.2s ease;
+}
+
+/* Submenu hover */
+
+:host ::ng-deep .hms-panel-menu
+.p-panelmenu-content
+.p-menuitem-content:hover {
+background: #f5f9fd;
+}
+
+:host ::ng-deep .hms-panel-menu
+.p-panelmenu-content
+.p-menuitem-content:hover
+.p-menuitem-link {
+color: var(--theme-color, #0d6efd) !important;
+
+padding-left: 47px !important;
+}
+
+:host ::ng-deep .hms-panel-menu
+.p-panelmenu-content
+.p-menuitem-content:hover
+.p-menuitem-icon {
+color: var(--theme-color, #0d6efd);
+}
+
+/* =========================================================
+Active Submenu Item
+========================================================= */
+
+:host ::ng-deep .hms-panel-menu
+.p-menuitem-content.p-menuitem-active {
+background: #edf5ff !important;
+}
+
+:host ::ng-deep .hms-panel-menu
+.p-menuitem-content.p-menuitem-active
+.p-menuitem-link {
+color: var(--theme-color, #0d6efd) !important;
+
+font-weight: 600;
+}
+
+/* =========================================================
+Sidebar Scrollbar
+========================================================= */
+
+.sidebar-navigation::-webkit-scrollbar {
+width: 5px;
+}
+
+.sidebar-navigation::-webkit-scrollbar-track {
+background: transparent;
+}
+
+.sidebar-navigation::-webkit-scrollbar-thumb {
+background: #d9e2ec;
+
+border-radius: 10px;
+}
+
+.sidebar-navigation::-webkit-scrollbar-thumb:hover {
+background: #b8c6d6;
+}
+
+/* =========================================================
+Bottom Section
+========================================================= */
+
+.sidebar-bottom {
+padding: 12px;
+
+border-top: 1px solid #eef2f6;
+
+background: #ffffff;
+}
+
+/* =========================================================
+Support Card
+========================================================= */
+
+.support-card {
+min-height: 58px;
+
+display: flex;
+align-items: center;
+
+gap: 10px;
+
+padding: 9px 10px;
+
+border: 1px solid #e7edf4;
+
+border-radius: 10px;
+
+background: #f8fafc;
+
+cursor: pointer;
+
+transition:
+background-color 0.2s ease,
+border-color 0.2s ease,
+transform 0.2s ease;
+}
+
+.support-card:hover {
+background: #f2f7fc;
+
+border-color: #d5e2ef;
+
+transform: translateY(-1px);
+}
+
+/* Support icon */
+
+.support-icon {
+width: 34px;
+height: 34px;
+
+min-width: 34px;
+
+display: flex;
+align-items: center;
+justify-content: center;
+
+border-radius: 8px;
+
+background: #eaf3ff;
+
+color: var(--theme-color, #0d6efd);
+
+font-size: 15px;
+}
+
+/* Support text */
+
+.support-content {
+display: flex;
+flex-direction: column;
+
+min-width: 0;
+
+flex: 1;
+}
+
+.support-content strong {
+font-size: 11px;
+
+font-weight: 600;
+
+color: #344054;
+}
+
+.support-content span {
+margin-top: 2px;
+
+font-size: 10px;
+
+color: #98a2b3;
+}
+
+/* Arrow */
+
+.support-arrow {
+font-size: 11px;
+
+color: #98a2b3;
+}
+
+/* Version */
+
+.sidebar-version {
+padding-top: 10px;
+
+text-align: center;
+
+font-size: 9px;
+
+color: #b0b8c4;
+}
+
+/* =========================================================
+Responsive
+========================================================= */
+
+@media (max-width: 768px) {
+
+.sidebar-header {
+padding: 16px;
+}
+
+.sidebar-navigation {
+padding: 16px 10px;
+}
+
+.sidebar-bottom {
+padding: 10px;
+}
+
+}
+
+/* =========================================================
+Compact Sidebar
+========================================================= */
+
+@media (max-width: 576px) {
+
+.brand-details span {
+display: none;
+}
+
+.brand-details h3 {
+font-size: 17px;
+}
+
+.brand-icon {
+width: 38px;
+height: 38px;
+min-width: 38px;
+
+
+font-size: 17px;
+
+
+}
+
 }

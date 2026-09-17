@@ -1,0 +1,363 @@
+/* =========================================================
+   Header
+   ========================================================= */
+
+.header-wrapper {
+  width: 100%;
+
+  position: relative;
+  z-index: 1000;
+}
+
+
+/* =========================================================
+   PrimeNG Menubar
+   ========================================================= */
+
+:host ::ng-deep .hms-menubar {
+  min-height: 68px;
+
+  padding: 0 22px !important;
+
+  border: none !important;
+
+  border-bottom: 1px solid #e7edf4 !important;
+
+  border-radius: 0 !important;
+
+  background: #ffffff !important;
+
+  box-shadow:
+    0 2px 10px rgba(16, 24, 40, 0.05);
+}
+
+
+/* =========================================================
+   Brand
+   ========================================================= */
+
+.brand-section {
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  margin-right: 28px;
+
+  cursor: pointer;
+}
+
+
+/* Logo */
+
+.brand-logo {
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #f5f9fd;
+
+  border: 1px solid #e5edf5;
+
+  overflow: hidden;
+}
+
+.brand-logo img {
+  width: 32px;
+
+  height: 32px;
+
+  object-fit: contain;
+}
+
+
+/* Brand text */
+
+.brand-text {
+  display: flex;
+
+  flex-direction: column;
+
+  line-height: 1.2;
+}
+
+.project-name {
+  font-size: 17px;
+
+  font-weight: 700;
+
+  color: #123b5d;
+}
+
+.project-subtitle {
+  margin-top: 3px;
+
+  font-size: 9px;
+
+  font-weight: 500;
+
+  color: #98a2b3;
+
+  letter-spacing: 0.3px;
+}
+
+
+/* =========================================================
+   Navigation
+   ========================================================= */
+
+:host ::ng-deep .hms-menubar .p-menubar-root-list {
+  gap: 3px;
+}
+
+:host ::ng-deep .hms-menubar .p-menubar-item-link {
+  padding: 10px 13px !important;
+
+  border-radius: 8px;
+
+  color: #475467 !important;
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+:host ::ng-deep .hms-menubar .p-menubar-item-link:hover {
+  background: #f2f7fc !important;
+
+  color: var(--theme-color, #0d6efd) !important;
+}
+
+:host ::ng-deep .hms-menubar .p-menubar-item-icon {
+  color: #667085;
+
+  font-size: 14px;
+}
+
+:host ::ng-deep .hms-menubar .p-menubar-item-link:hover
+.p-menubar-item-icon {
+  color: var(--theme-color, #0d6efd);
+}
+
+
+/* =========================================================
+   Profile Section
+   ========================================================= */
+
+.profile-section {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  margin-left: 20px;
+
+  padding: 6px 9px;
+
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  user-select: none;
+
+  transition:
+    background-color 0.2s ease;
+}
+
+.profile-section:hover {
+  background: #f5f8fb;
+}
+
+
+/* Avatar */
+
+.profile-avatar {
+  width: 38px;
+  height: 38px;
+
+  min-width: 38px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--theme-color, #0d6efd);
+
+  color: #ffffff;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  box-shadow:
+    0 3px 8px rgba(13, 110, 253, 0.18);
+}
+
+
+/* Profile details */
+
+.profile-info {
+  display: flex;
+
+  flex-direction: column;
+
+  min-width: 85px;
+}
+
+.profile-name {
+  font-size: 12px;
+
+  font-weight: 600;
+
+  color: #344054;
+
+  white-space: nowrap;
+}
+
+.profile-role {
+  margin-top: 2px;
+
+  font-size: 10px;
+
+  color: #98a2b3;
+
+  white-space: nowrap;
+}
+
+
+/* Arrow */
+
+.profile-arrow {
+  margin-left: 2px;
+
+  font-size: 11px;
+
+  color: #667085;
+
+  transition: transform 0.2s ease;
+}
+
+
+/* =========================================================
+   Profile Popup
+   ========================================================= */
+
+:host ::ng-deep .profile-menu {
+  min-width: 210px !important;
+
+  margin-top: 8px;
+
+  padding: 6px !important;
+
+  border: 1px solid #e7edf4 !important;
+
+  border-radius: 12px !important;
+
+  box-shadow:
+    0 12px 30px rgba(16, 24, 40, 0.12) !important;
+}
+
+:host ::ng-deep .profile-menu .p-menu-item-link {
+  min-height: 40px;
+
+  padding: 9px 11px !important;
+
+  border-radius: 8px;
+
+  color: #475467 !important;
+
+  font-size: 12px;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+:host ::ng-deep .profile-menu .p-menu-item-link:hover {
+  background: #f2f7fc !important;
+
+  color: var(--theme-color, #0d6efd) !important;
+}
+
+:host ::ng-deep .profile-menu .p-menu-item-icon {
+  font-size: 14px;
+
+  color: #667085;
+}
+
+:host ::ng-deep .profile-menu .p-menu-item-link:hover
+.p-menu-item-icon {
+  color: var(--theme-color, #0d6efd);
+}
+
+
+/* =========================================================
+   Mobile
+   ========================================================= */
+
+@media (max-width: 992px) {
+
+  .profile-info {
+    display: none;
+  }
+
+  .profile-section {
+    margin-left: 10px;
+  }
+
+  .brand-section {
+    margin-right: 10px;
+  }
+
+}
+
+
+@media (max-width: 576px) {
+
+  :host ::ng-deep .hms-menubar {
+    min-height: 60px;
+
+    padding: 0 12px !important;
+  }
+
+  .brand-logo {
+    width: 35px;
+    height: 35px;
+  }
+
+  .brand-logo img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .project-name {
+    font-size: 15px;
+  }
+
+  .project-subtitle {
+    display: none;
+  }
+
+  .profile-avatar {
+    width: 34px;
+    height: 34px;
+
+    min-width: 34px;
+  }
+
+}

@@ -1,16 +1,57 @@
 <div class="sidebar-content">
 
-    <div class="sidebar-header">
-        <h3>Care Point</h3>
-        <span>Hospital Management</span>
-    </div>
 
-    <p-panelmenu
-        [model]="items"
-        styleClass="hms-panel-menu">
-    </p-panelmenu>
+  <div class="sidebar-header">
+
+<div class="brand-icon">
+  <i class="pi pi-heart-fill"></i>
+</div>
+
+<div class="brand-details">
+  <h3>Care Point</h3>
+  <span>Hospital Management</span>
+</div>
+
+  </div>
+
+
+  <div class="sidebar-navigation">
+
+<div class="navigation-title">
+  <span>MAIN MENU</span>
+</div>
+
+<p-panelmenu
+  [model]="items"
+  styleClass="hms-panel-menu">
+</p-panelmenu>
+
+  </div>
+
+
+  <div class="sidebar-bottom">
+
+<div class="support-card">
+  <div class="support-icon">
+    <i class="pi pi-question-circle"></i>
+  </div>
+
+  <div class="support-content">
+    <strong>Need Help?</strong>
+    <span>Contact Support</span>
+  </div>
+
+  <i class="pi pi-angle-right support-arrow"></i>
+</div>
+
+<div class="sidebar-version">
+  HMS v1.0.0
+</div>
+
+  </div>
 
 </div>
+
 
 <!-- <div class="card flex justify-center">
 <p-drawer #drawerRef [(visible)]="visible">

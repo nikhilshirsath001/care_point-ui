@@ -1,3 +1,71 @@
-<div class="card">
-    <p-menubar [model]="items" />
+<div class="header-wrapper">
+
+  <p-menubar [model]="items" styleClass="hms-menubar">
+
+    <!-- LEFT: Logo + Project Name -->
+    <ng-template #start>
+
+      <div class="brand-section">
+
+        <div class="brand-logo">
+          <img
+            src="/images/sumasoft-logo.png"
+            alt="Care Point"
+          />
+        </div>
+
+        <div class="brand-text">
+          <span class="project-name">Care Point</span>
+          <span class="project-subtitle">
+            Hospital Management
+          </span>
+        </div>
+
+      </div>
+
+    </ng-template>
+
+
+    <!-- RIGHT: Profile -->
+    <ng-template #end>
+
+      <div
+        class="profile-section"
+        (click)="profileMenu.toggle($event)"
+      >
+
+        <!-- Avatar -->
+        <div class="profile-avatar">
+          <span>UA</span>
+        </div>
+
+        <!-- User information -->
+        <div class="profile-info">
+
+          <span class="profile-name">
+            User Admin
+          </span>
+
+          <span class="profile-role">
+            Administrator
+          </span>
+
+        </div>
+
+        <i class="pi pi-angle-down profile-arrow"></i>
+
+      </div>
+
+      <!-- Profile Popup -->
+      <p-menu
+        #profileMenu
+        [model]="profileItems"
+        [popup]="true"
+        styleClass="profile-menu"
+      />
+
+    </ng-template>
+
+  </p-menubar>
+
 </div>

@@ -1,0 +1,563 @@
+/* =========================================================
+Login Page
+========================================================= */
+
+.login-page {
+min-height: 100vh;
+width: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+
+padding: 30px 15px;
+
+background:
+radial-gradient(
+circle at 10% 20%,
+rgba(13, 110, 253, 0.12),
+transparent 30%
+),
+radial-gradient(
+circle at 90% 80%,
+rgba(0, 180, 216, 0.12),
+transparent 30%
+),
+linear-gradient(
+135deg,
+#eef6ff 0%,
+#f8fbff 50%,
+#edf7ff 100%
+);
+
+position: relative;
+overflow: hidden;
+}
+
+/* Decorative circles */
+
+.login-page::before,
+.login-page::after {
+content: "";
+position: absolute;
+border-radius: 50%;
+pointer-events: none;
+}
+
+.login-page::before {
+width: 300px;
+height: 300px;
+
+top: -120px;
+left: -100px;
+
+background: rgba(13, 110, 253, 0.08);
+}
+
+.login-page::after {
+width: 350px;
+height: 350px;
+
+bottom: -180px;
+right: -120px;
+
+background: rgba(0, 180, 216, 0.08);
+}
+
+/* =========================================================
+Container
+========================================================= */
+
+.login-container {
+width: 100%;
+max-width: 440px;
+
+position: relative;
+z-index: 1;
+}
+
+/* =========================================================
+Login Card
+========================================================= */
+
+.login-card {
+background: rgba(255, 255, 255, 0.96);
+
+border: 1px solid rgba(255, 255, 255, 0.8);
+
+border-radius: 18px;
+
+padding: 42px 42px 30px;
+
+box-shadow:
+0 20px 50px rgba(4, 56, 105, 0.14),
+0 5px 15px rgba(4, 56, 105, 0.06);
+
+backdrop-filter: blur(10px);
+
+transition:
+transform 0.3s ease,
+box-shadow 0.3s ease;
+}
+
+.login-card:hover {
+transform: translateY(-3px);
+
+box-shadow:
+0 25px 60px rgba(4, 56, 105, 0.18),
+0 8px 20px rgba(4, 56, 105, 0.08);
+}
+
+/* =========================================================
+Logo
+========================================================= */
+
+.logo-wrapper {
+display: flex;
+justify-content: center;
+align-items: center;
+
+margin-bottom: 28px;
+}
+
+.login-logo {
+width: 190px;
+max-width: 75%;
+height: auto;
+
+object-fit: contain;
+}
+
+/* =========================================================
+Heading
+========================================================= */
+
+.login-heading {
+margin-bottom: 30px;
+}
+
+.login-heading h2 {
+margin: 0 0 8px;
+
+font-size: 28px;
+font-weight: 700;
+
+color: #123b5d;
+}
+
+.login-heading p {
+margin: 0;
+
+font-size: 14px;
+
+color: #718096;
+}
+
+/* =========================================================
+Labels
+========================================================= */
+
+.form-label {
+display: block;
+
+margin-bottom: 8px;
+
+font-size: 14px;
+font-weight: 600;
+
+color: #344054;
+}
+
+/* =========================================================
+Input
+========================================================= */
+
+.input-wrapper {
+position: relative;
+
+display: flex;
+align-items: center;
+}
+
+.input-icon {
+position: absolute;
+
+left: 15px;
+
+z-index: 2;
+
+font-size: 16px;
+
+color: #667085;
+
+pointer-events: none;
+}
+
+.login-input {
+width: 100%;
+
+height: 48px;
+
+padding-left: 44px !important;
+padding-right: 14px !important;
+
+border: 1px solid #d0d5dd !important;
+
+border-radius: 9px !important;
+
+background: #ffffff !important;
+
+font-size: 14px;
+
+color: #101828;
+
+transition:
+border-color 0.2s ease,
+box-shadow 0.2s ease;
+}
+
+.login-input:hover {
+border-color: #98a2b3 !important;
+}
+
+.login-input:focus {
+border-color: var(--theme-color, #0d6efd) !important;
+
+box-shadow:
+0 0 0 3px rgba(13, 110, 253, 0.12) !important;
+
+outline: none;
+}
+
+/* =========================================================
+PrimeNG Password
+========================================================= */
+
+.password-wrapper {
+width: 100%;
+}
+
+.login-password {
+width: 100%;
+}
+
+/*
+
+* PrimeNG password component internally contains
+* the actual input element.
+  */
+
+:host ::ng-deep .login-password {
+width: 100%;
+}
+
+:host ::ng-deep .login-password .p-password-input {
+width: 100%;
+
+height: 48px;
+
+padding-left: 44px !important;
+padding-right: 45px !important;
+
+border: 1px solid #d0d5dd !important;
+
+border-radius: 9px !important;
+
+background: #ffffff !important;
+
+font-size: 14px;
+
+color: #101828;
+
+transition:
+border-color 0.2s ease,
+box-shadow 0.2s ease;
+}
+
+:host ::ng-deep .login-password .p-password-input:hover {
+border-color: #98a2b3 !important;
+}
+
+:host ::ng-deep .login-password .p-password-input:focus {
+border-color: var(--theme-color, #0d6efd) !important;
+
+box-shadow:
+0 0 0 3px rgba(13, 110, 253, 0.12) !important;
+
+outline: none;
+}
+
+/* Password eye icon */
+
+:host ::ng-deep .login-password .p-password-toggle-mask {
+color: #667085;
+}
+
+/* =========================================================
+Validation
+========================================================= */
+
+.error-message {
+display: flex;
+align-items: center;
+gap: 5px;
+
+margin-top: 6px;
+padding-left: 3px;
+
+font-size: 12px;
+
+color: #dc3545;
+}
+
+.error-message i {
+font-size: 11px;
+}
+
+/* =========================================================
+Login Options
+========================================================= */
+
+.login-options {
+display: flex;
+
+align-items: center;
+justify-content: space-between;
+
+gap: 10px;
+}
+
+.remember-me {
+display: flex;
+
+align-items: center;
+
+gap: 8px;
+}
+
+.remember-me label {
+margin: 0;
+
+font-size: 13px;
+
+color: #667085;
+
+cursor: pointer;
+}
+
+.forgot-password {
+font-size: 13px;
+
+font-weight: 500;
+
+color: var(--theme-color, #0d6efd);
+
+text-decoration: none;
+
+transition: color 0.2s ease;
+}
+
+.forgot-password:hover {
+color: #084298;
+
+text-decoration: underline;
+}
+
+/* =========================================================
+Login Button
+========================================================= */
+
+.login-button {
+height: 48px !important;
+
+border: none !important;
+
+border-radius: 9px !important;
+
+background: var(--theme-color, #0d6efd) !important;
+
+font-size: 15px !important;
+
+font-weight: 600 !important;
+
+color: white;
+
+box-shadow:
+0 5px 12px rgba(13, 110, 253, 0.20);
+
+transition:
+transform 0.2s ease,
+box-shadow 0.2s ease,
+opacity 0.2s ease;
+}
+
+.login-button:not(:disabled):hover {
+transform: translateY(-1px);
+
+box-shadow:
+0 8px 18px rgba(13, 110, 253, 0.28);
+}
+
+.login-button:not(:disabled):active {
+transform: translateY(0);
+}
+
+.login-button:disabled {
+opacity: 0.6;
+
+cursor: not-allowed;
+
+box-shadow: none;
+}
+
+/* =========================================================
+Card Footer
+========================================================= */
+
+.login-footer {
+margin-top: 25px;
+
+padding-top: 20px;
+
+border-top: 1px solid #eaecf0;
+
+text-align: center;
+
+color: #98a2b3;
+
+font-size: 11px;
+}
+
+/* =========================================================
+Copyright
+========================================================= */
+
+.copyright {
+margin-top: 15px;
+
+text-align: center;
+
+font-size: 10px;
+
+line-height: 1.5;
+
+color: #667085;
+}
+
+.copyright a {
+color: var(--theme-color, #0d6efd);
+
+text-decoration: none;
+
+margin-left: 3px;
+}
+
+.copyright a:hover {
+text-decoration: underline;
+}
+
+/* =========================================================
+Tablet
+========================================================= */
+
+@media (max-width: 768px) {
+
+.login-page {
+padding: 25px 18px;
+}
+
+.login-card {
+padding: 35px 30px 25px;
+
+
+border-radius: 16px;
+
+
+}
+
+.login-heading h2 {
+font-size: 25px;
+}
+
+}
+
+/* =========================================================
+Mobile
+========================================================= */
+
+@media (max-width: 480px) {
+
+.login-page {
+padding: 20px 15px;
+}
+
+.login-container {
+max-width: 100%;
+}
+
+.login-card {
+padding: 30px 22px 22px;
+
+
+border-radius: 14px;
+
+box-shadow:
+  0 15px 35px rgba(4, 56, 105, 0.12);
+
+
+}
+
+.login-logo {
+width: 165px;
+}
+
+.logo-wrapper {
+margin-bottom: 22px;
+}
+
+.login-heading {
+margin-bottom: 25px;
+}
+
+.login-heading h2 {
+font-size: 23px;
+}
+
+.login-heading p {
+font-size: 13px;
+}
+
+.login-options {
+align-items: flex-start;
+flex-direction: column;
+
+
+margin-bottom: 22px !important;
+
+
+}
+
+.forgot-password {
+align-self: flex-end;
+}
+
+}
+
+/* =========================================================
+Very Small Screens
+========================================================= */
+
+@media (max-width: 350px) {
+
+.login-card {
+padding: 25px 17px 20px;
+}
+
+.login-heading h2 {
+font-size: 21px;
+}
+
+.login-logo {
+width: 145px;
+}
+
+}

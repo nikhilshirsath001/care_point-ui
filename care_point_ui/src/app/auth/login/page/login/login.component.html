@@ -1,0 +1,157 @@
+<section class="login-page">
+  <div class="login-container">
+
+<!-- Login Card -->
+<div class="login-card">
+
+  <!-- Logo -->
+  <div class="logo-wrapper">
+    <img
+      src="/images/sumasoft-logo.png"
+      alt="SumaSoft Logo"
+      class="login-logo"
+    />
+  </div>
+
+  <!-- Heading -->
+  <div class="login-heading text-center">
+    <h2>Welcome Back</h2>
+    <p>Sign in to {{ Constants.projectName }}</p>
+  </div>
+
+  <!-- Login Form -->
+  <form [formGroup]="formGroup" (ngSubmit)="login($event)" novalidate>
+
+    <!-- Username -->
+    <div class="form-field mb-4">
+
+      <label for="username" class="form-label">
+        Username
+      </label>
+
+      <div class="input-wrapper">
+        <i class="pi pi-user input-icon"></i>
+
+        <input
+          pInputText
+          id="username"
+          name="username"
+          type="text"
+          formControlName="username"
+          placeholder="Enter your username"
+          autocomplete="username"
+          (keyup.enter)="login($event)"
+          class="login-input"
+        />
+      </div>
+
+      <small
+        *ngIf="
+          formControls['username'].touched &&
+          formControls['username'].invalid
+        "
+        class="error-message"
+      >
+        <i class="pi pi-exclamation-circle"></i>
+        Username is required
+      </small>
+
+    </div>
+
+    <!-- Password -->
+    <div class="form-field mb-4">
+
+      <label for="password" class="form-label">
+        Password
+      </label>
+
+      <div class="input-wrapper password-wrapper">
+        <i class="pi pi-lock input-icon"></i>
+
+        <p-password
+          formControlName="password"
+          id="password"
+          name="password"
+          placeholder="Enter your password"
+          [toggleMask]="true"
+          [feedback]="false"
+          [fluid]="true"
+          autocomplete="current-password"
+          (keyup.enter)="login($event)"
+          styleClass="login-password"
+        >
+        </p-password>
+      </div>
+
+      <small
+        *ngIf="
+          formControls['password'].touched &&
+          formControls['password'].invalid
+        "
+        class="error-message"
+      >
+        <i class="pi pi-exclamation-circle"></i>
+        Password is required
+      </small>
+
+    </div>
+
+    <!-- Remember / Forgot Password -->
+    <div class="login-options mb-4">
+
+      <div class="remember-me">
+        <!-- <p-checkbox
+          inputId="rememberMe"
+          [binary]="true"
+        >
+        </p-checkbox> -->
+
+        <label for="rememberMe">
+          Remember me
+        </label>
+      </div>
+
+      <a href="javascript:void(0)" class="forgot-password">
+        Forgot Password?
+      </a>
+
+    </div>
+
+    <!-- Login Button -->
+    <button
+      pButton
+      type="submit"
+      label="Login"
+      icon="pi pi-sign-in"
+      iconPos="right"
+      class="login-button w-100"
+      [disabled]="formGroup.invalid"
+    >
+    Login
+    </button>
+
+  </form>
+
+  <!-- Footer inside card -->
+  <div class="login-footer">
+    <span>
+      Secure access to your hospital management system
+    </span>
+  </div>
+
+</div>
+
+<!-- Copyright -->
+<div class="copyright">
+  © Copyright KVMS-2026 SumaSoft Pvt. Ltd. All Rights Reserved.
+  <a
+    href="https://www.sumasoft.com/"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    SumaSoft
+  </a>
+</div>
+
+  </div>
+</section>
