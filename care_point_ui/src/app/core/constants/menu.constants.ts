@@ -62,6 +62,11 @@ export const MENU_ITEMS : MenuItem[] = [
     label: 'Users',
     icon: 'pi pi-users',
     routerLink: ['/user', 'create-user']
+  },
+  {
+    label: 'doctors',
+    icon: 'pi pi-users',
+    routerLink: ['/user', 'create-user']
   }
 
 ];

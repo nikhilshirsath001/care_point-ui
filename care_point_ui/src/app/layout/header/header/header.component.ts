@@ -4,16 +4,19 @@ import { MenuItem } from 'primeng/api';
 import { Menubar } from 'primeng/menubar';
 import { MENU_ITEMS } from '../../../core/constants/menu.constants';
 import { Menu } from 'primeng/menu';
+import { DialogModule } from 'primeng/dialog';
+import { ProfileComponent } from '../../profile/profile/profile.component';
 
 @Component({
   selector: 'app-header',
-  imports: [Menubar, Menu],
+  imports: [ProfileComponent ,Menubar, Menu,DialogModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
 
 items: MenuItem[] | undefined;
+showProfile:boolean= false;
 
 constructor(private router: Router) {}
 
@@ -49,6 +52,7 @@ profileItems: MenuItem[] = [
 
 
   openProfile(): void {
+    this.showProfile= true;
     console.log('Open profile');
   }
 

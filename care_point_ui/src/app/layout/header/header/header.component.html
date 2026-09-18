@@ -69,3 +69,15 @@
   </p-menubar>
 
 </div>
+
+<p-dialog
+  [(visible)]="showProfile"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '450px' }"
+  header="My Profile">
+
+  <app-profile></app-profile>
+
+</p-dialog>

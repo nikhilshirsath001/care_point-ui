@@ -520,6 +520,37 @@ padding: 10px;
 
 }
 
+.heartbeat {
+  color: #e91e63;
+  text-shadow: 0 0 10px #65e21c;
+  animation: heartbeat 1.2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+
+  14% {
+    transform: scale(1.25);
+  }
+
+  28% {
+    transform: scale(1);
+  }
+
+  42% {
+    transform: scale(1.2);
+  }
+
+  70%,
+  100% {
+    transform: scale(1);
+  }
+}
+
+
 /* =========================================================
 Compact Sidebar
 ========================================================= */

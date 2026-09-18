@@ -1,0 +1,712 @@
+/* =========================================================
+Profile Page
+========================================================= */
+
+.profile-page {
+min-height: calc(100vh - 70px);
+
+padding: 25px;
+
+background: #f6f9fc;
+}
+
+/* =========================================================
+Page Heading
+========================================================= */
+
+.page-heading {
+display: flex;
+
+align-items: center;
+justify-content: space-between;
+
+margin-bottom: 25px;
+}
+
+.page-heading h2 {
+margin: 0;
+
+font-size: 24px;
+
+font-weight: 700;
+
+color: #123b5d;
+}
+
+.page-heading p {
+margin: 5px 0 0;
+
+font-size: 13px;
+
+color: #98a2b3;
+}
+
+.edit-profile-btn {
+height: 40px !important;
+
+padding: 0 16px !important;
+
+border-radius: 8px !important;
+
+border: none !important;
+
+background: var(--theme-color, #0d6efd) !important;
+
+font-size: 12px !important;
+
+font-weight: 600 !important;
+
+box-shadow:
+0 4px 10px rgba(13, 110, 253, 0.15);
+}
+
+/* =========================================================
+Common Card
+========================================================= */
+
+.profile-card {
+position: relative;
+
+background: #ffffff;
+
+border: 1px solid #e8eef4;
+
+border-radius: 14px;
+
+padding: 22px;
+
+box-shadow:
+0 3px 12px rgba(16, 24, 40, 0.04);
+
+transition:
+box-shadow 0.2s ease,
+transform 0.2s ease;
+}
+
+.profile-card:hover {
+box-shadow:
+0 8px 24px rgba(16, 24, 40, 0.07);
+}
+
+/* =========================================================
+Profile Main Card
+========================================================= */
+
+.profile-main-card {
+padding: 0;
+
+overflow: hidden;
+
+text-align: center;
+}
+
+/* Cover */
+
+.profile-cover {
+height: 110px;
+
+position: relative;
+
+overflow: hidden;
+
+background:
+linear-gradient(
+135deg,
+var(--theme-color, #0d6efd),
+#1769aa
+);
+}
+
+.cover-pattern {
+position: absolute;
+
+width: 180px;
+height: 180px;
+
+top: -90px;
+right: -25px;
+
+border-radius: 50%;
+
+border: 35px solid rgba(255, 255, 255, 0.08);
+}
+
+.cover-pattern::after {
+content: "";
+
+position: absolute;
+
+width: 130px;
+height: 130px;
+
+top: 20px;
+left: -70px;
+
+border-radius: 50%;
+
+border: 25px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Avatar */
+
+.profile-avatar-wrapper {
+position: relative;
+
+width: 90px;
+height: 90px;
+
+margin: -45px auto 0;
+
+z-index: 2;
+}
+
+:host ::ng-deep .profile-avatar {
+width: 90px !important;
+height: 90px !important;
+
+border: 5px solid #ffffff;
+
+background: #eaf3ff !important;
+
+color: var(--theme-color, #0d6efd) !important;
+
+font-size: 30px !important;
+
+font-weight: 700;
+
+box-shadow:
+0 5px 15px rgba(16, 24, 40, 0.12);
+}
+
+/* Online indicator */
+
+.online-indicator {
+position: absolute;
+
+width: 16px;
+height: 16px;
+
+right: 3px;
+bottom: 5px;
+
+border: 3px solid #ffffff;
+
+border-radius: 50%;
+
+background: #22c55e;
+}
+
+/* Main info */
+
+.profile-main-info {
+padding: 15px 20px 0;
+}
+
+.profile-main-info h2 {
+margin: 0;
+
+font-size: 21px;
+
+font-weight: 700;
+
+color: #123b5d;
+}
+
+.profile-designation {
+display: block;
+
+margin-top: 5px;
+
+font-size: 12px;
+
+color: #667085;
+}
+
+.profile-role {
+display: inline-flex;
+
+align-items: center;
+
+gap: 6px;
+
+margin: 12px 0;
+
+padding: 6px 10px;
+
+border-radius: 20px;
+
+background: #f2f7fc;
+
+color: #475467;
+
+font-size: 11px;
+
+font-weight: 500;
+}
+
+.profile-role i {
+color: var(--theme-color, #0d6efd);
+
+font-size: 11px;
+}
+
+/* =========================================================
+Stats
+========================================================= */
+
+.profile-stats {
+display: flex;
+
+align-items: center;
+
+justify-content: space-around;
+
+padding: 4px 20px 24px;
+}
+
+.stat {
+display: flex;
+
+flex-direction: column;
+
+gap: 4px;
+}
+
+.stat strong {
+font-size: 17px;
+
+color: #123b5d;
+}
+
+.stat span {
+font-size: 10px;
+
+color: #98a2b3;
+}
+
+/* =========================================================
+Card Title
+========================================================= */
+
+.card-title {
+display: flex;
+
+align-items: center;
+
+gap: 12px;
+
+margin-bottom: 20px;
+}
+
+.title-icon {
+width: 38px;
+height: 38px;
+
+min-width: 38px;
+
+display: flex;
+
+align-items: center;
+justify-content: center;
+
+border-radius: 9px;
+
+background: #edf5ff;
+
+color: var(--theme-color, #0d6efd);
+
+font-size: 15px;
+}
+
+.card-title h4 {
+margin: 0;
+
+font-size: 15px;
+
+font-weight: 650;
+
+color: #344054;
+}
+
+.card-title span {
+display: block;
+
+margin-top: 3px;
+
+font-size: 10px;
+
+color: #98a2b3;
+}
+
+/* =========================================================
+Detail Box
+========================================================= */
+
+.detail-box {
+min-height: 70px;
+
+display: flex;
+
+align-items: center;
+
+gap: 13px;
+
+padding: 13px;
+
+border: 1px solid #edf1f5;
+
+border-radius: 10px;
+
+background: #fbfcfd;
+
+transition:
+background-color 0.2s ease,
+border-color 0.2s ease;
+}
+
+.detail-box:hover {
+background: #f7faff;
+
+border-color: #dbe8f5;
+}
+
+.detail-icon {
+width: 35px;
+height: 35px;
+
+min-width: 35px;
+
+display: flex;
+
+align-items: center;
+justify-content: center;
+
+border-radius: 8px;
+
+background: #ffffff;
+
+color: var(--theme-color, #0d6efd);
+
+font-size: 14px;
+
+box-shadow:
+0 2px 5px rgba(16, 24, 40, 0.05);
+}
+
+.detail-content {
+display: flex;
+
+flex-direction: column;
+
+min-width: 0;
+}
+
+.detail-content label {
+margin-bottom: 4px;
+
+font-size: 10px;
+
+font-weight: 500;
+
+color: #98a2b3;
+}
+
+.detail-content span {
+font-size: 12px;
+
+font-weight: 600;
+
+color: #344054;
+
+overflow: hidden;
+
+text-overflow: ellipsis;
+}
+
+/* =========================================================
+Security Card
+========================================================= */
+
+.status-card {
+margin-top: 20px;
+}
+
+.security-item {
+display: flex;
+
+align-items: center;
+
+gap: 10px;
+
+padding: 10px 0;
+
+border-bottom: 1px solid #f0f2f5;
+}
+
+.security-item:last-of-type {
+border-bottom: none;
+}
+
+.security-icon {
+width: 30px;
+height: 30px;
+
+display: flex;
+
+align-items: center;
+justify-content: center;
+
+border-radius: 50%;
+
+font-size: 11px;
+}
+
+.security-icon.success {
+background: #ecfdf3;
+
+color: #12b76a;
+}
+
+.security-item div:nth-child(2) {
+display: flex;
+
+flex-direction: column;
+}
+
+.security-item strong {
+font-size: 11px;
+
+color: #344054;
+}
+
+.security-item span {
+margin-top: 2px;
+
+font-size: 9px;
+
+color: #98a2b3;
+}
+
+/* Change password */
+
+.change-password-btn {
+height: 38px !important;
+
+margin-top: 15px;
+
+border-radius: 8px !important;
+
+background: transparent !important;
+
+border: 1px solid #d0d5dd !important;
+
+color: #475467 !important;
+
+font-size: 11px !important;
+}
+
+.change-password-btn:hover {
+background: #f7faff !important;
+
+border-color: var(--theme-color, #0d6efd) !important;
+
+color: var(--theme-color, #0d6efd) !important;
+}
+
+/* =========================================================
+Account Information
+========================================================= */
+
+.account-row {
+min-height: 48px;
+
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+gap: 20px;
+
+border-bottom: 1px solid #f0f2f5;
+}
+
+.account-row:last-child {
+border-bottom: none;
+}
+
+.account-label {
+display: flex;
+
+align-items: center;
+
+gap: 9px;
+
+font-size: 11px;
+
+color: #667085;
+}
+
+.account-label i {
+width: 20px;
+
+color: #98a2b3;
+
+font-size: 12px;
+}
+
+.account-row strong {
+font-size: 11px;
+
+font-weight: 600;
+
+color: #344054;
+
+text-align: right;
+}
+
+/* =========================================================
+Recent Activity
+========================================================= */
+
+.activity-item {
+display: flex;
+
+align-items: center;
+
+gap: 12px;
+
+padding: 12px 0;
+
+border-bottom: 1px solid #f0f2f5;
+}
+
+.activity-item:last-child {
+border-bottom: none;
+
+padding-bottom: 0;
+}
+
+.activity-icon {
+width: 34px;
+height: 34px;
+
+min-width: 34px;
+
+display: flex;
+
+align-items: center;
+justify-content: center;
+
+border-radius: 50%;
+
+background: #edf5ff;
+
+color: var(--theme-color, #0d6efd);
+
+font-size: 12px;
+}
+
+.activity-content {
+display: flex;
+
+flex-direction: column;
+
+flex: 1;
+}
+
+.activity-content strong {
+font-size: 11px;
+
+font-weight: 600;
+
+color: #344054;
+}
+
+.activity-content span {
+margin-top: 3px;
+
+font-size: 9px;
+
+color: #98a2b3;
+}
+
+.activity-item small {
+white-space: nowrap;
+
+font-size: 9px;
+
+color: #98a2b3;
+}
+
+/* =========================================================
+Responsive
+========================================================= */
+
+@media (max-width: 992px) {
+
+.profile-page {
+padding: 20px;
+}
+
+}
+
+@media (max-width: 576px) {
+
+.profile-page {
+padding: 15px;
+}
+
+.page-heading {
+align-items: flex-start;
+
+
+flex-direction: column;
+
+gap: 15px;
+
+
+}
+
+.page-heading h2 {
+font-size: 21px;
+}
+
+.edit-profile-btn {
+width: 100%;
+}
+
+.profile-card {
+padding: 17px;
+}
+
+.profile-main-card {
+padding: 0;
+}
+
+.account-row {
+align-items: flex-start;
+
+
+flex-direction: column;
+
+gap: 5px;
+
+padding: 11px 0;
+
+
+}
+
+.account-row strong {
+text-align: left;
+}
+
+.activity-item {
+align-items: flex-start;
+}
+
+.activity-item small {
+display: none;
+}
+
+}

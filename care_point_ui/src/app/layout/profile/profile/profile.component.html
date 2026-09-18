@@ -1,0 +1,207 @@
+<div class="profile-page">
+  <div class="row ">
+    <div class="col-12">
+      <div class="profile-card profile-main-card mb-4">
+        <!-- Cover -->
+        <div class="profile-cover">
+          <div class="cover-pattern"></div>
+        </div>
+
+        <!-- Avatar -->
+        <div class="profile-avatar-wrapper">
+          <p-avatar
+            [label]="user?.name?.charAt(0)"
+            shape="circle"
+            size="xlarge"
+            styleClass="profile-avatar"
+          >
+          </p-avatar>
+
+          <span class="online-indicator"></span>
+        </div>
+
+        <!-- Basic Information -->
+        <div class="profile-main-info text-center">
+          <h2>{{ user?.name }}</h2>
+
+          <span class="profile-designation">
+            {{ user?.designation }}
+          </span>
+
+          <div class="profile-role">
+            <i class="pi pi-shield"></i>
+            {{ user?.role }}
+          </div>
+
+          <p-tag value="Active" severity="success" icon="pi pi-check-circle">
+          </p-tag>
+        </div>
+
+        <!-- Divider -->
+        <p-divider></p-divider>
+
+        <!-- Quick Stats -->
+        <div class="profile-stats">
+          <div class="stat">
+            <strong>24</strong>
+            <span>Patients</span>
+          </div>
+
+          <div class="stat">
+            <strong>8</strong>
+            <span>Months</span>
+          </div>
+
+          <div class="stat">
+            <strong>12</strong>
+            <span>Activities</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="profile-card mb-4">
+        <div class="card-title">
+          <div class="title-icon">
+            <i class="pi pi-address-book"></i>
+          </div>
+
+          <div>
+            <h4>Contact Information</h4>
+            <span>Your registered contact details</span>
+          </div>
+        </div>
+
+        <div class="row g-3">
+          <!-- Email -->
+          <div class="col-md-6">
+            <div class="detail-box">
+              <div class="detail-icon">
+                <i class="pi pi-envelope"></i>
+              </div>
+
+              <div class="detail-content">
+                <label>Email Address</label>
+                <span>{{ user?.email }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mobile -->
+          <div class="col-md-6">
+            <div class="detail-box">
+              <div class="detail-icon">
+                <i class="pi pi-phone"></i>
+              </div>
+
+              <div class="detail-content">
+                <label>Mobile Number</label>
+                <span>{{ user?.mobile }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div class="col-md-6">
+            <div class="detail-box">
+              <div class="detail-icon">
+                <i class="pi pi-map-marker"></i>
+              </div>
+
+              <div class="detail-content">
+                <label>Location</label>
+                <span>Mumbai, Maharashtra</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Employee ID -->
+          <div class="col-md-6">
+            <div class="detail-box">
+              <div class="detail-icon">
+                <i class="pi pi-id-card"></i>
+              </div>
+
+              <div class="detail-content">
+                <label>Employee ID</label>
+                <span>EMP-10245</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Professional Information -->
+      <div class="profile-card mb-4">
+        <div class="card-title">
+          <div class="title-icon">
+            <i class="pi pi-briefcase"></i>
+          </div>
+
+          <div>
+            <h4>Professional Information</h4>
+            <span>Your role and organizational details</span>
+          </div>
+        </div>
+
+        <div class="row g-3">
+          <!-- Department -->
+          <div class="col-md-6">
+            <div class="detail-box">
+              <div class="detail-icon">
+                <i class="pi pi-building"></i>
+              </div>
+
+              <div class="detail-content">
+                <label>Department</label>
+                <span>{{ user?.department }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Designation -->
+          <div class="col-md-6">
+            <div class="detail-box">
+              <div class="detail-icon">
+                <i class="pi pi-user-edit"></i>
+              </div>
+
+              <div class="detail-content">
+                <label>Designation</label>
+                <span>{{ user?.designation }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Role -->
+          <div class="col-md-6">
+            <div class="detail-box">
+              <div class="detail-icon">
+                <i class="pi pi-shield"></i>
+              </div>
+
+              <div class="detail-content">
+                <label>System Role</label>
+                <span>{{ user?.role }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Joining Date -->
+          <div class="col-md-6">
+            <div class="detail-box">
+              <div class="detail-icon">
+                <i class="pi pi-calendar"></i>
+              </div>
+
+              <div class="detail-content">
+                <label>Joining Date</label>
+                <span>15 January 2026</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
