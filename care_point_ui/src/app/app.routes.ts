@@ -4,11 +4,21 @@ import { LoginComponent } from './auth/login/page/login/login.component';
 
 export const routes: Routes = [
   {
-    path: '',
-    component: MainLayoutComponent,
-  },
-  {
+
+    path:'',
+    component:LoginComponent,
+    pathMatch:'full' } ,
+
+    {
     path: 'login',
     component: LoginComponent,
-  }
+  },
+
+  {
+    path:'main',
+    component: MainLayoutComponent,
+    
+  }, 
+
+  
 ];

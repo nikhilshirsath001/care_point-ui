@@ -63,6 +63,8 @@ profileItems: MenuItem[] = [
 
 
   logout(): void {
+  localStorage.removeItem('access_token');
+  this.router.navigate(['/login']);
     console.log('Logout');
   }
 
