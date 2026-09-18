@@ -5,7 +5,7 @@ export const MENU_ITEMS : MenuItem[] = [
   {
     label: 'Home',
     icon: 'pi pi-home',
-    routerLink: '/'
+    routerLink:'/main'
   },
 
   {
