@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './layout/main-layout/main-layout/main-layout.component';
 import { LoginComponent } from './auth/login/page/login/login.component';
-import { DashboardComponent } from './shared/dashboard/dashboard.component';
 import { MainDashboardComponent } from './features/dashborad/pages/main-dashboard/main-dashboard.component';
 
 export const routes: Routes = [
@@ -37,6 +36,30 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/patient/patient.routes')
             .then(m => m.PATIENT_ROUTES)
+      },
+
+      // Staff module
+      {
+        path: 'staff',
+        loadChildren: () =>
+          import('./features/staff/staff.routes')
+            .then(m => m.STAFF_ROUTES)
+      },
+
+      // Ipd module
+      {
+        path: 'ipd',
+        loadChildren: () =>
+          import('./features/ipd/ipd.routes')
+            .then(m => m.IPD_ROUTES)
+      },
+
+      // Ipd module
+      {
+        path: 'bed-ward',
+        loadChildren: () =>
+          import('./features/bed-ward/bed-ward.routes')
+            .then(m => m.BED_WARD_ROUTES)
       },
 
       // Add other modules here
