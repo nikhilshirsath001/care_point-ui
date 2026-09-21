@@ -1,0 +1,48 @@
+<div class="dashboard-container">
+
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div>
+      <h2>Dashboard</h2>
+      <p>Hospital overview and statistics</p>
+    </div>
+  </div>
+
+
+  <!-- Charts -->
+  <div class="row g-4">
+
+    <!-- Patient Distribution -->
+    <div class="col-12 col-lg-6">
+
+      <app-dashboard
+        type="pie"
+        title="Patient Distribution"
+        subtitle="Patients by category"
+        [labels]="patientLabels"
+        [data]="patientData"
+        [colors]="patientColors"
+        height="300px">
+      </app-dashboard>
+
+    </div>
+
+
+    <!-- Appointment Status -->
+    <div class="col-12 col-lg-6">
+
+      <app-dashboard
+        type="doughnut"
+        title="Appointment Status"
+        subtitle="Today's appointment overview"
+        [labels]="appointmentLabels"
+        [data]="appointmentData"
+        [colors]="appointmentColors"
+        height="300px">
+      </app-dashboard>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,455 @@
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.table-card {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 24px;
+
+  border-bottom: 1px solid #edf0f2;
+  background: #ffffff;
+}
+
+.table-title-section {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.table-icon {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #eef5ff;
+  color: #2563eb;
+
+  font-size: 18px;
+}
+
+.table-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.table-subtitle {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.table-action-btn {
+  width: 40px;
+  height: 40px;
+}
+
+.export-btn {
+  border-radius: 8px;
+}
+
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 14px 24px;
+
+  background: #fafbfc;
+  border-bottom: 1px solid #edf0f2;
+}
+
+.search-wrapper {
+  position: relative;
+  width: 320px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #9ca3af;
+  z-index: 2;
+}
+
+.search-input {
+  width: 100%;
+  padding-left: 38px;
+
+  border-radius: 8px;
+  border: 1px solid #dfe3e8;
+
+  font-size: 14px;
+}
+
+.search-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+}
+
+
+.record-count {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.record-label {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.record-number {
+  min-width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 8px;
+
+  border-radius: 14px;
+
+  background: #eaf2ff;
+  color: #2563eb;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.hms-table {
+  width: 100%;
+}
+
+
+/* Header */
+
+:host ::ng-deep .hms-table .p-datatable-thead > tr > th {
+  background: #f8fafc;
+  color: #475569;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+
+  padding: 14px 16px;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  white-space: nowrap;
+}
+
+
+/* Body */
+
+:host ::ng-deep .hms-table .p-datatable-tbody > tr > td {
+  padding: 14px 16px;
+
+  font-size: 14px;
+
+  color: #374151;
+
+  border-bottom: 1px solid #f0f2f5;
+
+  vertical-align: middle;
+
+  white-space: nowrap;
+}
+
+
+/* Hover */
+
+:host ::ng-deep .hms-table .p-datatable-tbody > tr:hover {
+  background: #f8fbff !important;
+}
+
+
+/* Column */
+
+.column-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+
+/* Text */
+
+.table-text {
+  color: #374151;
+}
+
+
+/* Number */
+
+.table-number {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+
+/* Date */
+
+.table-date {
+  color: #64748b;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.view-btn {
+  color: #2563eb !important;
+}
+
+.edit-btn {
+  color: #f59e0b !important;
+}
+
+.delete-btn {
+  color: #ef4444 !important;
+}
+
+
+/* =========================================================
+   BOOLEAN
+========================================================= */
+
+.boolean-active,
+.boolean-inactive {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.boolean-active {
+  color: #16a34a;
+}
+
+.boolean-inactive {
+  color: #dc2626;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-state {
+  padding: 50px 20px;
+
+  text-align: center;
+}
+
+.empty-icon {
+  width: 60px;
+  height: 60px;
+
+  margin: 0 auto 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #f1f5f9;
+  color: #94a3b8;
+
+  font-size: 24px;
+}
+
+.empty-state h6 {
+  margin-bottom: 5px;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  color: #334155;
+}
+
+.empty-state p {
+  margin: 0;
+
+  color: #94a3b8;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   PAGINATOR
+========================================================= */
+
+:host ::ng-deep .hms-table .p-paginator {
+  padding: 12px 16px;
+
+  border-top: 1px solid #edf0f2;
+  border-bottom: 0;
+
+  background: #ffffff;
+}
+
+:host ::ng-deep .hms-table .p-paginator .p-paginator-page {
+  min-width: 34px;
+  height: 34px;
+
+  border-radius: 8px;
+}
+
+:host ::ng-deep .hms-table .p-paginator .p-paginator-page.p-highlight {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .table-header {
+    align-items: flex-start;
+    flex-direction: column;
+
+    padding: 16px;
+  }
+
+  .table-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .table-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+
+    padding: 12px 16px;
+  }
+
+  .search-wrapper {
+    width: 100%;
+  }
+
+  .record-count {
+    justify-content: flex-end;
+  }
+
+  .table-title {
+    font-size: 16px;
+  }
+
+  .table-subtitle {
+    font-size: 12px;
+  }
+
+  .table-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  :host ::ng-deep .hms-table .p-datatable-thead > tr > th {
+    padding: 12px;
+  }
+
+  :host ::ng-deep .hms-table .p-datatable-tbody > tr > td {
+    padding: 12px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .table-card {
+    border-radius: 10px;
+  }
+
+  .table-header {
+    padding: 14px;
+  }
+
+  .table-toolbar {
+    padding: 10px 14px;
+  }
+
+  .export-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .export-btn .p-button-label {
+    display: none;
+  }
+
+}

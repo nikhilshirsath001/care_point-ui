@@ -521,7 +521,6 @@ padding: 10px;
 }
 
 .heartbeat {
-  color: #e91e63;
   text-shadow: 0 0 10px #65e21c;
   animation: heartbeat 1.2s ease-in-out infinite;
   transform-origin: center;

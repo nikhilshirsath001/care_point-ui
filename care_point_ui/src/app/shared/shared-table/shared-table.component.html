@@ -1,0 +1,298 @@
+<div class="table-card">
+
+  <!-- ================= HEADER ================= -->
+  <div class="table-header">
+
+    <div class="table-title-section">
+
+      <div class="table-icon">
+        <i class="pi pi-list"></i>
+      </div>
+
+      <div>
+        <h5 class="table-title mb-1">
+          {{ title }}
+        </h5>
+
+        @if (subtitle) {
+          <p class="table-subtitle mb-0">
+            {{ subtitle }}
+          </p>
+        }
+      </div>
+
+    </div>
+
+
+    <div class="table-actions">
+
+      @if (config.showRefresh) {
+        <button
+          pButton
+          type="button"
+          icon="pi pi-refresh"
+          class="p-button-outlined p-button-secondary table-action-btn"
+          pTooltip="Refresh"
+          (click)="onRefresh()">
+        </button>
+      }
+
+
+      @if (config.exportable) {
+        <button
+          pButton
+          type="button"
+          icon="pi pi-file-excel"
+          label="Export"
+          class="p-button-success export-btn"
+          (click)="onDownloadExcel()">
+        </button>
+      }
+
+    </div>
+
+  </div>
+
+
+  <!-- ================= TOOLBAR ================= -->
+  <div class="table-toolbar">
+
+    @if (config.searchable) {
+
+      <div class="search-wrapper">
+
+        <i class="pi pi-search search-icon"></i>
+
+        <input
+          pInputText
+          type="text"
+          placeholder="Search records..."
+          (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+          class="search-input" />
+
+      </div>
+
+    }
+
+
+    <div class="record-count">
+
+      <span class="record-label">
+        Total Records
+      </span>
+
+      <span class="record-number">
+        {{ data.length }}
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- ================= TABLE ================= -->
+  <div class="table-container">
+
+    <p-table
+      #dt
+      [columns]="columns"
+      [value]="data"
+      [paginator]="config.paginator"
+      [rows]="config.rows"
+      [rowsPerPageOptions]="config.rowsPerPageOptions"
+      [loading]="config.loading"
+      [showGridlines]="false"
+      [stripedRows]="true"
+      [rowHover]="true"
+      responsiveLayout="scroll"
+      styleClass="hms-table">
+
+
+      <!-- ================= HEADER ================= -->
+      <ng-template #header let-columns>
+
+        <tr>
+
+          @for (col of columns; track col.field) {
+
+            <th
+              [style.width]="col.width"
+              [pSortableColumn]="col.sortable ? col.field : undefined">
+
+              <div class="column-header">
+
+                <span>
+                  {{ col.header }}
+                </span>
+
+                @if (col.sortable) {
+                  <p-sortIcon [field]="col.field"></p-sortIcon>
+                }
+
+              </div>
+
+            </th>
+
+          }
+
+        </tr>
+
+      </ng-template>
+
+
+      <!-- ================= BODY ================= -->
+      <ng-template
+        #body
+        let-rowData
+        let-columns="columns">
+
+        <tr>
+
+          @for (col of columns; track col.field) {
+
+            <td>
+
+              <!-- TEXT -->
+              @if (!col.type || col.type === 'text') {
+
+                <span class="table-text">
+                  {{ rowData[col.field] }}
+                </span>
+
+              }
+
+
+              <!-- NUMBER -->
+              @if (col.type === 'number') {
+
+                <span class="table-number">
+                  {{ rowData[col.field] }}
+                </span>
+
+              }
+
+
+              <!-- DATE -->
+              @if (col.type === 'date') {
+
+                <span class="table-date">
+                  {{ rowData[col.field] | date:'dd MMM yyyy' }}
+                </span>
+
+              }
+
+
+              <!-- STATUS -->
+              @if (col.type === 'status') {
+
+                <p-tag
+                  [value]="rowData[col.field]"
+                  [severity]="getStatusSeverity(rowData[col.field])">
+                </p-tag>
+
+              }
+
+
+              <!-- BOOLEAN -->
+              @if (col.type === 'boolean') {
+
+                @if (rowData[col.field]) {
+
+                  <span class="boolean-active">
+                    <i class="pi pi-check-circle"></i>
+                    Yes
+                  </span>
+
+                } @else {
+
+                  <span class="boolean-inactive">
+                    <i class="pi pi-times-circle"></i>
+                    No
+                  </span>
+
+                }
+
+              }
+
+
+              <!-- ACTION -->
+              @if (col.type === 'action') {
+
+                <div class="action-buttons">
+
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-eye"
+                    class="p-button-rounded p-button-text view-btn"
+                    pTooltip="View"
+                    (click)="onView(rowData)">
+                  </button>
+
+
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-pencil"
+                    class="p-button-rounded p-button-text edit-btn"
+                    pTooltip="Edit"
+                    (click)="onEdit(rowData)">
+                  </button>
+
+
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-trash"
+                    class="p-button-rounded p-button-text delete-btn"
+                    pTooltip="Delete"
+                    (click)="onDelete(rowData)">
+                  </button>
+
+                </div>
+
+              }
+
+            </td>
+
+          }
+
+        </tr>
+
+      </ng-template>
+
+
+      <!-- ================= EMPTY ================= -->
+      <ng-template #emptymessage>
+
+        <tr>
+
+          <td [attr.colspan]="columns.length">
+
+            <div class="empty-state">
+
+              <div class="empty-icon">
+                <i class="pi pi-inbox"></i>
+              </div>
+
+              <h6>
+                No Records Found
+              </h6>
+
+              <p>
+                {{ config.emptyMessage }}
+              </p>
+
+            </div>
+
+          </td>
+
+        </tr>
+
+      </ng-template>
+
+    </p-table>
+
+  </div>
+
+</div>
