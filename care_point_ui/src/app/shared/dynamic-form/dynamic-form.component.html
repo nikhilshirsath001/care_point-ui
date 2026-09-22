@@ -1,0 +1,296 @@
+<form
+  *ngIf="form"
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  class="dynamic-form"
+>
+
+  <div class="row g-3">
+
+    @for (field of config.fields; track field.name) {
+
+      @if (isVisible(field)) {
+
+        <div
+          [class]="field.col || 'col-12 col-md-6'"
+        >
+
+          <!-- TEXT -->
+          @if (
+            field.type === 'text' ||
+            field.type === 'email'
+          ) {
+
+            <label
+              class="form-label"
+              [for]="field.name"
+            >
+              {{ field.label }}
+
+              @if (field.required) {
+                <span class="text-danger">*</span>
+              }
+            </label>
+
+            <input
+              pInputText
+              class="w-100"
+              [id]="field.name"
+              [type]="field.type === 'email' ? 'email' : 'text'"
+              [placeholder]="field.placeholder || ''"
+              [formControlName]="field.name"
+              [readonly]="field.readonly"
+            />
+
+          }
+
+
+          <!-- NUMBER -->
+          @if (field.type === 'number') {
+
+            <label
+              class="form-label"
+              [for]="field.name"
+            >
+              {{ field.label }}
+
+              @if (field.required) {
+                <span class="text-danger">*</span>
+              }
+            </label>
+
+            <p-inputnumber
+              [inputId]="field.name"
+              [placeholder]="field.placeholder || ''"
+              [formControlName]="field.name"
+              styleClass="w-100"
+            />
+
+          }
+
+
+          <!-- DATE -->
+          @if (field.type === 'date') {
+
+            <label
+              class="form-label"
+              [for]="field.name"
+            >
+              {{ field.label }}
+
+              @if (field.required) {
+                <span class="text-danger">*</span>
+              }
+            </label>
+
+            <input
+              type="date"
+              class="form-control"
+              [id]="field.name"
+              [formControlName]="field.name"
+            />
+
+          }
+
+
+          <!-- TEXTAREA -->
+          @if (field.type === 'textarea') {
+
+            <label
+              class="form-label"
+              [for]="field.name"
+            >
+              {{ field.label }}
+            </label>
+
+            <textarea
+              pTextarea
+              class="w-100"
+              [id]="field.name"
+              [rows]="4"
+              [placeholder]="field.placeholder || ''"
+              [formControlName]="field.name"
+            ></textarea>
+
+          }
+
+
+          <!-- SELECT -->
+          @if (field.type === 'select') {
+
+            <label
+              class="form-label"
+              [for]="field.name"
+            >
+              {{ field.label }}
+
+              @if (field.required) {
+                <span class="text-danger">*</span>
+              }
+            </label>
+
+            <p-select
+              [inputId]="field.name"
+              [options]="field.options || []"
+              optionLabel="label"
+              optionValue="value"
+              [placeholder]="field.placeholder || 'Select'"
+              [formControlName]="field.name"
+              styleClass="w-100"
+            />
+
+          }
+
+
+          <!-- MULTI SELECT -->
+          @if (field.type === 'multiselect') {
+
+            <label
+              class="form-label"
+              [for]="field.name"
+            >
+              {{ field.label }}
+            </label>
+
+            <p-multiselect
+              [options]="field.options || []"
+              optionLabel="label"
+              optionValue="value"
+              [placeholder]="field.placeholder || 'Select'"
+              [formControlName]="field.name"
+              styleClass="w-100"
+            />
+
+          }
+
+
+          <!-- CHECKBOX -->
+          @if (field.type === 'checkbox') {
+
+            <div class="form-check mt-4">
+
+              <p-checkbox
+                [binary]="true"
+                [inputId]="field.name"
+                [formControlName]="field.name"
+              />
+
+              <label
+                class="form-check-label ms-2"
+                [for]="field.name"
+              >
+                {{ field.label }}
+              </label>
+
+            </div>
+
+          }
+
+
+          <!-- RADIO -->
+          @if (field.type === 'radio') {
+
+            <label class="form-label d-block">
+              {{ field.label }}
+            </label>
+
+            <div class="d-flex gap-3">
+
+              @for (
+                option of field.options || [];
+                track option.value
+              ) {
+
+                <div>
+
+                  <p-radiobutton
+                    [inputId]="field.name + '_' + option.value"
+                    [value]="option.value"
+                    [formControlName]="field.name"
+                  />
+
+                  <label
+                    class="ms-2"
+                    [for]="field.name + '_' + option.value"
+                  >
+                    {{ option.label }}
+                  </label>
+
+                </div>
+
+              }
+
+            </div>
+
+          }
+
+
+          <!-- VALIDATION -->
+          @if (
+            getControl(field.name)?.invalid &&
+            getControl(field.name)?.touched
+          ) {
+
+            <small class="text-danger">
+              {{ field.label }} is required or invalid.
+            </small>
+
+          }
+
+          @if (field.helpText) {
+
+            <small class="text-muted d-block mt-1">
+              {{ field.helpText }}
+            </small>
+
+          }
+
+        </div>
+
+      }
+
+    }
+
+  </div>
+
+
+  <!-- ACTIONS -->
+
+  <div
+    class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top"
+  >
+
+    @if (config.showReset !== false) {
+
+      <button
+        pButton
+        type="button"
+        label="Reset"
+        severity="secondary"
+        [outlined]="true"
+        (click)="reset()"
+        [disabled]="loading"
+      ></button>
+
+    }
+
+    <button
+      pButton
+      type="button"
+      label="Cancel"
+      severity="secondary"
+      [outlined]="true"
+      (click)="cancel()"
+      [disabled]="loading"
+    ></button>
+
+    <button
+      pButton
+      type="submit"
+      [label]="config.submitLabel || 'Save'"
+      [loading]="loading"
+    ></button>
+
+  </div>
+
+</form>

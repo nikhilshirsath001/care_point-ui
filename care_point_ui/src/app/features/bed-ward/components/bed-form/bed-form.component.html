@@ -1,1 +1,9 @@
-<p>bed-form works!</p>
+<app-dynamic-form
+  [config]="formConfig"
+  [data]="bed"
+  [mode]="mode"
+  [loading]="loading"
+  (submitted)="onSubmit($event)"
+  (cancelled)="onCancel()"
+>
+</app-dynamic-form>

@@ -1,1 +1,66 @@
-<p>beds works!</p>
+<div class="page-container">
+
+  <!-- PAGE HEADER -->
+  <div
+    class="d-flex justify-content-between align-items-center mb-4"
+  >
+
+    <div>
+      <h2 class="mb-1">
+        Bed Management
+      </h2>
+
+      <p class="text-muted mb-0">
+        Manage hospital beds and their availability.
+      </p>
+    </div>
+
+    <button
+      pButton
+      label="Add Bed"
+      icon="pi pi-plus"
+      (click)="openCreateForm()"
+    ></button>
+
+  </div>
+
+
+  <!-- BED TABLE -->
+
+  <app-shared-table
+    [title]="'Beds'"
+    [subtitle]="'Manage registered beds'"
+    [columns]="bedColumns"
+    [data]="beds"
+    [config]="tableConfig"
+  >
+  </app-shared-table>
+
+
+  <!-- BED FORM -->
+
+  <p-dialog
+    [(visible)]="showForm"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{
+      width: '750px',
+      maxWidth: '95vw'
+    }"
+    [header]="formMode === 'create'
+      ? 'Create Bed'
+      : 'Edit Bed'"
+  >
+
+    <app-bed-form
+      [mode]="formMode"
+      [bed]="selectedBed"
+      (saved)="onBedSaved()"
+      (cancelled)="onFormCancelled()"
+    >
+    </app-bed-form>
+
+  </p-dialog>
+
+</div>

@@ -1,1 +1,191 @@
-<p>wards works!</p>
+<div class="page-container">
+
+  <!-- ===================================================== -->
+  <!-- PAGE HEADER -->
+  <!-- ===================================================== -->
+
+  <div
+    class="d-flex justify-content-between align-items-center mb-4"
+  >
+
+    <div>
+
+      <h2 class="mb-1">
+        Wards & Rooms
+      </h2>
+
+      <p class="text-muted mb-0">
+        Manage hospital wards, rooms and their capacity.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- TABS -->
+  <!-- ===================================================== -->
+
+  <p-tabView>
+
+
+    <!-- =================================================== -->
+    <!-- WARDS -->
+    <!-- =================================================== -->
+
+    <p-tabPanel header="Wards">
+
+      <div
+        class="d-flex justify-content-between align-items-center mb-3"
+      >
+
+        <div>
+
+          <h5 class="mb-1">
+            Ward Management
+          </h5>
+
+          <small class="text-muted">
+            Manage hospital wards and their details.
+          </small>
+
+        </div>
+
+
+        <button
+          pButton
+          type="button"
+          label="Add Ward"
+          icon="pi pi-plus"
+          (click)="openCreateWardForm()"
+        >
+        </button>
+
+      </div>
+
+
+      <app-shared-table
+        [title]="'Wards'"
+        [subtitle]="'Manage registered hospital wards'"
+        [columns]="wardColumns"
+        [data]="wards"
+        [config]="wardTableConfig"
+      >
+      </app-shared-table>
+
+    </p-tabPanel>
+
+
+    <!-- =================================================== -->
+    <!-- ROOMS -->
+    <!-- =================================================== -->
+
+    <p-tabPanel header="Rooms">
+
+      <div
+        class="d-flex justify-content-between align-items-center mb-3"
+      >
+
+        <div>
+
+          <h5 class="mb-1">
+            Room Management
+          </h5>
+
+          <small class="text-muted">
+            Manage rooms within hospital wards.
+          </small>
+
+        </div>
+
+
+        <button
+          pButton
+          type="button"
+          label="Add Room"
+          icon="pi pi-plus"
+          (click)="openCreateRoomForm()"
+        >
+        </button>
+
+      </div>
+
+
+      <app-shared-table
+        [title]="'Rooms'"
+        [subtitle]="'Manage registered rooms'"
+        [columns]="roomColumns"
+        [data]="rooms"
+        [config]="roomTableConfig"
+      >
+      </app-shared-table>
+
+    </p-tabPanel>
+
+
+  </p-tabView>
+
+
+  <!-- ===================================================== -->
+  <!-- WARD FORM DIALOG -->
+  <!-- ===================================================== -->
+
+  <p-dialog
+    [(visible)]="showWardForm"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{
+      width: '750px',
+      maxWidth: '95vw'
+    }"
+    [header]="
+      wardFormMode === 'create'
+        ? 'Create Ward'
+        : 'Edit Ward'
+    "
+  >
+
+    <app-ward-form
+      [mode]="wardFormMode"
+      [ward]="selectedWard"
+      (saved)="onWardSaved()"
+      (cancelled)="onWardFormCancelled()"
+    >
+    </app-ward-form>
+
+  </p-dialog>
+
+
+  <!-- ===================================================== -->
+  <!-- ROOM FORM DIALOG -->
+  <!-- ===================================================== -->
+
+  <p-dialog
+    [(visible)]="showRoomForm"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{
+      width: '750px',
+      maxWidth: '95vw'
+    }"
+    [header]="
+      roomFormMode === 'create'
+        ? 'Create Room'
+        : 'Edit Room'
+    "
+  >
+
+    <!-- <app-room-form
+      [mode]="roomFormMode"
+      [room]="selectedRoom"
+      (saved)="onRoomSaved()"
+      (cancelled)="onRoomFormCancelled()"
+    >
+    </app-room-form> -->
+
+  </p-dialog>
+
+</div>

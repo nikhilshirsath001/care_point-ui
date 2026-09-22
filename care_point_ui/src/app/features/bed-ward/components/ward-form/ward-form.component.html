@@ -1,1 +1,9 @@
-<p>ward-form works!</p>
+<app-dynamic-form
+  [config]="formConfig"
+  [data]="ward"
+  [mode]="mode"
+  [loading]="loading"
+  (submitted)="onSubmit($event)"
+  (cancelled)="onCancel()"
+>
+</app-dynamic-form>
