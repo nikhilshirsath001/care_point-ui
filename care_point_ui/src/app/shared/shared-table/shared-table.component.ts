@@ -93,7 +93,7 @@ export class SharedTableComponent {
   ): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
 
     switch (status?.toLowerCase()) {
-
+      
       case 'active':
       case 'approved':
       case 'completed':

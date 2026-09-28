@@ -1,1 +1,72 @@
-<p>staff-schedule works!</p>
+
+<div class="page-container">
+
+  <div
+    class="d-flex justify-content-between align-items-center mb-4"
+  >
+
+    <div>
+      <h2 class="mb-1">
+        Staff Schedule
+      </h2>
+
+      <p class="text-muted mb-0">
+        Manage hospital Staff and their Schedule.
+      </p>
+    </div>
+
+    <button
+      pButton
+      label="Add Staff Schedule"
+      icon="pi pi-plus"
+      (click)="openCreateForm()"
+    ></button>
+
+  </div>
+
+
+
+  <app-shared-table
+  [title]="'Doctors & Staff'"
+  [subtitle]="'Manage registered Doctors & Staff'"
+  [columns]="patientColumns"
+  [data]="staffList"
+  [config]="tableConfig"
+
+  (view)="onViewStaff($event)"
+  >
+  </app-shared-table>
+
+
+
+  <p-dialog
+    [(visible)]="showForm"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{
+      width: '750px',
+      maxWidth: '95vw'
+    }"
+    [header]="formMode === 'create'
+      ? 'Create Bed'
+      : 'Edit Bed'"
+  >
+
+    <app-schedule-form
+      [mode]="formMode"
+      [staff]="selectedStaff"
+      (saved)="onStaffSaved()"
+      (cancelled)="onFormCancelled()"
+    >
+    </app-schedule-form>
+
+  </p-dialog>
+
+  <app-shared-details
+  [(visible)]="viewDialogVisible"
+  [title]="'Staff Details'"
+  [data]="selectedStaff"
+  [fields]="staffDetailFields">
+</app-shared-details>
+</div>

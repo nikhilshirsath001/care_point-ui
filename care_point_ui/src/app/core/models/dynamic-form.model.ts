@@ -9,7 +9,9 @@ export type DynamicFieldType =
   | 'select'
   | 'multiselect'
   | 'checkbox'
-  | 'radio';
+  | 'radio'
+  |  'time'
+  ;
 
 export interface DynamicFormOption {
   label: string;
