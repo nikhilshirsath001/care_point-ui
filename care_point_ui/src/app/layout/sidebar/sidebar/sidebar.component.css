@@ -576,3 +576,17 @@ font-size: 17px;
 }
 
 }
+:host ::ng-deep .p-panelmenu-item-link {
+  background: transparent !important;
+  color: #475467;
+}
+
+:host ::ng-deep .p-panelmenu-item-link:hover {
+background: #f2f7fc !important;
+color: var(--theme-color, #0d6efd) !important;
+}
+
+:host ::ng-deep .p-panelmenu-item-link:hover
+.p-menuitem-icon {
+color: var(--theme-color, #0d6efd);
+}

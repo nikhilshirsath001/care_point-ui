@@ -1,67 +1,108 @@
-import { Component } from '@angular/core';
-import { SharedTableComponent, SharedTableConfig, TableColumn } from '../../../../shared/shared-table/shared-table.component';
+import { Component, OnInit } from '@angular/core';
+import {
+  SharedTableComponent,
+  SharedTableConfig,
+  TableColumn,
+} from '../../../../shared/shared-table/shared-table.component';
+import { StaffService } from '../../services/staff.service';
+import { STAFF_COLUMNS, TABLE_CONFIG } from '../../config/staff-table.config';
+import { StaffFormComponent } from '../../components/staff-form/staff-form.component';
+import { Dialog } from 'primeng/dialog';
+import { Staff } from '../../models/staff.model';
+import { ButtonModule } from 'primeng/button';
+import { SharedDetailsComponent } from '../../../../shared/shared-details/shared-details.component';
+import { STAFF_DETAIL_FIELDS } from '../../config/staff-form.config';
 
 @Component({
   selector: 'app-staff-list',
-  imports: [SharedTableComponent],
+  imports: [SharedTableComponent, StaffFormComponent, Dialog, ButtonModule, SharedDetailsComponent],
   templateUrl: './staff-list.component.html',
-  styleUrl: './staff-list.component.css'
+  styleUrl: './staff-list.component.css',
 })
-export class StaffListComponent {
+export class StaffListComponent implements OnInit {
+  patientColumns: TableColumn[] = STAFF_COLUMNS;
+  tableConfig: SharedTableConfig = TABLE_CONFIG;
+  staffDetailFields=STAFF_DETAIL_FIELDS;
+  staffList: any[] = [];
+  loading = false;
 
-  
-   patientColumns: TableColumn[] = [
-    {
-      field: 'patientId',
-      header: 'Patient ID',
-      sortable: true
-    },
-    {
-      field: 'name',
-      header: 'Patient Name',
-      sortable: true
-    },
-    {
-      field: 'mobile',
-      header: 'Mobile',
-      sortable: true
-    },
-    {
-      field: 'gender',
-      header: 'Gender'
-    },
-    {
-      field: 'status',
-      header: 'Status',
-      type: 'status'
-    }
-  ];
+  selectedStaff: any = null;
 
-  patients = [
-    {
-      patientId: 'P1001',
-      name: 'Rahul Sharma',
-      mobile: '9876543210',
-      gender: 'Male',
-      status: 'Active'
-    },
-    {
-      patientId: 'P1002',
-      name: 'Priya Patil',
-      mobile: '9876501234',
-      gender: 'Female',
-      status: 'Active'
-    }
-  ];
+  viewDialogVisible = false;
 
-  tableConfig: SharedTableConfig = {
-  searchable: true,
-  paginator: true,
-  rows: 10,
-  rowsPerPageOptions: [10, 25, 50],
-  exportable: true,
-  showRefresh: true,
-  loading: false,
-  emptyMessage: 'No patients found'
-};
+  ngOnInit(): void {
+    this.getAllStaff();
+  }
+
+  constructor(private staffService: StaffService) {}
+
+  getAllStaff() {
+    this.staffService.getAllSaff().subscribe({
+      next: (res: any) => {
+        this.staffList = res.data.content;
+      },
+      error: (error: any) => {},
+    });
+  }
+  onViewStaff(staff: any): void {
+    this.selectedStaff = staff;
+    this.viewDialogVisible = true;
+  }
+
+  // =========================================================
+  // FORM
+  // =========================================================
+
+  showForm = false;
+
+  formMode: 'create' | 'edit' = 'create';
+
+
+  // =========================================================
+  // CREATE
+  // =========================================================
+
+  openCreateForm(): void {
+    this.formMode = 'create';
+
+    this.selectedStaff = null;
+
+    this.showForm = true;
+  }
+
+  // =========================================================
+  // EDIT
+  // =========================================================
+
+  openEditForm(bed: Staff): void {
+    this.formMode = 'edit';
+
+    this.selectedStaff = {
+      ...bed,
+    };
+
+    this.showForm = true;
+  }
+
+  // =========================================================
+  // FORM SAVED
+  // =========================================================
+
+  onStaffSaved(): void {
+    this.showForm = false;
+
+    this.selectedStaff = null;
+
+    this.getAllStaff();
+  }
+
+  // =========================================================
+  // FORM CANCELLED
+  // =========================================================
+
+  onFormCancelled(): void {
+    this.showForm = false;
+
+    this.selectedStaff = null;
+  }
 }

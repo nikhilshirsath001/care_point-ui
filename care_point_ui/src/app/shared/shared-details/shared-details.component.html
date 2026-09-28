@@ -1,0 +1,228 @@
+<p-dialog
+  [(visible)]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '700px', maxWidth: '95vw' }"
+  [contentStyle]="{ padding: '0' }"
+  (onHide)="close()">
+
+  <!-- ================= HEADER ================= -->
+
+  <ng-template #header>
+
+    <div class="details-header">
+
+      <div class="details-header-icon">
+        <i class="pi pi-user"></i>
+      </div>
+
+      <div class="details-header-content">
+
+        <h5 class="details-title">
+          {{ title }}
+        </h5>
+
+        <span class="details-subtitle">
+          View detailed information
+        </span>
+
+      </div>
+
+    </div>
+
+  </ng-template>
+
+
+  <!-- ================= CONTENT ================= -->
+
+  <div class="details-container">
+
+    @if (data) {
+
+      <div class="details-grid">
+
+        @for (field of fields; track field.field) {
+
+          <div
+            class="detail-item"
+            [style.width]="field.width || null">
+
+            <!-- LABEL -->
+
+            <div class="detail-label">
+
+              <span>
+                {{ field.label }}
+              </span>
+
+            </div>
+
+
+            <!-- VALUE -->
+
+            <div class="detail-value">
+
+              <!-- TEXT -->
+
+              @if (!field.type || field.type === 'text') {
+
+                @if (!isEmpty(getFieldValue(data, field.field))) {
+
+                  <span>
+                    {{ getFieldValue(data, field.field) }}
+                  </span>
+
+                } @else {
+
+                  <span class="empty-value">
+                    -
+                  </span>
+
+                }
+
+              }
+
+
+              <!-- NUMBER -->
+
+              @if (field.type === 'number') {
+
+                @if (!isEmpty(getFieldValue(data, field.field))) {
+
+                  <span>
+                    {{ getFieldValue(data, field.field) }}
+                  </span>
+
+                } @else {
+
+                  <span class="empty-value">
+                    -
+                  </span>
+
+                }
+
+              }
+
+
+              <!-- DATE -->
+
+              @if (field.type === 'date') {
+
+                @if (!isEmpty(getFieldValue(data, field.field))) {
+
+                  <span class="date-value">
+
+                    <i class="pi pi-calendar"></i>
+
+                    {{ getFieldValue(data, field.field)
+                      | date:'dd MMM yyyy' }}
+
+                  </span>
+
+                } @else {
+
+                  <span class="empty-value">
+                    -
+                  </span>
+
+                }
+
+              }
+
+
+              <!-- STATUS -->
+
+              @if (field.type === 'status') {
+
+                <p-tag
+                  [value]="getStatusValue(
+                    getFieldValue(data, field.field)
+                  )"
+                  [severity]="getStatusSeverity(
+                    getFieldValue(data, field.field)
+                  )">
+                </p-tag>
+
+              }
+
+
+              <!-- BOOLEAN -->
+
+              @if (field.type === 'boolean') {
+
+                @if (getFieldValue(data, field.field)) {
+
+                  <span class="boolean-value boolean-active">
+
+                    <i class="pi pi-check-circle"></i>
+
+                    Yes
+
+                  </span>
+
+                } @else {
+
+                  <span class="boolean-value boolean-inactive">
+
+                    <i class="pi pi-times-circle"></i>
+
+                    No
+
+                  </span>
+
+                }
+
+              }
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+    } @else {
+
+      <!-- ================= EMPTY ================= -->
+
+      <div class="empty-details">
+
+        <div class="empty-details-icon">
+          <i class="pi pi-info-circle"></i>
+        </div>
+
+        <h6>
+          No Details Available
+        </h6>
+
+        <p>
+          There is no information available to display.
+        </p>
+
+      </div>
+
+    }
+
+  </div>
+
+
+  <!-- ================= FOOTER ================= -->
+
+  <ng-template #footer>
+
+    <button
+      pButton
+      type="button"
+      label="Close"
+      icon="pi pi-times"
+      class="p-button-outlined p-button-secondary"
+      (click)="close()">
+    </button>
+
+  </ng-template>
+
+</p-dialog>

@@ -1,0 +1,252 @@
+/* ================================
+   DETAILS HEADER
+================================ */
+
+.details-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 4px;
+}
+
+.details-header-icon {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: var(--p-primary-color);
+  color: var(--p-primary-contrast-color);
+
+  font-size: 1.2rem;
+}
+
+.details-header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.details-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.details-subtitle {
+  font-size: 0.8rem;
+  color: var(--p-text-muted-color);
+}
+
+
+/* ================================
+   CONTAINER
+================================ */
+
+.details-container {
+  padding: 24px;
+  background: var(--p-surface-ground);
+}
+
+
+/* ================================
+   GRID
+================================ */
+
+.details-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 14px;
+}
+
+
+/* ================================
+   DETAIL ITEM
+================================ */
+
+.detail-item {
+  min-width: 0;
+
+  padding: 16px;
+
+  background: var(--p-surface-0);
+
+  border: 1px solid var(--p-surface-border);
+
+  border-radius: 10px;
+
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.detail-item:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+
+/* ================================
+   LABEL
+================================ */
+
+.detail-label {
+  margin-bottom: 7px;
+
+  font-size: 0.75rem;
+
+  font-weight: 600;
+
+  color: var(--p-text-muted-color);
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.03em;
+}
+
+
+/* ================================
+   VALUE
+================================ */
+
+.detail-value {
+  min-height: 22px;
+
+  font-size: 0.95rem;
+
+  font-weight: 500;
+
+  color: var(--p-text-color);
+
+  word-break: break-word;
+}
+
+
+/* ================================
+   EMPTY VALUE
+================================ */
+
+.empty-value {
+  color: var(--p-text-muted-color);
+  font-style: italic;
+}
+
+
+/* ================================
+   DATE
+================================ */
+
+.date-value {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 7px;
+}
+
+.date-value i {
+  color: var(--p-primary-color);
+}
+
+
+/* ================================
+   BOOLEAN
+================================ */
+
+.boolean-value {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  font-weight: 600;
+}
+
+.boolean-active {
+  color: #16a34a;
+}
+
+.boolean-inactive {
+  color: #dc2626;
+}
+
+
+/* ================================
+   EMPTY DETAILS
+================================ */
+
+.empty-details {
+  min-height: 250px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+}
+
+.empty-details-icon {
+  width: 60px;
+  height: 60px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  margin-bottom: 14px;
+
+  border-radius: 50%;
+
+  background: var(--p-surface-100);
+
+  color: var(--p-text-muted-color);
+
+  font-size: 1.5rem;
+}
+
+.empty-details h6 {
+  margin-bottom: 5px;
+
+  font-weight: 600;
+}
+
+.empty-details p {
+  margin: 0;
+
+  color: var(--p-text-muted-color);
+
+  font-size: 0.85rem;
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 768px) {
+
+  .details-container {
+    padding: 16px;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-item {
+    padding: 14px;
+  }
+
+}

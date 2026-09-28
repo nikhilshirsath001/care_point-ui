@@ -5,16 +5,15 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class StaffService {
+export class AdministratorService {
 
   constructor(private apiService: ApiService) { }
 
-  getAllSaff():Observable<any>{
-    return this.apiService.getObservable("/staff?page=0&size=20");
+  getAllDepartments():Observable<any>{
+    return this.apiService.getObservable("/departments");
   }
 
-  createStaff(data:any):Observable<any>{
-    return this.apiService.postObservable("/staff",data);
+  createDepartment(data:any){
+    return this.apiService.postObservable("/departments",data);
   }
-
 }

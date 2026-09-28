@@ -1,18 +1,17 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { DynamicFormComponent } from '../../../../shared/dynamic-form/dynamic-form.component';
-import { Staff } from '../../models/staff.model';
+import { Department } from '../../models/department.model';
+import { AdministratorService } from '../../services/administrator.service';
 import { DynamicFormConfig } from '../../../../core/models/dynamic-form.model';
-import { StaffService } from '../../services/staff.service';
-import { STAFF_FORM_CONFIG } from '../../config/staff-form.config';
-import { AdministratorService } from '../../../administrator/services/administrator.service';
+import { DEPARTMENT_FORM_CONFIG } from '../../config/department-form.config';
 
 @Component({
-  selector: 'app-staff-form',
+  selector: 'app-department-form',
   imports: [DynamicFormComponent],
-  templateUrl: './staff-form.component.html',
-  styleUrl: './staff-form.component.css'
+  templateUrl: './department-form.component.html',
+  styleUrl: './department-form.component.css'
 })
-export class StaffFormComponent implements OnChanges {
+export class DepartmentFormComponent  implements OnChanges {
 
 
   // =========================================================
@@ -24,7 +23,7 @@ export class StaffFormComponent implements OnChanges {
 
 
   @Input()
-  staff: Staff | null = null;
+  bed: Department | null = null;
 
 
   // =========================================================
@@ -44,9 +43,9 @@ export class StaffFormComponent implements OnChanges {
   // =========================================================
 
   formConfig: DynamicFormConfig = {
-    ...STAFF_FORM_CONFIG,
+    ...DEPARTMENT_FORM_CONFIG,
 
-    fields: STAFF_FORM_CONFIG.fields.map(
+    fields: DEPARTMENT_FORM_CONFIG.fields.map(
       field => ({
         ...field,
 
@@ -62,7 +61,6 @@ export class StaffFormComponent implements OnChanges {
 
 
   constructor(
-    private staffService: StaffService,
     private administratorService: AdministratorService
   ) {}
 
@@ -94,7 +92,6 @@ export class StaffFormComponent implements OnChanges {
   private prepareForm(): void {
 
     this.loadWardOptions();
-    this.loadDepartmentOptions();
 
   }
 
@@ -223,65 +220,6 @@ export class StaffFormComponent implements OnChanges {
 
   }
 
-  private loadDepartmentOptions(){
-        this.administratorService.getAllDepartments().subscribe({
-
-        next: (response) => {
-
-          const departments =response?.data?.content ?? [];;
-
-          const field =
-            this.formConfig.fields.find(
-              field =>
-                field.name === 'departmentId'
-            );
-
-          if (field) {
-
-            field.options =
-              departments.map(
-                (ward: any) => ({
-
-                  label: ward.departmentName,
-
-                  value: ward.departmentId
-
-                })
-              );
-
-          }
-
-
-    //       /*
-    //        * If editing a bed,
-    //        * load rooms for its ward.
-    //        */
-
-    //       if (
-    //         this.mode === 'edit' &&
-    //         this.bed?.wardId
-    //       ) {
-
-    //         this.loadRoomOptions(
-    //           this.bed.wardId
-    //         );
-
-    //       }
-
-        },
-
-        error: (error:any) => {
-
-          console.error(
-            'Failed to load departments',
-            error
-          );
-
-        }
-
-      });
-
-  }
 
   // =========================================================
   // FORM SUBMIT
@@ -315,9 +253,9 @@ export class StaffFormComponent implements OnChanges {
     formData: Record<string, any>
   ): void {
 
-    this.staffService
-      .createStaff(
-        formData as Staff
+    this.administratorService
+      .createDepartment(
+        formData as Department
       )
       .subscribe({
 
@@ -353,7 +291,7 @@ export class StaffFormComponent implements OnChanges {
     formData: Record<string, any>
   ): void {
 
-    if (!this.staff?.id) {
+    if (!this.bed?.id) {
 
       console.error(
         'Bed ID is missing'

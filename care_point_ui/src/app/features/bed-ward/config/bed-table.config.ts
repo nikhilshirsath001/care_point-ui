@@ -41,7 +41,13 @@ export const BEDS = [
         mobile: '9876501234',
         gender: 'Female',
         status: 'Active'
-      }
+      },
+        {
+        field: 'actions',
+        header: 'Actions',
+        type: 'action',
+        width: '150px'
+        }
     ];
   
 export  let  TABLE_CONFIG: SharedTableConfig = {

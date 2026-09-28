@@ -68,8 +68,15 @@ export const routes: Routes = [
       //   loadChildren: () =>
       //     import('./features/billing/billing.routes')
       //       .then(m => m.BILLING_ROUTES)
-      // }
-
+      // },
+      
+           // Add other modules here
+      {
+        path: 'administrator',
+        loadChildren: () =>
+          import('./features/administrator/administrator.routes')
+            .then(m => m.ADMINISTRATOR_ROUTES)
+      }
     ]
   }
 

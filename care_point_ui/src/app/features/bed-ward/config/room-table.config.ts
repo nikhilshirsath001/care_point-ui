@@ -24,7 +24,13 @@ import { SharedTableConfig, TableColumn } from "../../../shared/shared-table/sha
         field: 'status',
         header: 'Status',
         type: 'status'
-      }
+      },
+        {
+    field: 'actions',
+    header: 'Actions',
+    type: 'action',
+    width: '150px'
+  }
     ];
   
 export const ROOMS = [

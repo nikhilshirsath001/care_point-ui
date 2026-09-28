@@ -185,6 +185,11 @@ export const MENU_ITEMS : MenuItem[] = [
     icon: 'pi pi-cog',
     items: [
       {
+        label: 'Departments',
+        icon: 'pi pi-user',
+        routerLink: ['/main/administrator/department']
+      },
+      {
         label: 'Users',
         icon: 'pi pi-user',
         routerLink: ['/main/admin/users']
