@@ -2,9 +2,9 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { ApiService } from '../../../core/services/api.service';
-import { PatientModel } from '../../models/patient-model';
-import { ApiResponse, PageResponse } from '../../models/api-response.model';
-import { API_ENDPOINTS } from '../../constants/api-endpoints';
+import { PatientModel } from '../models/patient-model';
+import { ApiResponse, PageResponse } from '../../../core/models/api-response.model';
+import { API_ENDPOINTS } from '../../../core/constants/api-endpoints';
 import { HttpParams } from '@angular/common/http';
 
 @Injectable({
