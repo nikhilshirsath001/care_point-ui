@@ -156,7 +156,7 @@
               @if (!col.type || col.type === 'text') {
 
                 <span class="table-text">
-                  {{ rowData[col.field] }}
+                  {{ getFieldValue(rowData, col.field) }}
                 </span>
 
               }
@@ -166,7 +166,7 @@
               @if (col.type === 'number') {
 
                 <span class="table-number">
-                  {{ rowData[col.field] }}
+                   {{ getFieldValue(rowData, col.field) }}
                 </span>
 
               }
@@ -183,14 +183,14 @@
 
 
               <!-- STATUS -->
-              <!-- @if (col.type === 'status') {
+              @if (col.type === 'status') {
 
                 <p-tag
                   [value]="rowData[col.field]"
                   [severity]="getStatusSeverity(rowData[col.field])">
                 </p-tag>
 
-              } -->
+              }
 
 
               <!-- BOOLEAN -->

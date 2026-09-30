@@ -1,0 +1,133 @@
+.page-container {
+  padding: 24px;
+}
+
+
+/* Summary Card */
+
+.summary-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  min-height: 110px;
+
+  padding: 20px;
+
+  background: #ffffff;
+
+  border: 1px solid #e8edf3;
+
+  border-radius: 12px;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+
+  transition: all 0.2s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+
+.summary-icon {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  font-size: 20px;
+}
+
+
+.summary-content {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.summary-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #6c757d;
+}
+
+
+.summary-value {
+  font-size: 28px;
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+
+.summary-description {
+  font-size: 12px;
+  color: #8a94a6;
+}
+
+
+/* Total */
+
+.total-card {
+  border-left: 4px solid #3b82f6;
+}
+
+.total-card .summary-icon {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+
+/* Admitted */
+
+.admitted-card {
+  border-left: 4px solid #22c55e;
+}
+
+.admitted-card .summary-icon {
+  background: #ecfdf5;
+  color: #16a34a;
+}
+
+
+/* Discharge */
+
+.discharge-card {
+  border-left: 4px solid #f59e0b;
+}
+
+.discharge-card .summary-icon {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+
+/* Transfer */
+
+.transfer-card {
+  border-left: 4px solid #8b5cf6;
+}
+
+.transfer-card .summary-icon {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+
+
+/* Responsive */
+
+@media (max-width: 768px) {
+
+  .page-container {
+    padding: 16px;
+  }
+
+}

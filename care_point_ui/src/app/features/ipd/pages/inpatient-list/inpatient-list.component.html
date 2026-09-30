@@ -1,1 +1,197 @@
-<p>inpatient-list works!</p>
+<div class="page-container">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+      <h2 class="mb-1">
+        Inpatient Management
+      </h2>
+
+      <p class="text-muted mb-0">
+        Manage hospital inpatients and their active admissions.
+      </p>
+    </div>
+
+   <button
+  pButton
+  label="New Admission"
+  icon="pi pi-plus"
+  (click)=openAdmission()>
+</button>
+
+  </div>
+
+
+
+  <div class="row g-3 mb-4">
+
+    <!-- TOTAL -->
+    <div class="col-12 col-sm-6 col-xl-3">
+
+      <div class="summary-card total-card">
+
+        <div class="summary-icon">
+          <i class="pi pi-users"></i>
+        </div>
+
+        <div class="summary-content">
+
+          <span class="summary-label">
+            Total Inpatients
+          </span>
+
+          <span class="summary-value">
+            {{ totalInPatients }}
+          </span>
+
+          <span class="summary-description">
+            Current inpatient records
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ADMITTED -->
+    <div class="col-12 col-sm-6 col-xl-3">
+
+      <div class="summary-card admitted-card">
+
+        <div class="summary-icon">
+          <i class="pi pi-check-circle"></i>
+        </div>
+
+        <div class="summary-content">
+
+          <span class="summary-label">
+            Admitted
+          </span>
+
+          <span class="summary-value">
+            {{ admittedCount }}
+          </span>
+
+          <span class="summary-description">
+            Currently admitted
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- DISCHARGE PENDING -->
+    <div class="col-12 col-sm-6 col-xl-3">
+
+      <div class="summary-card discharge-card">
+
+        <div class="summary-icon">
+          <i class="pi pi-sign-out"></i>
+        </div>
+
+        <div class="summary-content">
+
+          <span class="summary-label">
+            Discharge Pending
+          </span>
+
+          <span class="summary-value">
+            {{ dischargePendingCount }}
+          </span>
+
+          <span class="summary-description">
+            Ready for discharge
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- TRANSFERRED -->
+    <div class="col-12 col-sm-6 col-xl-3">
+
+      <div class="summary-card transfer-card">
+
+        <div class="summary-icon">
+          <i class="pi pi-arrow-right-arrow-left"></i>
+        </div>
+
+        <div class="summary-content">
+
+          <span class="summary-label">
+            Transfers
+          </span>
+
+          <span class="summary-value">
+            {{ transferredCount }}
+          </span>
+
+          <span class="summary-description">
+            Recent transfers
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <app-shared-table
+    [title]="'Inpatient List'"
+    [subtitle]="'View and manage current inpatient admissions.'"
+    [columns]="patientColumns"
+    [data]="inPatientList"
+    [config]="tableConfig"
+
+    (view)="onViewInPatient($event)"
+    (edit)="openEditForm($event)"
+    (refresh)="getAllInPatient()">
+  </app-shared-table>
+
+
+
+  <p-dialog
+    [(visible)]="showForm"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{
+      width: '750px',
+      maxWidth: '95vw'
+    }"
+    [header]="formMode === 'create'
+      ? 'Create Inpatient Admission'
+      : 'Edit Inpatient Admission'"
+  >
+
+    <app-inpatient-form
+      [mode]="formMode"
+      [inPatient]="selectedInPatient"
+      (saved)="onInPatientSaved()"
+      (cancelled)="onFormCancelled()">
+    </app-inpatient-form>
+
+  </p-dialog>
+
+
+
+  <app-shared-details
+    [(visible)]="viewDialogVisible"
+    [title]="'Inpatient Details'"
+    [data]="selectedInPatient"
+    [fields]="inPatientDetailFields">
+  </app-shared-details>
+
+</div>

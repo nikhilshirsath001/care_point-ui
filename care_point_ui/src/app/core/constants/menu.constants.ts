@@ -36,16 +36,16 @@ export const MENU_ITEMS : MenuItem[] = [
         icon: 'pi pi-users',
         routerLink: ['/main/staff']
       },
-      {
-        label: 'Duty Schedule',
-        icon: 'pi pi-calendar',
-        routerLink: ['/main/staff/schedule']
-      },
-      {
-        label: 'Availability',
-        icon: 'pi pi-clock',
-        routerLink: ['/main/staff/availability']
-      }
+      // {
+      //   label: 'Duty Schedule',
+      //   icon: 'pi pi-calendar',
+      //   routerLink: ['/main/staff/schedule']
+      // },
+      // {
+      //   label: 'Availability',
+      //   icon: 'pi pi-clock',
+      //   routerLink: ['/main/staff/availability']
+      // }
     ]
   },
 

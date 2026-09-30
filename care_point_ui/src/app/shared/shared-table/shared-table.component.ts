@@ -88,35 +88,47 @@ export class SharedTableComponent {
   }
 
 
-  getStatusSeverity(
-    status: string
-  ): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
+getStatusSeverity(
+  status: unknown
+): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
 
-    switch (status?.toLowerCase()) {
-      
-      case 'active':
-      case 'approved':
-      case 'completed':
-      case 'success':
-        return 'success';
+  const normalizedStatus = String(status ?? '').trim().toLowerCase();
 
-      case 'pending':
-      case 'processing':
-        return 'warn';
+  switch (normalizedStatus) {
 
-      case 'inactive':
-      case 'cancelled':
-      case 'rejected':
-      case 'failed':
-        return 'danger';
+    case 'active':
+    case 'approved':
+    case 'completed':
+    case 'success':
+      return 'success';
 
-      case 'new':
-        return 'info';
+    case 'pending':
+    case 'processing':
+      return 'warn';
 
-      default:
-        return 'secondary';
-    }
+    case 'inactive':
+    case 'cancelled':
+    case 'rejected':
+    case 'failed':
+      return 'danger';
+
+    case 'new':
+      return 'info';
+
+    default:
+      return 'secondary';
   }
+}
+
+getFieldValue(row: any, field: string): any {
+  if (!row || !field) {
+    return null;
+  }
+
+  return field
+    .split('.')
+    .reduce((value, key) => value?.[key], row);
+}
 
 onDownloadExcel(): void {
 

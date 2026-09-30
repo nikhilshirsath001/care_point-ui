@@ -39,7 +39,7 @@ export class StaffScheduleComponent implements OnInit {
   constructor(private staffService: StaffService) {}
 
   getAllStaff() {
-    this.staffService.getAllSaff().subscribe({
+    this.staffService.getAllStaff().subscribe({
       next: (res: any) => {
         this.staffList = res.data.content;
       },

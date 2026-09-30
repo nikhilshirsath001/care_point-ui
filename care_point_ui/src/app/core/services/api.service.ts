@@ -13,7 +13,7 @@ export class ApiService {
     return firstValueFrom(this.httpClient.get(environment.apiUrl + url, { withCredentials:true, ...params }));
   }
   public getObservable(url: string, params?: HttpParams) {
-    return this.httpClient.get(environment.apiUrl + url, { withCredentials:true, ...params });
+    return this.httpClient.get(environment.apiUrl + url, {withCredentials: true,params: params});
   }
 
   public getObservableURI<T>(url: string, options?: { params?: HttpParams; responseType?: any; withCredentials?: boolean }) {
