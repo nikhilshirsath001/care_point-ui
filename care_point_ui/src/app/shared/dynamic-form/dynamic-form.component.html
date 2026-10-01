@@ -268,7 +268,7 @@
         label="Reset"
         severity="secondary"
         [outlined]="true"
-        (click)="reset()"
+        (click)="resetForm()"
         [disabled]="loading"
       ></button>
 
@@ -287,7 +287,7 @@
     <button
       pButton
       type="submit"
-      [label]="config.submitLabel || 'Save'"
+      [label]="(mode === 'edit' ? 'Update ' : 'Create ')+ config.submitLabel"
       [loading]="loading"
     ></button>
 

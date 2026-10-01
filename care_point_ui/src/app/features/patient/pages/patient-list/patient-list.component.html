@@ -2,7 +2,21 @@
   [title]="'Patients'"
   [subtitle]="'Manage registered patients'"
   [columns]="patientColumns"
-  [data]="patients"
+  [data]="patients()"
   [config]="tableConfig"
+  [totalRecords]="totalRecords()"
+  
+  (view)="viewPatient($event)"
+  (pageChange)="onPageChange($event)"
+  (refresh)="onRefresh()"
+  (edit)="editPatient($event)"
 >
 </app-shared-table>
+
+  <app-shared-details
+  [(visible)]="viewDialogVisible"
+  [title]="'Patient Details'"
+  [data]="selectedPatient()"
+
+  >
+</app-shared-details>

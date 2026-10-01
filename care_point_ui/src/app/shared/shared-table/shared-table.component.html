@@ -100,12 +100,15 @@
       [paginator]="config.paginator"
       [rows]="config.rows"
       [rowsPerPageOptions]="config.rowsPerPageOptions"
+	    [totalRecords]="totalRecords"
+  	  [lazy]="true"
       [loading]="config.loading"
       [showGridlines]="false"
       [stripedRows]="true"
       [rowHover]="true"
       responsiveLayout="scroll"
-      styleClass="hms-table">
+      styleClass="hms-table"
+	    (onPage)="onPageChange($event)" >
 
 
       <!-- ================= HEADER ================= -->

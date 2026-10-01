@@ -43,4 +43,13 @@ export class PatientService {
     const params = new HttpParams().set('keyword', keyword.trim());
     return this.apiService.getObservable(API_ENDPOINTS.PATIENTS.SEARCH, params);
   }
+
+  public updatePatient(patientId: number, patient: PatientModel): Observable<ApiResponse<PatientModel>> {
+
+      const params = new HttpParams()
+        .set('patientId', patientId.toString());
+
+      return this.apiService.putObservable(API_ENDPOINTS.PATIENTS.UPDATE, patient, params
+      ) as Observable<ApiResponse<PatientModel>>;
+    }
 }

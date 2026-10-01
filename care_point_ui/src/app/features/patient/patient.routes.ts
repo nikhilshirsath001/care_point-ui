@@ -8,13 +8,12 @@ export const PATIENT_ROUTES: Routes = [
         .then(m => m.PatientListComponent)
   },
 
-//   {
-//     path: 'create',
-//     loadComponent: () =>
-//       import('./pages/patient-create/patient-create.component')
-//         .then(m => m.PatientCreateComponent)
-//   },
-
+  {
+    path: 'create',
+    loadComponent: () =>
+      import('./pages/patient-create/patient-create.component')
+        .then(m => m.PatientCreateComponent)
+  },
 //   {
 //     path: ':id',
 //     loadComponent: () =>

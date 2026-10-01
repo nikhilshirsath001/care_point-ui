@@ -1,0 +1,44 @@
+:host {
+  display: block;
+}
+
+.patient-create-page {
+  padding: 24px;
+  min-height: 100%;
+  background: var(--bg-page);
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-title {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.page-subtitle {
+  margin: 4px 0 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.form-card {
+  padding: 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+@media (max-width: 768px) {
+  .patient-create-page {
+    padding: 16px;
+  }
+
+  .form-card {
+    padding: 16px;
+  }
+}

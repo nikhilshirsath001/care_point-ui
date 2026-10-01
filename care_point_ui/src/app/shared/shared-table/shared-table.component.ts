@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { TableModule } from 'primeng/table';
+import { TableModule, TablePageEvent } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import * as XLSX from 'xlsx';
 
@@ -48,16 +48,24 @@ export class SharedTableComponent {
 
   @Input() subtitle = '';
 
+  @Input() totalRecords = 0;
+
   @Input() config: SharedTableConfig = {
     searchable: true,
     paginator: true,
-    rows: 10,
-    rowsPerPageOptions: [10, 25, 50],
+    rows: 20,
+    rowsPerPageOptions: [10, 25, 50, 100],
     exportable: true,
     showRefresh: true,
     loading: false,
     emptyMessage: 'No records found'
   };
+
+  @Output() pageChange = new EventEmitter<{
+    page: number;
+    size: number;
+    first: number;
+  }>();
 
   @Output() refresh = new EventEmitter<void>();
 
@@ -68,6 +76,13 @@ export class SharedTableComponent {
   @Output() delete = new EventEmitter<any>();
 
 
+  onPageChange(event: TablePageEvent): void {
+
+    const first = event.first ?? 0;
+    const size = event.rows ?? this.config.rows ?? 20;
+    const page = Math.floor(first / size);
+    this.pageChange.emit({page, size, first});
+  }
   onRefresh(): void {
     this.refresh.emit();
   }
@@ -88,9 +103,9 @@ export class SharedTableComponent {
   }
 
 
-getStatusSeverity(
-  status: unknown
-): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
+  getStatusSeverity(
+    status: string
+  ): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
 
   const normalizedStatus = String(status ?? '').trim().toLowerCase();
 

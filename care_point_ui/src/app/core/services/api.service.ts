@@ -28,7 +28,7 @@ export class ApiService {
     return firstValueFrom(this.httpClient.post(environment.apiUrl + url, body, { withCredentials:true, ...params }))
   }
   public postObservable(url: string, body: any, params?: any) {
-    return this.httpClient.post(environment.apiUrl + url, body, { withCredentials:true, ...params });
+    return this.httpClient.post(environment.apiUrl + url, body, { withCredentials:true, params:params });
   }
   public patchPromise(url: string, body: any, params?: HttpParams) {
     return firstValueFrom(this.httpClient.patch(environment.apiUrl + url, body, { withCredentials:true, ...params }))
@@ -42,4 +42,9 @@ export class ApiService {
   public deleteObservable(url: string, body?: any, params?: HttpParams) {
     return this.httpClient.patch(environment.apiUrl + url, body, { withCredentials:true, ...params });
   }
+  
+    public putObservable(url: string, body: any, params?: HttpParams) {
+    return this.httpClient.put(environment.apiUrl + url, body, { withCredentials:true, ...params });
+  }
+  
 }

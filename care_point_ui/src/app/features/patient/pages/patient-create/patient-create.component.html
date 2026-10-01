@@ -1,0 +1,13 @@
+  <div class="m-5">
+  
+  <app-dynamic-form
+    [config]="patientFormConfig"
+    [loading]="loading"
+    [data]="patient"
+    [mode]="isEditMode ? 'edit' : 'create'"
+    (submitted)="onSubmit($event)"
+    (cancelled)="onCancel()"
+    (reset)="onReset()"
+  >
+  </app-dynamic-form>
+  </div>

@@ -250,3 +250,35 @@
   }
 
 }
+
+/* ================================
+   DETAIL SECTION
+================================ */
+
+.detail-section {
+  grid-column: 1 / -1;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 10px;
+  margin-bottom: 2px;
+
+  padding: 10px 4px;
+
+  font-size: 0.95rem;
+
+  font-weight: 700;
+
+  color: var(--p-text-color);
+
+  border-bottom: 1px solid var(--p-surface-border);
+}
+
+.detail-section i {
+  color: var(--p-primary-color);
+
+  font-size: 0.9rem;
+}

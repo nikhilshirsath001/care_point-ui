@@ -44,144 +44,164 @@
 
       <div class="details-grid">
 
-        @for (field of fields; track field.field) {
+        @for (field of generatedFields; track field.field) {
 
-          <div
-            class="detail-item"
-            [style.width]="field.width || null">
+  @if (field.isGroup) {
 
-            <!-- LABEL -->
+    <div
+      class="detail-section">
+      <!-- [style.margin-left.px]="(field.level || 0) * 20"> -->
 
-            <div class="detail-label">
+      <!-- <i class="pi pi-folder"></i> -->
 
-              <span>
-                {{ field.label }}
-              </span>
+      <span>
+        {{ field.label }}
+      </span>
 
-            </div>
+    </div>
 
+  } @else {
 
-            <!-- VALUE -->
+    <div
+      class="detail-item"
+      [style.width]="field.width || null"
+      [style.margin-left.px]="(field.level || 0) * 20">
 
-            <div class="detail-value">
+      <!-- LABEL -->
 
-              <!-- TEXT -->
+      <div class="detail-label">
 
-              @if (!field.type || field.type === 'text') {
+        <span>
+          {{ field.label }}
+        </span>
 
-                @if (!isEmpty(getFieldValue(data, field.field))) {
-
-                  <span>
-                    {{ getFieldValue(data, field.field) }}
-                  </span>
-
-                } @else {
-
-                  <span class="empty-value">
-                    -
-                  </span>
-
-                }
-
-              }
+      </div>
 
 
-              <!-- NUMBER -->
+      <!-- VALUE -->
 
-              @if (field.type === 'number') {
+      <div class="detail-value">
 
-                @if (!isEmpty(getFieldValue(data, field.field))) {
+        <!-- TEXT -->
 
-                  <span>
-                    {{ getFieldValue(data, field.field) }}
-                  </span>
+        @if (!field.type || field.type === 'text') {
 
-                } @else {
+          @if (!isEmpty(getFieldValue(data, field.field))) {
 
-                  <span class="empty-value">
-                    -
-                  </span>
+            <span>
+              {{ getFieldValue(data, field.field) }}
+            </span>
 
-                }
+          } @else {
 
-              }
+            <span class="empty-value">
+              -
+            </span>
 
-
-              <!-- DATE -->
-
-              @if (field.type === 'date') {
-
-                @if (!isEmpty(getFieldValue(data, field.field))) {
-
-                  <span class="date-value">
-
-                    <i class="pi pi-calendar"></i>
-
-                    {{ getFieldValue(data, field.field)
-                      | date:'dd MMM yyyy' }}
-
-                  </span>
-
-                } @else {
-
-                  <span class="empty-value">
-                    -
-                  </span>
-
-                }
-
-              }
-
-
-              <!-- STATUS -->
-
-              @if (field.type === 'status') {
-
-                <p-tag
-                  [value]="getStatusValue(
-                    getFieldValue(data, field.field)
-                  )"
-                  [severity]="getStatusSeverity(
-                    getFieldValue(data, field.field)
-                  )">
-                </p-tag>
-
-              }
-
-
-              <!-- BOOLEAN -->
-
-              @if (field.type === 'boolean') {
-
-                @if (getFieldValue(data, field.field)) {
-
-                  <span class="boolean-value boolean-active">
-
-                    <i class="pi pi-check-circle"></i>
-
-                    Yes
-
-                  </span>
-
-                } @else {
-
-                  <span class="boolean-value boolean-inactive">
-
-                    <i class="pi pi-times-circle"></i>
-
-                    No
-
-                  </span>
-
-                }
-
-              }
-
-            </div>
-
-          </div>
+          }
 
         }
+
+
+        <!-- NUMBER -->
+
+        @if (field.type === 'number') {
+
+          @if (!isEmpty(getFieldValue(data, field.field))) {
+
+            <span>
+              {{ getFieldValue(data, field.field) }}
+            </span>
+
+          } @else {
+
+            <span class="empty-value">
+              -
+            </span>
+
+          }
+
+        }
+
+
+        <!-- DATE -->
+
+        @if (field.type === 'date') {
+
+          @if (!isEmpty(getFieldValue(data, field.field))) {
+
+            <span class="date-value">
+
+              <i class="pi pi-calendar"></i>
+
+              {{ getFieldValue(data, field.field)
+                | date:'dd MMM yyyy' }}
+
+            </span>
+
+          } @else {
+
+            <span class="empty-value">
+              -
+            </span>
+
+          }
+
+        }
+
+
+        <!-- STATUS -->
+
+        @if (field.type === 'status') {
+
+          <p-tag
+            [value]="getStatusValue(
+              getFieldValue(data, field.field)
+            )"
+            [severity]="getStatusSeverity(
+              getFieldValue(data, field.field)
+            )">
+          </p-tag>
+
+        }
+
+
+        <!-- BOOLEAN -->
+
+        @if (field.type === 'boolean') {
+
+          @if (getFieldValue(data, field.field)) {
+
+            <span class="boolean-value boolean-active">
+
+              <i class="pi pi-check-circle"></i>
+
+              Yes
+
+            </span>
+
+          } @else {
+
+            <span class="boolean-value boolean-inactive">
+
+              <i class="pi pi-times-circle"></i>
+
+              No
+
+            </span>
+
+          }
+
+        }
+
+      </div>
+
+    </div>
+
+  }
+
+}
+
 
       </div>
 

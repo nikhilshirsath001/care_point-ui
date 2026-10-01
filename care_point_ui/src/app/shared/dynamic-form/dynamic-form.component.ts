@@ -58,6 +58,8 @@ export class DynamicFormComponent implements OnChanges {
 
   @Output() cancelled = new EventEmitter<void>();
 
+  @Output() reset = new EventEmitter<void>();
+
   form!: FormGroup;
 
   constructor(
@@ -66,7 +68,7 @@ export class DynamicFormComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
 
-    if (changes['config'] || changes['data']) {
+    if (changes['config'] && this.config) {
       this.buildForm();
     }
   }
@@ -146,8 +148,29 @@ export class DynamicFormComponent implements OnChanges {
     this.cancelled.emit();
   }
 
-  reset(): void {
+  resetForm(): void {
 
-    this.buildForm();
+  if (!this.form || !this.config) {
+    return;
   }
+
+  const resetValues: Record<string, any> = {};
+
+  this.config.fields.forEach(field => {
+
+    resetValues[field.name] =
+      field.defaultValue ??
+      this.getDefaultValue(field);
+
+  });
+
+  this.form.reset(resetValues);
+
+  this.form.markAsPristine();
+  this.form.markAsUntouched();
+
+  this.reset.emit();
+}
+
+
 }
