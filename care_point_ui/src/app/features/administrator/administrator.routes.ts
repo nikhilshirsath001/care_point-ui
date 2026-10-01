@@ -1,20 +1,37 @@
 import { Routes } from '@angular/router';
 
 export const ADMINISTRATOR_ROUTES: Routes = [
-
   {
     path: 'department',
     loadComponent: () =>
-      import('./pages/department/department.component')
-        .then(m => m.DepartmentComponent)
+      import('./pages/department/department.component').then(
+        (m) => m.DepartmentComponent,
+      ),
   },
 
-  // {
-  //   path: 'beds',
-  //   loadComponent: () =>
-  //     import('./pages/beds/beds.component')
-  //       .then(m => m.BedsComponent)
-  // },
+  {
+    path: 'procedure',
+    loadComponent: () =>
+      import('./pages/procedure/procedure.component').then(
+        (m) => m.ProcedureComponent,
+      ),
+  },
+
+  {
+    path: 'diagnosis',
+    loadComponent: () =>
+      import('./pages/diagnosis/diagnosis.component').then(
+        (m) => m.DiagnosisComponent,
+      ),
+  },
+
+    {
+    path: 'service',
+    loadComponent: () =>
+      import('./pages/service/service/service.component').then(
+        (m) => m.ServiceComponent,
+      ),
+  },
 
   // {
   //   path: 'allocation',
@@ -22,5 +39,4 @@ export const ADMINISTRATOR_ROUTES: Routes = [
   //     import('./pages/allocation/allocation.component')
   //       .then(m => m.AllocationComponent)
   // }
-
 ];

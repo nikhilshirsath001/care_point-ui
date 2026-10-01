@@ -43,7 +43,7 @@ openAdmission(): void {
   getAllInPatient() {
     this.ipdService.getAllInPatients().subscribe({
       next: (res: any) => {
-        this.inPatientList = res.data;
+        this.inPatientList = res?.data ?? [];
       },
       error: (error: any) => {},
     });

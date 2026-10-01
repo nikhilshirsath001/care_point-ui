@@ -1,0 +1,209 @@
+<div class="page-container container-fluid px-3 px-md-4 py-3">
+
+  <!-- ========================= -->
+  <!-- PAGE HEADER -->
+  <!-- ========================= -->
+  <div class="page-header mb-4">
+
+    <div class="row align-items-center g-3">
+
+      <div class="col-12">
+        <h2 class="mb-1 fw-semibold">
+          Services & Categories
+        </h2>
+
+        <p class="text-muted mb-0">
+          Manage hospital services and their categories.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- SERVICE TABS -->
+  <!-- ========================= -->
+  <div class="service-tabs">
+
+    <p-tabView>
+
+      <!-- ========================= -->
+      <!-- SERVICE CATEGORIES -->
+      <!-- ========================= -->
+      <p-tabPanel header="Service Categories">
+
+        <div class="tab-content-wrapper">
+
+          <!-- Tab Header -->
+          <div class="row align-items-center g-3 mb-4">
+
+            <div class="col-12 col-md-8">
+              <h5 class="mb-1 fw-semibold">
+                Service Category Management
+              </h5>
+
+              <small class="text-muted">
+                Manage categories used to organize hospital services.
+              </small>
+            </div>
+
+            <div class="col-12 col-md-4 text-md-end">
+
+              <button
+                pButton
+                type="button"
+                label="Add Category"
+                icon="pi pi-plus"
+                class="w-100 w-md-auto"
+                (click)="openCreateServiceCategoryForm()">
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- Category Table -->
+          <div class="table-wrapper">
+
+            <app-shared-table
+              [title]="'Service Categories'"
+              [subtitle]="'Manage registered service categories'"
+              [columns]="serviceCategoryColumns"
+              [data]="serviceCategories"
+              [config]="serviceCategoryTableConfig">
+            </app-shared-table>
+
+          </div>
+
+        </div>
+
+      </p-tabPanel>
+
+
+      <!-- ========================= -->
+      <!-- SERVICES -->
+      <!-- ========================= -->
+      <p-tabPanel header="Services">
+
+        <div class="tab-content-wrapper">
+
+          <!-- Tab Header -->
+          <div class="row align-items-center g-3 mb-4">
+
+            <div class="col-12 col-md-8">
+              <h5 class="mb-1 fw-semibold">
+                Service Management
+              </h5>
+
+              <small class="text-muted">
+                Manage hospital services and their details.
+              </small>
+            </div>
+
+            <div class="col-12 col-md-4 text-md-end">
+
+              <button
+                pButton
+                type="button"
+                label="Add Service"
+                icon="pi pi-plus"
+                class="w-100 w-md-auto"
+                (click)="openCreateServiceForm()">
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- Service Table -->
+          <div class="table-wrapper">
+
+            <app-shared-table
+              [title]="'Services'"
+              [subtitle]="'Manage registered hospital services'"
+              [columns]="serviceColumns"
+              [data]="services"
+              [config]="serviceTableConfig">
+            </app-shared-table>
+
+          </div>
+
+        </div>
+
+      </p-tabPanel>
+
+    </p-tabView>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- SERVICE CATEGORY DIALOG -->
+  <!-- ========================= -->
+  <p-dialog
+    [(visible)]="showServiceCategoryForm"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{
+      width: '700px',
+      maxWidth: '95vw'
+    }"
+    [contentStyle]="{
+      'max-height': '75vh',
+      'overflow-y': 'auto'
+    }"
+    [header]="
+      serviceCategoryFormMode === 'create'
+        ? 'Create Service Category'
+        : 'Edit Service Category'
+    "
+  >
+
+    <app-service-category-form
+      [mode]="serviceCategoryFormMode"
+      [serviceCategory]="selectedServiceCategory"
+      (saved)="onServiceCategorySaved()"
+      (cancelled)="onServiceCategoryFormCancelled()">
+    </app-service-category-form>
+
+  </p-dialog>
+
+
+  <!-- ========================= -->
+  <!-- SERVICE DIALOG -->
+  <!-- ========================= -->
+  <p-dialog
+    [(visible)]="showServiceForm"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{
+      width: '750px',
+      maxWidth: '95vw'
+    }"
+    [contentStyle]="{
+      'max-height': '75vh',
+      'overflow-y': 'auto'
+    }"
+    [header]="
+      serviceFormMode === 'create'
+        ? 'Create Service'
+        : 'Edit Service'
+    "
+  >
+
+    <app-service-form
+      [mode]="serviceFormMode"
+      [service]="selectedService"
+      (saved)="onServiceSaved()"
+      (cancelled)="onServiceFormCancelled()">
+    </app-service-form>
+
+  </p-dialog>
+
+</div>

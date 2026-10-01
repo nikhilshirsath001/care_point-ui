@@ -34,6 +34,28 @@ export const API_ENDPOINTS = {
     GET_ALL: '/staff',
     CREATE: '/staff',
   },
+
+  PROCEDURE: {
+    BASE: '/procedure',
+    GET_ALL: '/procedure/procedure',
+    CREATE: '/procedure/procedure',
+  },
+  DIAGNOSIS: {
+    BASE: '/diagnosis',
+    GET_ALL: '/diagnosis/diagnosis',
+    CREATE: '/diagnosis/diagnosis',
+  },
+  SERVICE: {
+    BASE: '/services',
+    SERVICE: {
+      GET_ALL: '/services/service',
+      CREATE: '/services/service',
+    },
+    SERVICE_CATEGORY: {
+      GET_ALL: '/services/service/service-category',
+      CREATE: '/services/service/service-category',
+    },
+  },
 } as const;
 
 const API_NAVIGATION_BASE = '/main';
@@ -42,5 +64,5 @@ export const API_NAVIGATION = {
     BASE: API_NAVIGATION_BASE,
     CREATE: `${API_NAVIGATION_BASE}/create`,
     LIST: `${API_NAVIGATION_BASE}/patient`,
-  }
+  },
 } as const;

@@ -141,7 +141,7 @@ export class AdmissionComponent implements OnInit {
   getAllDoctors() {
     this.staffService.getAllStaff().subscribe({
       next: (res: any) => {
-        this.doctors = res.data.content;
+        this.doctors = res?.data?.content ?? [];
       },
       error: (error: any) => {},
     });
@@ -171,7 +171,7 @@ export class AdmissionComponent implements OnInit {
     const wardId = this.admissionForm.get('wardId')?.value;
     this.bedWardService.getRoomBaseOnWardId(wardId).subscribe({
       next: (res: any) => {
-        this.rooms = res.data;
+        this.rooms = res?.data ?? [];
       },
       error: (error: any) => {},
     });
@@ -185,7 +185,7 @@ export class AdmissionComponent implements OnInit {
   getAvailableBedsBasedOnRoomId(roomId: any) {
     this.bedWardService.getAvailableBedsBasedOnRoomId(roomId).subscribe({
       next: (res: any) => {
-        this.beds = res.data;
+        this.beds = res?.data ??[];
       },
       error: (error: any) => {},
     });

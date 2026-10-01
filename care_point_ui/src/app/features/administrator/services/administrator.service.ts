@@ -10,15 +10,67 @@ export class AdministratorService {
 
   constructor(private apiService: ApiService) { }
 
-    getAllDepartments(): Observable<any> {
+  getAllDepartments(): Observable<any> {
     return this.apiService.getObservable(
       API_ENDPOINTS.DEPARTMENTS.GET_ALL
+    );
+  }
+
+  getAllProcedures(): Observable<any> {
+    return this.apiService.getObservable(
+      API_ENDPOINTS.PROCEDURE.GET_ALL
+    );
+  }
+
+  getAllDiagnosis(): Observable<any> {
+    return this.apiService.getObservable(
+      API_ENDPOINTS.DIAGNOSIS.GET_ALL
+    );
+  }
+
+  getAllServiceCategories(): Observable<any> {
+    return this.apiService.getObservable(
+      API_ENDPOINTS.SERVICE.SERVICE_CATEGORY.GET_ALL
+    );
+  }
+
+  getAllServices(): Observable<any> {
+    return this.apiService.getObservable(
+      API_ENDPOINTS.SERVICE.SERVICE.GET_ALL
     );
   }
 
   createDepartment(data: any): Observable<any> {
     return this.apiService.postObservable(
       API_ENDPOINTS.DEPARTMENTS.CREATE,
+      data
+    );
+  }
+
+  createProcedure(data: any): Observable<any> {
+    return this.apiService.postObservable(
+      API_ENDPOINTS.PROCEDURE.CREATE,
+      data
+    );
+  }
+
+  createDiagnosis(data: any): Observable<any> {
+    return this.apiService.postObservable(
+      API_ENDPOINTS.DIAGNOSIS.BASE,
+      data
+    );
+  }
+
+  createServiceCategory(data: any): Observable<any> {
+    return this.apiService.postObservable(
+      API_ENDPOINTS.SERVICE.SERVICE_CATEGORY.CREATE,
+      data
+    );
+  }
+
+  createService(data: any): Observable<any> {
+    return this.apiService.postObservable(
+      API_ENDPOINTS.SERVICE.SERVICE.CREATE,
       data
     );
   }

@@ -39,7 +39,7 @@ export class StaffListComponent implements OnInit {
   getAllStaff() {
     this.staffService.getAllStaff().subscribe({
       next: (res: any) => {
-        this.staffList = res.data.content;
+        this.staffList = res?.data?.content ??[];
       },
       error: (error: any) => {},
     });
@@ -49,18 +49,12 @@ export class StaffListComponent implements OnInit {
     this.viewDialogVisible = true;
   }
 
-  // =========================================================
-  // FORM
-  // =========================================================
 
   showForm = false;
 
   formMode: 'create' | 'edit' = 'create';
 
 
-  // =========================================================
-  // CREATE
-  // =========================================================
 
   openCreateForm(): void {
     this.formMode = 'create';
@@ -70,9 +64,7 @@ export class StaffListComponent implements OnInit {
     this.showForm = true;
   }
 
-  // =========================================================
-  // EDIT
-  // =========================================================
+
 
   openEditForm(bed: Staff): void {
     this.formMode = 'edit';
@@ -84,9 +76,6 @@ export class StaffListComponent implements OnInit {
     this.showForm = true;
   }
 
-  // =========================================================
-  // FORM SAVED
-  // =========================================================
 
   onStaffSaved(): void {
     this.showForm = false;
@@ -96,9 +85,7 @@ export class StaffListComponent implements OnInit {
     this.getAllStaff();
   }
 
-  // =========================================================
-  // FORM CANCELLED
-  // =========================================================
+
 
   onFormCancelled(): void {
     this.showForm = false;
