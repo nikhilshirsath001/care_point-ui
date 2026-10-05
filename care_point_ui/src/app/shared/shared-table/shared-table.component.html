@@ -67,7 +67,8 @@
           pInputText
           type="text"
           placeholder="Search records..."
-          (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+          [(ngModel)]="searchValue"
+          (input)="onSearch(searchValue)"
           class="search-input" />
 
       </div>
@@ -147,16 +148,24 @@
       <ng-template
         #body
         let-rowData
-        let-columns="columns">
+        let-columns="columns"
+        let-rowIndex="rowIndex">
 
         <tr>
 
           @for (col of columns; track col.field) {
 
             <td>
+              @if (col.field === '__index') {
+
+                <span class="table-number">
+                  {{ getSerialNumber(rowIndex) }}
+                </span>
+
+              }
 
               <!-- TEXT -->
-              @if (!col.type || col.type === 'text') {
+              @if (col.field !== '__index' && (!col.type || col.type === 'text')) {
 
                 <span class="table-text">
                   {{ getFieldValue(rowData, col.field) }}

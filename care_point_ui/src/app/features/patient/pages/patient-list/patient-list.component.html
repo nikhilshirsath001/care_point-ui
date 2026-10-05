@@ -2,7 +2,7 @@
   [title]="'Patients'"
   [subtitle]="'Manage registered patients'"
   [columns]="patientColumns"
-  [data]="patients()"
+  [data]="filteredPatients()"
   [config]="tableConfig"
   [totalRecords]="totalRecords()"
   
@@ -10,6 +10,8 @@
   (pageChange)="onPageChange($event)"
   (refresh)="onRefresh()"
   (edit)="editPatient($event)"
+  (delete)="deletePatient($event)"
+  (searchRecord)="onSearch($event)"
 >
 </app-shared-table>
 

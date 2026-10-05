@@ -1,7 +1,9 @@
 import {
   Component,
   OnInit,
+  ViewChild,
   inject,
+  signal,
 } from '@angular/core';
 
 import { Router } from '@angular/router';
@@ -51,6 +53,9 @@ export class PatientCreateComponent implements OnInit {
 
   loading = false;
 
+  @ViewChild(DynamicFormComponent)
+  dynamicForm!: DynamicFormComponent;
+
   ngOnInit(): void {
     this.loadPatientFromNavigation();
   }
@@ -58,29 +63,19 @@ export class PatientCreateComponent implements OnInit {
   private loadPatientFromNavigation(): void {
 
     const state = history.state;
-
     const patient = state?.['patient'];
     const mode = state?.['mode'];
 
+    this.patientFormConfig.fields = this.patientFormConfig.fields.filter(field => field.name !== 'active');
     if (mode === 'edit' && patient) {
 
       this.isEditMode = true;
-
+      this.patientFormConfig.showReset = false;
       this.patient = patient;
-
-      /**
-       * Keep original data so Reset can restore it.
-       */
       this.originalPatient = structuredClone(patient);
-
-      console.log('Edit patient:', this.patient);
-
       return;
     }
 
-    /**
-     * Create mode
-     */
     this.isEditMode = false;
     this.patient = null;
     this.originalPatient = null;
@@ -111,8 +106,8 @@ export class PatientCreateComponent implements OnInit {
 
         this.loading = false;
 
-        // void this.router.navigate([API_NAVIGATION.PATIENTS.LIST]);
-        console.log('Patient created successfully:', patient);
+        void this.router.navigate([API_NAVIGATION.PATIENTS.LIST]);
+        // console.log('Patient created successfully:', patient);
         this.onReset();
       },
 
@@ -160,7 +155,7 @@ export class PatientCreateComponent implements OnInit {
   ): PatientModel {
 
     return {
-      patientId: this.patient?.patientId ?? 0,
+      // patientId: this.patient?.patientId ?? 0,
 
       abhaId: formData['abhaId'] ?? '',
       firstName: formData['firstName'] ?? '',
@@ -195,6 +190,25 @@ export class PatientCreateComponent implements OnInit {
       return;
     }
     this.patient = structuredClone(this.originalPatient);
+  }
+
+  eventHandler(event: {fieldName: string; eventType: string; value: any;}) {
+    
+    const abhaId = event.value?.trim();
+      if (!abhaId) { return; }
+
+      if (event.fieldName === 'abhaId' && event.value.length > 6 && event.value.length < 15) {
+      this.patientService.isPatientExists(event.value).subscribe({
+        next: (response: any) => {
+          if(response.status === 1) {
+            this.dynamicForm.setFieldError( 'abhaId', 'exists', 'ABHA ID already exists.' );
+          }else{
+            this.dynamicForm.clearFieldError('abhaId', 'exists');
+          }
+        },
+         error: (error) => {}
+      });
+    }
   }
 
 }

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule, TablePageEvent } from 'primeng/table';
@@ -34,7 +35,8 @@ export interface SharedTableConfig {
     CommonModule,
     ButtonModule,
     InputTextModule,
-    TagModule
+    TagModule,
+    FormsModule 
   ],
   templateUrl: './shared-table.component.html',
   styleUrl: './shared-table.component.css'
@@ -54,7 +56,7 @@ export class SharedTableComponent {
     searchable: true,
     paginator: true,
     rows: 20,
-    rowsPerPageOptions: [10, 25, 50, 100],
+    rowsPerPageOptions: [10, 20, 50, 100],
     exportable: true,
     showRefresh: true,
     loading: false,
@@ -75,15 +77,24 @@ export class SharedTableComponent {
 
   @Output() delete = new EventEmitter<any>();
 
+  @Output() searchRecord = new EventEmitter<any>();
 
   onPageChange(event: TablePageEvent): void {
 
     const first = event.first ?? 0;
     const size = event.rows ?? this.config.rows ?? 20;
     const page = Math.floor(first / size);
+    this.currentFirst = first;
     this.pageChange.emit({page, size, first});
   }
+
+  searchValue = '';
+  currentFirst = 0;
+  
   onRefresh(): void {
+    this.searchValue = '';
+    this.currentFirst = 0;
+    this.searchRecord.emit('');
     this.refresh.emit();
   }
 
@@ -153,7 +164,7 @@ onDownloadExcel(): void {
 
   // Exclude action columns from Excel
   const exportColumns = this.columns.filter(
-    column => column.type !== 'action'
+    column => column.type !== 'action' && column.exportable !== false
   );
 
   // Create Excel rows dynamically
@@ -211,4 +222,13 @@ private getCurrentDate(): string {
     .toISOString()
     .split('T')[0];
 }
+
+  onSearch(value: string) {
+    this.searchValue = value;
+    this.searchRecord.emit(value);
+  }
+
+  getSerialNumber(rowIndex: number): number {
+    return this.currentFirst + rowIndex + 1;
+  }
 }

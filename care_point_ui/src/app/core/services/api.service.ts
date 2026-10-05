@@ -36,11 +36,11 @@ export class ApiService {
   public patchObservable(url: string, body: any, params?: HttpParams) {
     return this.httpClient.patch(environment.apiUrl + url, body, { withCredentials:true, ...params });
   }
-  public deletePromise(url: string, body?: any, params?: HttpParams) {
-    return firstValueFrom(this.httpClient.patch(environment.apiUrl + url, body, { withCredentials:true, ...params }))
+  public deletePromise(url: string, params?: HttpParams) {
+    return firstValueFrom(this.httpClient.delete(environment.apiUrl + url, { withCredentials:true, params:params }))
   }
-  public deleteObservable(url: string, body?: any, params?: HttpParams) {
-    return this.httpClient.patch(environment.apiUrl + url, body, { withCredentials:true, ...params });
+  public deleteObservable(url: string, params?: HttpParams) {
+    return this.httpClient.delete(environment.apiUrl + url, { withCredentials:true, params });
   }
   
     public putObservable(url: string, body: any, params?: HttpParams) {

@@ -1,5 +1,5 @@
 export interface PatientModel {
-  patientId: number;
+  patientId?: number;
   abhaId: string;
   firstName: string;
   lastName: string;

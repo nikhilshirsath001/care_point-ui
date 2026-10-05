@@ -7,6 +7,8 @@ export const API_ENDPOINTS = {
     GET_ALL: `${HMIS_BASE}/get`,
     SEARCH: `${HMIS_BASE}/search`,
     UPDATE: `${HMIS_BASE}/update`,
+    DELETE: `${HMIS_BASE}/delete`,
+    EXISTS: `${HMIS_BASE}/exists`,
   },
 
   IPD: {
@@ -61,8 +63,8 @@ export const API_ENDPOINTS = {
 const API_NAVIGATION_BASE = '/main';
 export const API_NAVIGATION = {
   PATIENTS: {
-    BASE: API_NAVIGATION_BASE,
-    CREATE: `${API_NAVIGATION_BASE}/create`,
+    BASE: `${API_NAVIGATION_BASE}/patient`,
+    CREATE: `${API_NAVIGATION_BASE}/patient/create`,
     LIST: `${API_NAVIGATION_BASE}/patient`,
   },
 } as const;

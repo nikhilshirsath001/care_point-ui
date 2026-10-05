@@ -9,6 +9,7 @@ import { PatientService } from '../../services/patient-service.service';
 import { PatientModel } from '../../models/patient-model';
 import { SharedDetailsComponent } from '../../../../shared/shared-details/shared-details.component';
 import { Router } from '@angular/router';
+import { API_NAVIGATION } from '../../../../core/constants/api-endpoints';
 
 @Component({
   selector: 'app-patient-list',
@@ -24,6 +25,7 @@ export class PatientListComponent {
   patientColumns = PATIENT_COLUMNS;
 
   patients = signal<PatientModel[]>([]);
+  filteredPatients = signal<PatientModel[]>([]);
 
   viewDialogVisible: boolean = false;
   selectedPatient = signal<any | null>(null);
@@ -41,8 +43,8 @@ export class PatientListComponent {
   tableConfig: SharedTableConfig = {
     searchable: true,
     paginator: true,
-    rows: 20,
-    rowsPerPageOptions: [10, 25, 50, 100],
+    rows: 10,
+    rowsPerPageOptions: [10, 20, 50, 100],
     exportable: true,
     showRefresh: true,
     loading: false,
@@ -60,6 +62,7 @@ export class PatientListComponent {
   loadPatients(): void {
     this.patientService.getAllPatients(this.currentPage, this.currentPageSize).subscribe((response) => {
       this.patients.set(response.data?.content || []);
+      this.filteredPatients.set(response.data?.content || []);
       this.totalRecords.set(response.data?.totalElements || 0);
     });
   }
@@ -69,8 +72,7 @@ export class PatientListComponent {
   }
 
 editPatient(event: { patient: PatientModel }): void {
-  console.log('Edit patient event received:', event.patient);
-  this.router.navigate(['/main/patient/create'], {
+  this.router.navigate([API_NAVIGATION.PATIENTS.CREATE], {
     state: {
       patient: event,
       mode: 'edit'
@@ -78,4 +80,49 @@ editPatient(event: { patient: PatientModel }): void {
   });
 }
 
+
+  deletePatient(patient: PatientModel ) {
+    const patientId = patient.patientId;
+    if (patientId === undefined) {
+      console.error('Patient ID is undefined. Cannot delete patient.');
+      return;
+    }
+    const confirmDelete = window.confirm(`Are you sure you want to delete patient ${patient.firstName} ${patient.lastName}?`);
+    if (confirmDelete) {
+      this.patientService.deletePatient(patientId).subscribe({
+        next: () => {
+          this.loadPatients();
+        },
+        error: (error) => {
+          console.error(`Failed to delete patient with ID ${patientId}:`, error);
+        }
+      });
+    }
+  }
+
+  onSearch(searchValue: string) {
+    if (searchValue.trim() !== '') {
+      
+      // this.currentPageSize = 100;
+      // this.patientService.searchPatientByKeyword(searchValue, this.currentPage).subscribe((response) => {
+        
+      //   console.log('Search response:', response);
+      //   this.filteredPatients.set(response.data?.data || []);
+      // });
+
+      this.filteredPatients.set(this.patients().filter((patient) => {
+        const lowerSearchValue = searchValue.toLowerCase();
+        return (
+          patient.firstName.toLowerCase().includes(lowerSearchValue) ||
+          patient.lastName.toLowerCase().includes(lowerSearchValue) ||
+          // patient.email.toLowerCase().includes(lowerSearchValue) ||
+          patient.phone.toLowerCase().includes(lowerSearchValue) ||
+          patient.abhaId.toLowerCase().includes(lowerSearchValue)
+        );
+      }));
+    }
+    if (searchValue.trim() === '') {
+      this.filteredPatients.set(this.patients());
+    }
+  }
 }

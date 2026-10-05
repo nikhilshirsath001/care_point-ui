@@ -43,6 +43,9 @@ export interface DynamicFormField {
   hidden?: boolean;
 
   readonly?: boolean;
+  eventType?: 'blur' | 'input' | 'change';
+  eventMessage?: string;
+  eventMessageType?: 'success' | 'error' | 'info' | 'warning';
 }
 
 export interface DynamicFormConfig {

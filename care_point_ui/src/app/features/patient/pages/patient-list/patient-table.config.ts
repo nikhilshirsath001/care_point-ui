@@ -3,9 +3,11 @@ import { TableColumn } from "../../../../shared/shared-table/shared-table.compon
 export const PATIENT_COLUMNS: TableColumn[]= [
 
   {
-    field: 'patientId',
-    header: 'Patient ID',
-    sortable: true
+    field: '__index',
+    header: 'S.No',
+    type: 'number',
+    width: '80px',
+    exportable: false
   },
 
   {

@@ -60,6 +60,8 @@ export class DynamicFormComponent implements OnChanges {
 
   @Output() reset = new EventEmitter<void>();
 
+  @Output() fieldEvent = new EventEmitter<{fieldName: string; eventType: string; value: any; }>();
+
   form!: FormGroup;
 
   constructor(
@@ -171,6 +173,71 @@ export class DynamicFormComponent implements OnChanges {
 
   this.reset.emit();
 }
+
+  onFieldEvent(field: any, eventType: string, event: Event) {
+      if (field.eventType !== eventType) {
+        return;
+      }
+      const value = (event.target as HTMLInputElement).value;
+      this.fieldEvent.emit({fieldName: field.name, eventType, value});
+    }
+
+  setFieldError(fieldName: string, errorKey: string, message: string): void {
+      const control = this.form.get(fieldName);
+
+      if (!control) {
+        return;
+      }
+      control.setErrors({
+        ...(control.errors || {}),
+        [errorKey]: message
+      });
+      control.markAsTouched();
+    }
+
+  clearFieldError(fieldName: string, errorKey: string): void {
+
+    const control = this.form.get(fieldName);
+
+    if (!control?.errors?.[errorKey]) {return;}
+    const errors = { ...control.errors };
+    delete errors[errorKey];
+    control.setErrors(Object.keys(errors).length ? errors : null);
+  }
+
+  getValidationMessage(field: DynamicFormField): string {
+    const control = this.getControl(field.name);
+
+    if (!control || !control.errors) {
+      return '';
+    }
+
+    if (control.hasError('required')) {
+      return `${field.label} is required.`;
+    }
+
+    if (control.hasError('exists')) {
+      return control.getError('exists');
+    }
+
+    if (control.hasError('minlength')) {
+      return `${field.label} is too short.`;
+    }
+
+    if (control.hasError('maxlength')) {
+      return `${field.label} is too long.`;
+    }
+
+    if (control.hasError('email')) {
+      return `Please enter a valid email address.`;
+    }
+
+    if (control.hasError('pattern')) {
+      return `${field.label} has an invalid format.`;
+    }
+
+    return `${field.label} is invalid.`;
+  }
 
 
 }

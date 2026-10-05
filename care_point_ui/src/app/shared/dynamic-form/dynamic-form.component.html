@@ -40,6 +40,7 @@
               [placeholder]="field.placeholder || ''"
               [formControlName]="field.name"
               [readonly]="field.readonly"
+              (blur)="field.eventType === 'blur' && onFieldEvent(field, 'blur', $event)"
             />
 
           }
@@ -232,7 +233,8 @@
           ) {
 
             <small class="text-danger">
-              {{ field.label }} is required or invalid.
+              <!-- {{ field.label }} is required or invalid. -->
+                {{ getValidationMessage(field) }}
             </small>
 
           }

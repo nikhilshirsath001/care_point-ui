@@ -4,7 +4,7 @@ import { DynamicFormConfig } from "../../../../core/models/dynamic-form.model";
 export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
   title: 'Patient Information',
 
-  submitLabel: 'Patient',
+  submitLabel: 'Save Patient',
 
   cancelLabel: 'Cancel',
 
@@ -16,9 +16,16 @@ export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
       label: 'ABHA ID',
       type: 'text',
       placeholder: 'Enter ABHA ID',
+      required: false,
+      eventType: 'blur',
+      validators: [
+        Validators.minLength(6),
+        Validators.maxLength(15)
+      ],
+      eventMessage: '',
+      eventMessageType: 'info',
       col: 'col-12 col-md-6',
     },
-
 
     {
       name: 'firstName',
@@ -26,6 +33,10 @@ export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
       type: 'text',
       placeholder: 'Enter first name',
       required: true,
+      validators: [
+        Validators.required,
+        Validators.maxLength(50)
+      ],
       col: 'col-12 col-md-6',
     },
 
@@ -34,6 +45,11 @@ export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
       label: 'Last Name',
       type: 'text',
       placeholder: 'Enter last name',
+      required: true,
+      validators: [
+        Validators.required,
+        Validators.maxLength(50)
+      ],
       col: 'col-12 col-md-6',
     },
 
@@ -41,6 +57,11 @@ export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
       name: 'dateOfBirth',
       label: 'Date of Birth',
       type: 'date',
+      placeholder: 'Select date of birth',
+      required: false,
+      validators: [
+        // Add Validators.required if DOB is mandatory
+      ],
       col: 'col-12 col-md-6',
     },
 
@@ -49,6 +70,7 @@ export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
       label: 'Gender',
       type: 'select',
       placeholder: 'Select gender',
+      required: true,
       options: [
         {
           label: 'Male',
@@ -63,6 +85,9 @@ export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
           value: 'OTHER',
         },
       ],
+      validators: [
+        Validators.required
+      ],
       col: 'col-12 col-md-6',
     },
 
@@ -71,6 +96,7 @@ export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
       label: 'Blood Group',
       type: 'select',
       placeholder: 'Select blood group',
+      required: false,
       options: [
         { label: 'A+', value: 'A+' },
         { label: 'A-', value: 'A-' },
@@ -81,6 +107,7 @@ export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
         { label: 'O+', value: 'O+' },
         { label: 'O-', value: 'O-' },
       ],
+      validators: [],
       col: 'col-12 col-md-6',
     },
 
@@ -89,6 +116,11 @@ export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
       label: 'Phone',
       type: 'text',
       placeholder: 'Enter phone number',
+      required: true,
+      validators: [
+        Validators.required,
+        Validators.pattern(/^[0-9]{10}$/)
+      ],
       col: 'col-12 col-md-6',
     },
 
@@ -97,6 +129,11 @@ export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
       label: 'Email',
       type: 'email',
       placeholder: 'Enter email address',
+      required: false,
+      validators: [
+        Validators.email,
+        Validators.maxLength(100)
+      ],
       col: 'col-12 col-md-6',
     },
 
@@ -105,6 +142,10 @@ export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
       label: 'Address',
       type: 'textarea',
       placeholder: 'Enter address',
+      required: false,
+      validators: [
+        Validators.maxLength(250)
+      ],
       col: 'col-12',
     },
 
@@ -113,6 +154,10 @@ export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
       label: 'City',
       type: 'text',
       placeholder: 'Enter city',
+      required: false,
+      validators: [
+        Validators.maxLength(100)
+      ],
       col: 'col-12 md:col-4',
     },
 
@@ -121,6 +166,10 @@ export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
       label: 'State',
       type: 'text',
       placeholder: 'Enter state',
+      required: false,
+      validators: [
+        Validators.maxLength(100)
+      ],
       col: 'col-12 md:col-4',
     },
 
@@ -129,6 +178,10 @@ export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
       label: 'Pincode',
       type: 'text',
       placeholder: 'Enter pincode',
+      required: false,
+      validators: [
+        Validators.pattern(/^[0-9]{6}$/)
+      ],
       col: 'col-12 md:col-4',
     },
 
@@ -137,6 +190,10 @@ export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
       label: 'Emergency Contact Name',
       type: 'text',
       placeholder: 'Enter emergency contact name',
+      required: false,
+      validators: [
+        Validators.maxLength(100)
+      ],
       col: 'col-12 col-md-6',
     },
 
@@ -145,6 +202,10 @@ export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
       label: 'Emergency Contact Phone',
       type: 'text',
       placeholder: 'Enter emergency contact phone',
+      required: false,
+      validators: [
+        Validators.pattern(/^[0-9]{10}$/)
+      ],
       col: 'col-12 col-md-6',
     },
 
