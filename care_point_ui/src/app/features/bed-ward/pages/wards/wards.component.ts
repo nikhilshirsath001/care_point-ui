@@ -22,20 +22,21 @@ import { BedWardService } from '../../services/bed-ward.service';
 import { Room } from '../../models/room.model';
 import { WARD_COLUMNS, WARD_TABLE_CONFIG } from '../../config/ward-table.config';
 import { ROOM_COLUMNS, ROOM_TABLE_CONFIG } from '../../config/room-table.config';
+import { PatientSearchComponent } from '../../../../shared/patient-search/patient-search.component';
 
 
 @Component({
   selector: 'app-wards',
-  imports: [   
+  imports: [
     CommonModule,
     ButtonModule,
     DialogModule,
     TabViewModule,
-
     SharedTableComponent,
-
     WardFormComponent,
-    RoomFormComponent],
+    RoomFormComponent,
+    PatientSearchComponent
+],
   templateUrl: './wards.component.html',
   styleUrl: './wards.component.css'
 })

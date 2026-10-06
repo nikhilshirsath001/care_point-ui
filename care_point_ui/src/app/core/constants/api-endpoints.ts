@@ -1,4 +1,5 @@
 const HMIS_BASE = '/hmis';
+const MED_BASE = '/medication';
 
 export const API_ENDPOINTS = {
   PATIENTS: {
@@ -15,6 +16,10 @@ export const API_ENDPOINTS = {
     BASE: `${HMIS_BASE}/admission`,
     GET_ALL: `${HMIS_BASE}/admission/get-all`,
     CREATE: `${HMIS_BASE}/admission/create`,
+    GET_PATEINT_WORKSPACE_BY_PATIENT_ID :`${HMIS_BASE}/admission/treatment/patient/`,
+    CREATE_TREATMENT :"/procedure/treatment",
+    GET_TREATMENTS_BY_ADMISSION_ID:"/procedure/treatment/admission",
+    CREATE_PRESCRIPTION:"/medication/prescription"
   },
 
   BED_WARD: {
@@ -58,6 +63,14 @@ export const API_ENDPOINTS = {
       CREATE: '/services/service/service-category',
     },
   },
+  MEDICATION:{
+    BASE:MED_BASE,
+    GET_ALL:`${MED_BASE}/medications`,
+    PRESCRIPTION:{
+      CREATE_PRESCRIPTION:`${MED_BASE}/prescription`,
+      PATIENT_PRESCRIPTION :`${MED_BASE}/prescription/patient`
+    }
+  }
 } as const;
 
 const API_NAVIGATION_BASE = '/main';

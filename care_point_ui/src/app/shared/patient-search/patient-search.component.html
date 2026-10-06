@@ -1,0 +1,433 @@
+<div class="patient-search">
+  <div class="patient-search-header">
+    <div class="d-flex align-items-start gap-3">
+      <div class="search-icon">
+        <i class="pi pi-search"></i>
+      </div>
+
+      <div class="flex-grow-1">
+        <h5 class="mb-1">
+          {{ config.title || "Find Patient" }}
+        </h5>
+
+        <p class="text-muted mb-0">
+          {{
+            config.description ||
+              "Search using Patient ID, ABHA ID, name or mobile number."
+          }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-2 align-items-center">
+    <div class="col-12 col-md">
+      <div class="position-relative w-100">
+        <input
+          pInputText
+          type="text"
+          class="form-control pe-5 w-100"
+          [(ngModel)]="patientSearchText"
+          [placeholder]="
+            config.placeholder ||
+            'Enter Patient ID, ABHA ID, name or mobile number'
+          "
+          (keyup.enter)="searchPatients()"
+        />
+
+        @if (patientSearchText) {
+          <button
+            type="button"
+            class="btn btn-link position-absolute top-50 end-0 translate-middle-y text-secondary p-0 me-2 clear-search-btn"
+            (click)="clearSearchInput()"
+            title="Clear search"
+            aria-label="Clear search"
+          >
+            <i class="pi pi-times"></i>
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="col-12 col-md-auto">
+      <p-button
+        type="button"
+        icon="pi pi-search"
+        [label]="config.searchButtonLabel || 'Search Patient'"
+        [loading]="patientSearchLoading"
+        [disabled]="!patientSearchText.trim() || patientSearchLoading"
+        styleClass="w-100"
+        (onClick)="searchPatients()"
+      ></p-button>
+    </div>
+  </div>
+  @if (patientSearchLoading) {
+    <div class="patient-search-loading mt-4">
+      <i class="pi pi-spin pi-spinner"></i>
+
+      <div>
+        <strong> Searching patient... </strong>
+
+        <small class="d-block text-muted">
+          Please wait while we search for the patient.
+        </small>
+      </div>
+    </div>
+  }
+
+  @if (
+    !isPatientSelected &&
+    hasSearched &&
+    !patientSearchLoading &&
+    patientSuggestions.length === 1
+  ) {
+    <div class="single-patient-result mt-4">
+      <div
+        class="result-header d-flex justify-content-between align-items-start gap-3"
+      >
+        <div>
+          <h6 class="mb-1">Patient Found</h6>
+
+          <small class="text-muted">
+            One patient matches your search. The patient has been automatically
+            selected.
+          </small>
+        </div>
+
+        <i class="pi pi-check-circle text-success fs-5"></i>
+      </div>
+
+      <div class="single-patient-card mt-3">
+        <div class="patient-result-avatar">
+          <i class="pi pi-user"></i>
+        </div>
+
+        <div class="patient-result-info flex-grow-1">
+          <div class="patient-result-name">
+            {{ getPatientName(patientSuggestions[0]) || "-" }}
+          </div>
+
+          <div class="patient-result-meta">
+            @if (patientSuggestions[0].patientId) {
+              <span>
+                <strong> Patient ID: </strong>
+
+                {{ patientSuggestions[0].patientId }}
+              </span>
+            }
+
+            @if (patientSuggestions[0].patientNo) {
+              <span>
+                <strong> Patient No: </strong>
+
+                {{ patientSuggestions[0].patientNo }}
+              </span>
+            }
+
+            @if (patientSuggestions[0].abhaId) {
+              <span>
+                <strong> ABHA: </strong>
+
+                {{ patientSuggestions[0].abhaId }}
+              </span>
+            }
+          </div>
+
+          <div class="patient-result-meta">
+            @if (
+              patientSuggestions[0].mobileNo ||
+              patientSuggestions[0].phone ||
+              patientSuggestions[0].mobile
+            ) {
+              <span>
+                <strong> Mobile: </strong>
+
+                {{
+                  patientSuggestions[0].mobileNo ||
+                    patientSuggestions[0].phone ||
+                    patientSuggestions[0].mobile ||
+                    "-"
+                }}
+              </span>
+            }
+
+            @if (patientSuggestions[0].gender) {
+              <span>
+                <strong> Gender: </strong>
+
+                {{ patientSuggestions[0].gender }}
+              </span>
+            }
+
+            @if (patientSuggestions[0].dateOfBirth) {
+              <span>
+                <strong> DOB: </strong>
+
+                {{ patientSuggestions[0].dateOfBirth }}
+              </span>
+            }
+          </div>
+
+          <div class="patient-result-meta">
+            @if (patientSuggestions[0].age) {
+              <span>
+                <strong> Age: </strong>
+
+                {{ patientSuggestions[0].age }}
+                Years
+              </span>
+            }
+
+            @if (patientSuggestions[0].bloodGroup) {
+              <span>
+                <strong> Blood Group: </strong>
+
+                {{ patientSuggestions[0].bloodGroup }}
+              </span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end mt-3">
+        <button
+          pButton
+          type="button"
+          [label]="config.selectButtonLabel || 'Select Patient'"
+          icon="pi pi-check"
+          [disabled]="!searchSelectedPatient"
+          (click)="confirmPatientSelection()"
+        ></button>
+      </div>
+    </div>
+  }
+
+  @if (
+    !isPatientSelected &&
+    hasSearched &&
+    !patientSearchLoading &&
+    patientSuggestions.length > 1
+  ) {
+    <div class="multiple-patient-result mt-4">
+      <div
+        class="result-header d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2"
+      >
+        <div>
+          <h6 class="mb-1">Multiple Patients Found</h6>
+
+          <small class="text-muted">
+            Select one patient from the list to continue.
+          </small>
+        </div>
+
+        <span class="patient-count">
+          {{ patientSuggestions.length }}
+
+          {{ patientSuggestions.length === 1 ? "Patient" : "Patients" }}
+        </span>
+      </div>
+
+      <div class="table-responsive mt-3">
+        <p-table
+          [value]="patientSuggestions"
+          [tableStyle]="{
+            'min-width': '750px',
+          }"
+          styleClass="p-datatable-sm"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 70px" class="text-center">Select</th>
+
+              <th>Patient ID</th>
+
+              <th>Patient Name</th>
+
+              <th>Mobile</th>
+
+              <th>ABHA ID</th>
+
+              <th>Gender</th>
+
+              <th>Date Of Birth</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-patient>
+            <tr [class.selected-row]="isSelected(patient)">
+              <td class="text-center">
+                <p-radioButton
+                  name="patientSelection"
+                  [value]="patient"
+                  [(ngModel)]="searchSelectedPatient"
+                ></p-radioButton>
+              </td>
+
+              <td>
+                <strong>
+                  {{ patient.patientId || patient.patientNo || "-" }}
+                </strong>
+              </td>
+
+              <td>
+                {{ getPatientName(patient) || "-" }}
+              </td>
+
+              <td>
+                {{ patient.mobileNo || patient.phone || patient.mobile || "-" }}
+              </td>
+
+              <td>
+                {{ patient.abhaId || "-" }}
+              </td>
+
+              <td>
+                {{ patient.gender || "-" }}
+              </td>
+
+              <td>
+                {{ patient.dateOfBirth || "-" }}
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="7" class="text-center py-4">
+                <i class="pi pi-info-circle me-2"></i>
+
+                No patients found.
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+
+      @if (searchSelectedPatient) {
+        <div class="selected-patient-card mt-4">
+          <div class="d-flex justify-content-between align-items-start gap-3">
+            <div>
+              <h6 class="mb-1">Selected Patient</h6>
+
+              <small class="text-muted">
+                Review the patient details before continuing.
+              </small>
+            </div>
+
+            <i class="pi pi-check-circle text-success fs-5"></i>
+          </div>
+
+          <div class="row g-3 mt-2">
+            <div class="col-12 col-md-6 col-lg-4">
+              <small class="text-muted d-block"> Patient Name </small>
+
+              <strong>
+                {{ getPatientName(searchSelectedPatient) || "-" }}
+              </strong>
+            </div>
+
+            <div class="col-6 col-md-3 col-lg-2">
+              <small class="text-muted d-block"> Patient ID </small>
+
+              <span>
+                {{
+                  searchSelectedPatient.patientId ||
+                    searchSelectedPatient.patientNo ||
+                    "-"
+                }}
+              </span>
+            </div>
+
+            <div class="col-6 col-md-3 col-lg-2">
+              <small class="text-muted d-block"> ABHA ID </small>
+
+              <span>
+                {{ searchSelectedPatient.abhaId || "-" }}
+              </span>
+            </div>
+
+            <div class="col-6 col-md-3 col-lg-2">
+              <small class="text-muted d-block"> Mobile </small>
+
+              <span>
+                {{
+                  searchSelectedPatient.mobileNo ||
+                    searchSelectedPatient.phone ||
+                    searchSelectedPatient.mobile ||
+                    "-"
+                }}
+              </span>
+            </div>
+
+            <div class="col-6 col-md-3 col-lg-2">
+              <small class="text-muted d-block"> Gender </small>
+
+              <span>
+                {{ searchSelectedPatient.gender || "-" }}
+              </span>
+            </div>
+
+            <div class="col-6 col-md-3 col-lg-2">
+              <small class="text-muted d-block"> Date Of Birth </small>
+
+              <span>
+                {{ searchSelectedPatient.dateOfBirth || "-" }}
+              </span>
+            </div>
+
+            @if (searchSelectedPatient.bloodGroup) {
+              <div class="col-6 col-md-3 col-lg-2">
+                <small class="text-muted d-block"> Blood Group </small>
+
+                <span>
+                  {{ searchSelectedPatient.bloodGroup }}
+                </span>
+              </div>
+            }
+
+            @if (searchSelectedPatient.email) {
+              <div class="col-12 col-md-6 col-lg-4">
+                <small class="text-muted d-block"> Email </small>
+
+                <span>
+                  {{ searchSelectedPatient.email }}
+                </span>
+              </div>
+            }
+          </div>
+
+          <div class="d-flex justify-content-end mt-3">
+            <button
+              pButton
+              type="button"
+              [label]="config.selectButtonLabel || 'Select Patient'"
+              icon="pi pi-check"
+              (click)="confirmPatientSelection()"
+            ></button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (
+    !isPatientSelected &&
+    hasSearched &&
+    !patientSearchLoading &&
+    patientSuggestions.length === 0
+  ) {
+    <div class="no-patient-found mt-4">
+      <div class="no-patient-icon">
+        <i class="pi pi-user-minus"></i>
+      </div>
+
+      <div>
+        <strong> No patient found </strong>
+
+        <p class="mb-0 text-muted">
+          No patient matches the entered search criteria.
+        </p>
+      </div>
+    </div>
+  }
+</div>
