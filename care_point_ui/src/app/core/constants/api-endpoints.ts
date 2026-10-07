@@ -70,7 +70,16 @@ export const API_ENDPOINTS = {
       CREATE_PRESCRIPTION:`${MED_BASE}/prescription`,
       PATIENT_PRESCRIPTION :`${MED_BASE}/prescription/patient`
     }
-  }
+  },
+
+  DOCUMENT: {
+    UPLOAD: `/documents`,
+    UPLOAD_ALL: `/documents/files`,
+    GET_ALL_BY_PATIENT_ID: `/documents`,
+    DOWNLOAD: '/documents/:id/download',
+    GET_DOC_TYPES: '/documents/doctypes',
+  },
+
 } as const;
 
 const API_NAVIGATION_BASE = '/main';

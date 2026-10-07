@@ -1,0 +1,300 @@
+<div class="document-upload-card">
+  <div class="document-header">
+    <div>
+      <h5 class="document-title">Documents</h5>
+      <p class="document-subtitle">Upload and manage documents</p>
+    </div>
+  </div>
+        <!-- <div class="document-scope">
+        <label for="documentScope">Document Type</label>
+
+        <p-select
+            inputId="documentScope"
+            [options]="getDocumentScopes()"
+            optionLabel="label"
+            optionValue="value"
+            [(ngModel)]="selectedDocumentScope"
+            placeholder="Select document scope"
+            styleClass="document-scope-select"
+            (onChange)="onDocumentScopeChange()"
+        ></p-select>
+        </div> -->
+
+  <div
+    class="drop-zone"
+    [class.drag-over]="isDragOver"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+  >
+    <div class="drop-icon">
+      <i class="pi pi-cloud-upload"></i>
+    </div>
+
+    <h6>Drag &amp; Drop files here</h6>
+    <p>or browse files from your computer</p>
+
+    <button
+      pButton
+      type="button"
+      label="Browse All Files"
+      icon="pi pi-folder-open"
+      severity="secondary"
+      [outlined]="true"
+      (click)="openBrowse(fileInput)"
+    ></button>
+
+    <small class="file-info">
+      PDF, JPG, JPEG, PNG, DOC, DOCX
+      <br />
+      Maximum file size: 10 MB
+    </small>
+  </div>
+
+  <input
+    #fileInput
+    type="file"
+    multiple
+    class="d-none"
+    accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+    (change)="onFilesSelected($event)"
+  />
+
+  @if (documents.length > 0) {
+    <div class="documents-section">
+      <div class="documents-header">
+        <div class="documents-title">
+          <h6>Documents</h6>
+          <span class="document-count">{{ documents.length }}</span>
+        </div>
+      </div>
+
+      <div class="document-list">
+        @for (document of documents; track document.id; let i = $index) {
+          <div class="document-row">
+            <div class="document-info">
+              <div class="document-file-icon">
+                <i [class]="getFileIcon(document)"></i>
+              </div>
+
+              <div class="document-file-details">
+                <span
+                  class="document-file-name"
+                  [title]="document.fileName"
+                >
+                  {{ document.fileName }}
+                </span>
+
+                <small>
+                  {{ formatFileSize(document.fileSize) }}
+                </small>
+              </div>
+            </div>
+
+            <div class="document-type">
+              <p-select
+                [options]="documentTypes"
+                optionLabel="label"
+                optionValue="value"
+                [(ngModel)]="document.documentType"
+                placeholder="Change Type"
+                styleClass="document-type-select"
+                [disabled]="
+                  document.status === 'uploading' ||
+                  document.status === 'uploaded'
+                "
+                (onChange)="onDocumentTypeChange(document)"
+              ></p-select>
+            </div>
+
+            <div class="document-status">
+              <p-tag
+                [value]="getStatusLabel(document.status)"
+                [severity]="getStatusSeverity(document.status)"
+              ></p-tag>
+
+              @if (document.status === 'uploading') {
+                <div class="progress-wrapper">
+                  <div class="progress-bar">
+                    <div
+                      class="progress-value"
+                      [style.width.%]="document.progress"
+                    ></div>
+                  </div>
+
+                  <small>{{ document.progress }}%</small>
+                </div>
+              }
+
+              @if (document.status === 'failed') {
+                <small class="text-danger">
+                  {{ document.errorMessage }}
+                </small>
+              }
+            </div>
+
+            <div class="document-actions">
+              <button
+                pButton
+                type="button"
+                icon="pi pi-eye"
+                severity="info"
+                [outlined]="true"
+                pTooltip="View"
+                tooltipPosition="top"
+                [disabled]="!document.file"
+                (click)="viewDocument(document)"
+              ></button>
+
+              @if (document.status !== 'uploaded') {
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-folder-open"
+                  severity="secondary"
+                  [outlined]="true"
+                  pTooltip="Browse File"
+                  tooltipPosition="top"
+                  [disabled]="document.status === 'uploading'"
+                  (click)="browseFile(i, fileInput)"
+                ></button>
+
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-upload"
+                  pTooltip="Upload"
+                  tooltipPosition="top"
+                  [loading]="document.status === 'uploading'"
+                  [disabled]="
+                    document.status === 'uploading' ||
+                    !document.file
+                  "
+                  (click)="uploadDocument(document)"
+                ></button>
+
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-trash"
+                  severity="danger"
+                  [outlined]="true"
+                  pTooltip="Remove"
+                  tooltipPosition="top"
+                  [disabled]="document.status === 'uploading'"
+                  (click)="deleteDocument(document, i)"
+                ></button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="documents-footer">
+        @if (documents.length > 1) {
+          <button
+            pButton
+            type="button"
+            label="Delete All"
+            icon="pi pi-trash"
+            severity="danger"
+            [outlined]="true"
+            (click)="deleteAll()"
+          ></button>
+        }
+
+        <button
+          pButton
+          type="button"
+          label="Remove Uploaded"
+          icon="pi pi-times-circle"
+          severity="warn"
+          [outlined]="true"
+          [disabled]="!hasUploadedDocuments()"
+          (click)="removeUploadedDocuments()"
+        ></button>
+
+        <button
+          pButton
+          type="button"
+          label="Upload All"
+          icon="pi pi-cloud-upload"
+          [disabled]="!hasPendingDocuments()"
+          (click)="uploadAll()"
+        ></button>
+      </div>
+    </div>
+  }
+</div>
+
+<p-dialog
+  [(visible)]="viewDialogVisible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="true"
+  [dismissableMask]="true"
+  [header]="viewDocumentName"
+  [style]="{ width: '85vw', height: '90vh' }"
+  [contentStyle]="{ padding: '0', overflow: 'hidden' }"
+  (onHide)="closeViewDocument()"
+>
+  @if (safeDocumentUrl) {
+    @if (isPdfFile()) {
+      <div class="document-preview document-preview-pdf">
+        <iframe
+          [src]="safeDocumentUrl"
+          class="document-pdf-viewer"
+        ></iframe>
+      </div>
+    } @else if (isImageFile()) {
+      <div class="document-preview document-preview-image">
+        <img
+          [src]="viewDocumentUrl"
+          [alt]="viewDocumentName"
+          class="document-image"
+        />
+      </div>
+    } @else if (isWordDocument()) {
+      <div class="document-office-viewer">
+        <div class="office-file-icon">
+          <i class="pi pi-file-word"></i>
+        </div>
+
+        <h5>{{ viewDocumentName }}</h5>
+
+        <p>
+          Word documents cannot be rendered directly
+          by the browser.
+        </p>
+
+        <button
+          pButton
+          type="button"
+          label="Open Document"
+          icon="pi pi-external-link"
+          (click)="openDocument()"
+        ></button>
+      </div>
+    } @else {
+      <div class="document-office-viewer">
+        <div class="office-file-icon">
+          <i class="pi pi-file"></i>
+        </div>
+
+        <h5>{{ viewDocumentName }}</h5>
+
+        <p>
+          Preview is not available for this file type.
+        </p>
+
+        <button
+          pButton
+          type="button"
+          label="Open Document"
+          icon="pi pi-external-link"
+          (click)="openDocument()"
+        ></button>
+      </div>
+    }
+  }
+</p-dialog>
