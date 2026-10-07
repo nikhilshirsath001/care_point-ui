@@ -4,7 +4,7 @@ import { DynamicFormConfig } from "../../../../core/models/dynamic-form.model";
 export const PATIENT_FORM_CONFIG: DynamicFormConfig = {
   title: 'Patient Information',
 
-  submitLabel: 'Save Patient',
+  submitLabel: 'Patient',
 
   cancelLabel: 'Cancel',
 

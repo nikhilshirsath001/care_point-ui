@@ -6,6 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule, TablePageEvent } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import * as XLSX from 'xlsx';
+import { Tooltip } from 'primeng/tooltip';
 
 export interface TableColumn {
   field: string;
@@ -26,6 +27,9 @@ export interface SharedTableConfig {
   showRefresh?: boolean;
   loading?: boolean;
   emptyMessage?: string;
+  canUploadDocuments?:boolean;
+  canCreateNewRecord?:boolean;
+  canViewDocuments?:boolean;
 }
 
 @Component({
@@ -36,7 +40,8 @@ export interface SharedTableConfig {
     ButtonModule,
     InputTextModule,
     TagModule,
-    FormsModule 
+    FormsModule,
+    Tooltip 
   ],
   templateUrl: './shared-table.component.html',
   styleUrl: './shared-table.component.css'
@@ -79,6 +84,12 @@ export class SharedTableComponent {
 
   @Output() searchRecord = new EventEmitter<any>();
 
+  @Output() uploadDocuments = new EventEmitter<any>();
+  
+  @Output() createNewRecord = new EventEmitter<void>();
+  
+  @Output() viewDocuments = new EventEmitter<any>();
+
   onPageChange(event: TablePageEvent): void {
 
     const first = event.first ?? 0;
@@ -113,6 +124,17 @@ export class SharedTableComponent {
     this.delete.emit(row);
   }
 
+  onUploadDocuments(row: any): void {
+    this.uploadDocuments.emit(row);
+  }
+
+  onCreateNewRecord(): void {
+    this.createNewRecord.emit();
+  }
+
+   onViewDocuments(row: any): void {
+    this.viewDocuments.emit(row);
+  }
 
   getStatusSeverity(
     status: string

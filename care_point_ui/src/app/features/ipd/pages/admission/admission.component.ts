@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RadioButtonModule } from 'primeng/radiobutton';
 import {
   FormBuilder,
   FormGroup,
@@ -10,28 +9,37 @@ import {
 } from '@angular/forms';
 
 import { Router } from '@angular/router';
+
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
-import { DialogModule } from 'primeng/dialog';
 import { TagModule } from 'primeng/tag';
-import {
-  SharedTableConfig,
-  TableColumn,
-} from '../../../../shared/shared-table/shared-table.component';
+import { TableModule } from 'primeng/table';
+import { RadioButtonModule } from 'primeng/radiobutton';
+
 import { StaffService } from '../../../staff/services/staff.service';
 import { IpdService } from '../../services/ipd.service';
 import { BedWardService } from '../../../bed-ward/services/bed-ward.service';
 import { PatientService } from '../../../patient/services/patient-service.service';
+
 import { Admission, BedAssignment } from '../../models/admission.model';
-import { TableModule } from 'primeng/table';
-import { ADMISSION_TYPES, STATUS_LIST } from '../../config/ipd-form.config';
+
+import {
+  ADMISSION_TYPES,
+  STATUS_LIST,
+} from '../../config/ipd-form.config';
+
+import {
+  PatientSearchComponent,
+  PatientSearchConfig,
+} from '../../../../shared/patient-search/patient-search.component';
 
 @Component({
   selector: 'app-admission',
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -40,12 +48,12 @@ import { ADMISSION_TYPES, STATUS_LIST } from '../../config/ipd-form.config';
     DatePickerModule,
     InputTextModule,
     TextareaModule,
-    DialogModule,
     TagModule,
     AutoCompleteModule,
     FormsModule,
     RadioButtonModule,
     TableModule,
+    PatientSearchComponent,
   ],
   templateUrl: './admission.component.html',
   styleUrl: './admission.component.css',
@@ -69,16 +77,6 @@ export class AdmissionComponent implements OnInit {
 
   submitting = false;
 
-  patientDialogVisible = false;
-
-  patientSearchText = '';
-
-  patientSearchLoading = false;
-
-  patientSuggestions: any[] = [];
-
-  searchSelectedPatient: any | null = null;
-
   selectedPatient: any | null = null;
 
   admissionTypeList = ADMISSION_TYPES;
@@ -91,7 +89,7 @@ export class AdmissionComponent implements OnInit {
     private staffService: StaffService,
     private ipdService: IpdService,
     private bedWardService: BedWardService,
-    private patientService: PatientService,
+    private patientService: PatientService
   ) {}
 
   ngOnInit(): void {
@@ -100,9 +98,35 @@ export class AdmissionComponent implements OnInit {
     this.createForm();
   }
 
+  readonly patientSearchConfig: PatientSearchConfig = {
+    title: 'Find Patient',
+    description:
+      'Search for an existing patient using Patient ABHA ID, name or mobile number.',
+    placeholder: 'Enter Patient ABHA ID, name or mobile number',
+    searchButtonLabel: 'Search Patient',
+    selectButtonLabel: 'Select Patient',
+  };
+
+  readonly searchPatientFn = (keyword: string) =>
+    this.patientService.searchPatientByKeyword(keyword);
+
+  onPatientSelected(patient: any): void {
+    if (!patient?.patientId) {
+      return;
+    }
+
+    this.selectedPatient = patient;
+
+    this.admissionForm.patchValue({
+      patientId: patient.patientId,
+    });
+
+    this.admissionForm.get('patientId')?.markAsTouched();
+  }
+
   createForm(): void {
     this.admissionForm = this.fb.group({
-      patientId: [2, Validators.required],
+      patientId: [null, Validators.required],
 
       admissionDate: [new Date(), Validators.required],
 
@@ -129,65 +153,55 @@ export class AdmissionComponent implements OnInit {
     });
   }
 
-  getAllWards() {
+  getAllWards(): void {
     this.bedWardService.getAllWards().subscribe({
       next: (res: any) => {
-        this.wards = res.data;
+        this.wards = res?.data ?? [];
       },
-      error: (error: any) => {},
+      error: (error: any) => {
+        console.error('Failed to load wards', error);
+      },
     });
   }
 
-  getAllDoctors() {
+  getAllDoctors(): void {
     this.staffService.getAllStaff().subscribe({
       next: (res: any) => {
         this.doctors = res?.data?.content ?? [];
       },
-      error: (error: any) => {},
-    });
-  }
-
-  searchPatientByKeyword(keyword: any) {
-    this.patientService.searchPatientByKeyword(keyword).subscribe({
-      next: (response: any) => {
-        this.patientSearchLoading = false;
-
-        const patients = response?.data ?? [];
-
-        this.patientSuggestions.push(patients);
-      },
-
       error: (error: any) => {
-        this.patientSearchLoading = false;
-
-        this.patientSuggestions = [];
-
-        console.error('Patient search failed', error);
+        console.error('Failed to load doctors', error);
       },
     });
   }
 
   onWardChange(): void {
     const wardId = this.admissionForm.get('wardId')?.value;
+
     this.bedWardService.getRoomBaseOnWardId(wardId).subscribe({
       next: (res: any) => {
         this.rooms = res?.data ?? [];
       },
-      error: (error: any) => {},
+      error: (error: any) => {
+        console.error('Failed to load rooms', error);
+      },
     });
   }
 
   onRoomChange(): void {
     const roomId = this.admissionForm.get('roomId')?.value;
+
     this.getAvailableBedsBasedOnRoomId(roomId);
   }
 
-  getAvailableBedsBasedOnRoomId(roomId: any) {
+  getAvailableBedsBasedOnRoomId(roomId: any): void {
     this.bedWardService.getAvailableBedsBasedOnRoomId(roomId).subscribe({
       next: (res: any) => {
-        this.beds = res?.data ??[];
+        this.beds = res?.data ?? [];
       },
-      error: (error: any) => {},
+      error: (error: any) => {
+        console.error('Failed to load available beds', error);
+      },
     });
   }
 
@@ -204,40 +218,66 @@ export class AdmissionComponent implements OnInit {
 
     if (!bedId) {
       console.error('Bed is not selected');
+      this.submitting = false;
+      return;
+    }
+
+    const patientId = this.admissionForm.get('patientId')?.value;
+
+    if (!patientId) {
+      console.error('Patient is not selected');
+      this.submitting = false;
       return;
     }
 
     const payloadForAdmission: Admission = {
-      // patientId: this.selectedPatient.patientId,
-      patientId: 1,
+      patientId: patientId,
 
-      admissionDate: this.admissionForm.get('admissionDate')?.value,
-      admissionType: this.admissionForm.get('admissionType')?.value,
-      status: this.admissionForm.get('status')?.value,
-      reason: this.admissionForm.get('reasonForAdmission')?.value,
-      admittingDoctorId: this.admissionForm.get('admittingDoctorId')?.value,
+      admissionDate:
+        this.admissionForm.get('admissionDate')?.value,
+
+      admissionType:
+        this.admissionForm.get('admissionType')?.value,
+
+      status:
+        this.admissionForm.get('status')?.value,
+
+      reason:
+        this.admissionForm.get('reasonForAdmission')?.value,
+
+      admittingDoctorId:
+        this.admissionForm.get('admittingDoctorId')?.value,
     };
 
-    console.log('Create Admission Payload:', payloadForAdmission);
+    console.log(
+      'Create Admission Payload:',
+      payloadForAdmission
+    );
 
     this.createAdmission(payloadForAdmission, bedId);
-
-    setTimeout(() => {
-      this.submitting = false;
-      this.router.navigate(['/main/ipd']);
-    }, 800);
   }
 
-  createAdmission(admissionPayload: Admission, bedId: number): void {
+  createAdmission(
+    admissionPayload: Admission,
+    bedId: number
+  ): void {
     this.ipdService.createAdmission(admissionPayload).subscribe({
       next: (response: any) => {
-        console.log('Admission created successfully:', response);
+        console.log(
+          'Admission created successfully:',
+          response
+        );
 
-        const admissionId = response?.data?.admissionId;
+        const admissionId =
+          response?.data?.admissionId;
 
         if (!admissionId) {
-          console.error('Admission ID not received from API response');
+          console.error(
+            'Admission ID not received from API response'
+          );
+
           this.submitting = false;
+
           return;
         }
 
@@ -247,35 +287,53 @@ export class AdmissionComponent implements OnInit {
           bedId: bedId,
         };
 
-        console.log('Create Bed Assignment Payload:', bedAssignmentPayload);
+        console.log(
+          'Create Bed Assignment Payload:',
+          bedAssignmentPayload
+        );
 
-        this.createBedAssignment(bedAssignmentPayload);
+        this.createBedAssignment(
+          bedAssignmentPayload
+        );
       },
 
       error: (error: any) => {
-        console.error('Admission creation failed:', error);
+        console.error(
+          'Admission creation failed:',
+          error
+        );
 
         this.submitting = false;
       },
     });
   }
 
-  createBedAssignment(bedAssignmentPayload: BedAssignment): void {
-    this.bedWardService.assignBedToPatient(bedAssignmentPayload).subscribe({
-      next: (response: any) => {
-        console.log('Bed assigned successfully:', response);
+  createBedAssignment(
+    bedAssignmentPayload: BedAssignment
+  ): void {
+    this.bedWardService
+      .assignBedToPatient(bedAssignmentPayload)
+      .subscribe({
+        next: (response: any) => {
+          console.log(
+            'Bed assigned successfully:',
+            response
+          );
 
-        this.submitting = false;
+          this.submitting = false;
 
-        this.router.navigate(['/main/ipd']);
-      },
+          this.router.navigate(['/main/ipd']);
+        },
 
-      error: (error: any) => {
-        console.error('Bed assignment failed:', error);
+        error: (error: any) => {
+          console.error(
+            'Bed assignment failed:',
+            error
+          );
 
-        this.submitting = false;
-      },
-    });
+          this.submitting = false;
+        },
+      });
   }
 
   cancel(): void {
@@ -283,81 +341,35 @@ export class AdmissionComponent implements OnInit {
   }
 
   isInvalid(controlName: string): boolean {
-    const control = this.admissionForm.get(controlName);
+    const control =
+      this.admissionForm.get(controlName);
 
-    return !!(control && control.invalid && (control.dirty || control.touched));
+    return !!(
+      control &&
+      control.invalid &&
+      (control.dirty || control.touched)
+    );
   }
 
   get selectedBed(): any | undefined {
-    const bedId = this.admissionForm.get('bedId')?.value;
+    const bedId =
+      this.admissionForm.get('bedId')?.value;
 
-    return this.filteredBeds.find((bed) => bed.bedId === bedId);
+    return this.filteredBeds.find(
+      (bed) => bed.bedId === bedId
+    );
   }
 
-  openPatientSearch(): void {
-    this.patientDialogVisible = true;
-
-    this.patientSearchText = '';
-
-    this.patientSuggestions = [];
-
-    this.searchSelectedPatient = null;
-  }
-
-  searchPatients(): void {
-    const searchValue = this.patientSearchText.trim();
-
-    if (!searchValue) {
-      return;
-    }
-
-    this.patientSearchLoading = true;
-
-    this.patientSuggestions = [];
-
-    this.searchSelectedPatient = null;
-
-    this.patientService.searchPatientByKeyword(searchValue).subscribe({
-      next: (response: any) => {
-        this.patientSuggestions = response.data ?? [];
-
-        if (this.patientSuggestions.length === 1) {
-          this.searchSelectedPatient = this.patientSuggestions[0];
-        }
-
-        this.patientSearchLoading = false;
-      },
-
-      error: (error: any) => {
-        console.error('Patient search failed', error);
-
-        this.patientSuggestions = [];
-
-        this.searchSelectedPatient = null;
-
-        this.patientSearchLoading = false;
-      },
-    });
-  }
-
-  confirmPatientSelection(): void {
-    if (!this.searchSelectedPatient) {
-      return;
-    }
-
-    this.selectedPatient = this.searchSelectedPatient;
+  changePatient(): void {
+    this.selectedPatient = null;
 
     this.admissionForm.patchValue({
-      patientId: this.searchSelectedPatient.patientId,
+      patientId: null,
     });
 
-    this.patientDialogVisible = false;
-
-    this.patientSearchText = '';
-
-    this.patientSuggestions = [];
-
-    this.searchSelectedPatient = null;
+    this.admissionForm
+      .get('patientId')
+      ?.markAsUntouched();
   }
 
   clearPatient(): void {
@@ -367,16 +379,8 @@ export class AdmissionComponent implements OnInit {
       patientId: null,
     });
 
-    this.admissionForm.get('patientId')?.markAsTouched();
-  }
-
-  closePatientSearch(): void {
-    this.patientDialogVisible = false;
-
-    this.patientSearchText = '';
-
-    this.patientSuggestions = [];
-
-    this.searchSelectedPatient = null;
+    this.admissionForm
+      .get('patientId')
+      ?.markAsTouched();
   }
 }

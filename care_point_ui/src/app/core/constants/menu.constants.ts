@@ -71,7 +71,7 @@ export const MENU_ITEMS: MenuItem[] = [
         routerLink: ['/main/ipd/admission'],
       },
       {
-        label: 'Treatment & Progress',
+        label: 'Treatment & Prescriptions',
         icon: 'pi pi-chart-line',
         routerLink: ['/main/ipd/treatment'],
       },

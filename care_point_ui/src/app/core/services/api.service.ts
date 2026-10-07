@@ -47,4 +47,13 @@ export class ApiService {
     return this.httpClient.put(environment.apiUrl + url, body, { withCredentials:true, ...params });
   }
   
+  public postObservableTest(url: string, body: any, options?: { observe?: 'events'; reportProgress?: boolean }):
+    any{
+    return this.httpClient.post<any>(environment.apiUrl + url, body, {
+      observe: 'events',
+      reportProgress: options?.reportProgress ?? false,
+      withCredentials: true
+    });
+  };
+
 }

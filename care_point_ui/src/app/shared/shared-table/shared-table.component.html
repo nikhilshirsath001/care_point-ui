@@ -38,6 +38,17 @@
       }
 
 
+      @if (config.canCreateNewRecord) {
+        <button
+          pButton
+          type="button"
+          icon="pi pi-plus"
+          label= 'Create {{title.substring(0,(title.length)-1)}}'
+          class="p-button-success export-btn"
+          (click)="onCreateNewRecord()">
+        </button>
+      }
+
       @if (config.exportable) {
         <button
           pButton
@@ -241,6 +252,29 @@
                     (click)="onView(rowData)">
                   </button>
 
+                   @if (config.canUploadDocuments) {
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-upload"
+                    pTooltip="Upload Documents"
+                    class="p-button-rounded p-button-text view-btn"
+
+                    (click)="onUploadDocuments(rowData)">
+                  </button>
+                  }
+
+                  @if (config.canViewDocuments) {
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-link"
+                    pTooltip="View Documents"
+                    class="p-button-rounded p-button-text view-btn"
+
+                    (click)="onViewDocuments(rowData)">
+                  </button>
+                  }
 
                   <button
                     pButton

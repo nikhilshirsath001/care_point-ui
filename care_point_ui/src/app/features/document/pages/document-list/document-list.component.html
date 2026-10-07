@@ -1,0 +1,311 @@
+<div class="document-container">
+  <div class="document-header">
+    <div class="document-title">
+      <h2>Patient Documents</h2>
+      <span>{{ documentCount }} files</span>
+    </div>
+
+    <div class="view-toggle">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-list"
+        [text]="viewMode !== 'list'"
+        [outlined]="viewMode === 'list'"
+        (click)="viewMode = 'list'">
+      </button>
+
+      <button
+        pButton
+        type="button"
+        icon="pi pi-th-large"
+        [text]="viewMode !== 'grid'"
+        [outlined]="viewMode === 'grid'"
+        (click)="viewMode = 'grid'">
+      </button>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <div class="search-box">
+      <i class="pi pi-search"></i>
+
+      <input
+        pInputText
+        type="text"
+        [(ngModel)]="searchText"
+        (input)="onSearch()"
+        placeholder="Search..." />
+    </div>
+
+    <p-select
+      [options]="categories"
+      [(ngModel)]="selectedCategory"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Category"
+      (onChange)="applyFilters()">
+    </p-select>
+
+    <p-select
+      [options]="dateOptions"
+      [(ngModel)]="selectedDate"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Date"
+      (onChange)="applyFilters()">
+    </p-select>
+
+    <p-select
+      [options]="sortOptions"
+      [(ngModel)]="selectedSort"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Sort"
+      (onChange)="applyFilters()">
+    </p-select>
+
+    <p-select
+      [options]="verifiedOptions"
+      [(ngModel)]="selectedSensitive"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Sensitive"
+      (onChange)="applyFilters()">
+    </p-select>
+
+    <button
+      pButton
+      type="button"
+      label="Reset"
+      icon="pi pi-refresh"
+      [text]="true"
+      (click)="resetFilters()">
+    </button>
+  </div>
+
+  <div class="section-title">
+    DOCUMENTS
+  </div>
+
+  <div
+    *ngIf="loading"
+    class="empty-state">
+    <i class="pi pi-spin pi-spinner"></i>
+    <span>Loading documents...</span>
+  </div>
+
+  <div
+    *ngIf="!loading && filteredDocuments.length === 0"
+    class="empty-state">
+    <i class="pi pi-folder-open"></i>
+
+    <h3>No documents found</h3>
+
+    <p>
+      There are no saved documents for this patient.
+    </p>
+  </div>
+
+  <div
+    *ngIf="
+      !loading &&
+      filteredDocuments.length > 0 &&
+      viewMode === 'grid'
+    "
+    class="document-grid">
+
+    <div
+      class="document-card"
+      *ngFor="let doc of filteredDocuments">
+
+      <div class="card-top">
+        <div class="document-icon">
+          <i [class]="getFileIcon(doc)"></i>
+        </div>
+
+        <span class="document-type">
+          {{ getDocumentTypeLabel(doc.documentType) }}
+        </span>
+      </div>
+
+      <div class="document-info">
+        <h3 [pTooltip]="doc.fileName">
+          {{ doc.fileName }}
+        </h3>
+
+        <div class="document-meta">
+          <span>{{ getFileSize(doc.fileSize) }}</span>
+          <span>{{ getDocumentDate(doc) }}</span>
+        </div>
+      </div>
+
+      <div class="card-status">
+        <p-tag
+          *ngIf="isVerified(doc)"
+          value="Verified"
+          severity="success">
+        </p-tag>
+
+        <p-tag
+          *ngIf="doc.sensitive"
+          value="Sensitive"
+          severity="warn">
+        </p-tag>
+      </div>
+
+      <div class="card-actions">
+        <button
+          pButton
+          type="button"
+          label="Preview"
+          icon="pi pi-eye"
+          [text]="true"
+          (click)="preview(doc)">
+        </button>
+
+        <button
+          pButton
+          type="button"
+          icon="pi pi-download"
+          [text]="true"
+          pTooltip="Download"
+          (click)="download(doc)">
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    *ngIf="
+      !loading &&
+      filteredDocuments.length > 0 &&
+      viewMode === 'list'
+    "
+    class="document-list">
+
+    <div
+      class="document-row"
+      *ngFor="let doc of filteredDocuments">
+
+      <div class="row-icon">
+        <i [class]="getFileIcon(doc)"></i>
+      </div>
+
+      <div class="row-info">
+        <div class="row-name">
+          {{ doc.fileName }}
+        </div>
+
+        <div class="row-meta">
+          <span>
+            {{ getDocumentTypeLabel(doc.documentType) }}
+          </span>
+
+          <span>
+            {{ getFileSize(doc.fileSize) }}
+          </span>
+
+          <span>
+            {{ getDocumentDate(doc) }}
+          </span>
+        </div>
+      </div>
+
+      <div class="row-status">
+        <p-tag
+          *ngIf="isVerified(doc)"
+          value="Verified"
+          severity="success">
+        </p-tag>
+
+        <p-tag
+          *ngIf="doc.sensitive"
+          value="Sensitive"
+          severity="warn">
+        </p-tag>
+      </div>
+
+      <div class="row-actions">
+        <button
+          pButton
+          type="button"
+          label="Preview"
+          icon="pi pi-eye"
+          [text]="true"
+          (click)="preview(doc)">
+        </button>
+
+        <button
+          pButton
+          type="button"
+          icon="pi pi-download"
+          [text]="true"
+          pTooltip="Download"
+          (click)="download(doc)">
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-dialog
+  [(visible)]="previewVisible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{
+    width: '80vw',
+    maxWidth: '1000px'
+  }"
+  [contentStyle]="{
+    padding: '0'
+  }"
+  (onHide)="closePreview()">
+
+  <div
+    *ngIf="previewDocument"
+    class="preview-container">
+
+    <div class="preview-header">
+      {{ previewDocument.fileName }}
+    </div>
+
+    <div class="preview-body">
+      <img
+        *ngIf="getPreviewType(previewDocument) === 'image'"
+        [src]="previewUrl"
+        [alt]="previewDocument.fileName"
+        class="preview-image" />
+
+      <iframe
+        *ngIf="getPreviewType(previewDocument) === 'pdf'"
+        [src]="previewUrl"
+        width="100%"
+        height="600"
+        frameborder="0">
+      </iframe>
+
+      <div
+        *ngIf="getPreviewType(previewDocument) === 'other'"
+        class="preview-unavailable">
+
+        <i class="pi pi-file"></i>
+
+        <p>
+          Preview is not available for this file type.
+        </p>
+
+        <button
+          pButton
+          type="button"
+          label="Download"
+          icon="pi pi-download"
+          (click)="download(previewDocument)">
+        </button>
+      </div>
+    </div>
+  </div>
+</p-dialog>

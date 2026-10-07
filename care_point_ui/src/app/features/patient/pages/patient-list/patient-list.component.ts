@@ -10,10 +10,14 @@ import { PatientModel } from '../../models/patient-model';
 import { SharedDetailsComponent } from '../../../../shared/shared-details/shared-details.component';
 import { Router } from '@angular/router';
 import { API_NAVIGATION } from '../../../../core/constants/api-endpoints';
+import { DocumentUploadComponent } from '../../../document/pages/document-upload/document-upload.component';
+import { Dialog } from 'primeng/dialog';
+import { DocumentItem } from '../../../document/model/document-model';
+import { DocumentListComponent } from '../../../document/pages/document-list/document-list.component';
 
 @Component({
   selector: 'app-patient-list',
-  imports: [SharedTableComponent, SharedDetailsComponent],
+  imports: [SharedTableComponent, SharedDetailsComponent, DocumentUploadComponent, Dialog, DocumentListComponent],
   templateUrl: './patient-list.component.html',
   styleUrl: './patient-list.component.css',
 })
@@ -32,6 +36,14 @@ export class PatientListComponent {
   currentPage = 0;
   currentPageSize = 20;
 
+  documentUploadVisible=false
+  selectedPatientId!:number;
+  selectedViewPatientId!:number;
+  uploadedBy!:number;
+  documents: DocumentItem[] = [];
+  
+  documentViewVisible=false
+
   viewPatient(patient: PatientModel): void {
     this.selectedPatient.set(patient);
     this.viewDialogVisible = true;
@@ -49,6 +61,9 @@ export class PatientListComponent {
     showRefresh: true,
     loading: false,
     emptyMessage: 'No patients found',
+    canUploadDocuments:true,
+    canCreateNewRecord:true,
+    canViewDocuments:true,
   };
 
   totalRecords = signal(0);
@@ -125,4 +140,38 @@ editPatient(event: { patient: PatientModel }): void {
       this.filteredPatients.set(this.patients());
     }
   }
+
+  uploadPatientDocuments(patient: PatientModel) {
+    this.documents = [];
+    this.documentUploadVisible=true;
+    this.uploadedBy=1;//update when login token
+    this.selectedPatientId = patient?.patientId!;
+    
+  }
+  closeDocumentUpload() {
+    this.documentUploadVisible=false;
+    this.uploadedBy!=null;
+    this.selectedPatientId!=null;
+    this.documents = [];
+  }
+
+  createNewPatient() {
+    this.router.navigate([API_NAVIGATION.PATIENTS.CREATE]);
+  }
+  
+  
+  viewPatientDocuments(patient: PatientModel) {
+    this.documents = [];
+    this.documentViewVisible=true;
+    this.selectedViewPatientId = patient?.patientId!;
+    
+  }
+
+  closeViewPatientDocuments() {
+    this.documentViewVisible=false;
+    this.selectedViewPatientId!=null;
+    this.documents = [];
+    
+  }
+
 }
