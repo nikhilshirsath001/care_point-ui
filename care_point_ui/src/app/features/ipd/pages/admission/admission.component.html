@@ -1,9 +1,18 @@
 <div class="page-container">
+  <!-- PAGE HEADER -->
   <div class="page-header">
-    <div>
-      <h2 class="mb-1">New Inpatient Admission</h2>
+    <div class="page-title-section">
+      <div class="page-title-icon">
+        <i class="pi pi-building"></i>
+      </div>
 
-      <p class="text-muted mb-0">Register a patient for inpatient care.</p>
+      <div>
+        <div class="page-eyebrow">INPATIENT MANAGEMENT</div>
+
+        <h2>New Inpatient Admission</h2>
+
+        <p>Register a patient and assign their inpatient care location.</p>
+      </div>
     </div>
 
     <button
@@ -11,158 +20,217 @@
       type="button"
       label="Back to Inpatients"
       icon="pi pi-arrow-left"
-      class="p-button-outlined"
+      class="p-button-outlined back-button"
       (click)="cancel()"
     ></button>
   </div>
 
-  <form [formGroup]="admissionForm" (ngSubmit)="saveAdmission()">
-
-    <div class="form-card">
-      <div class="section-header">
-        <div class="section-icon">
-          <i class="pi pi-user"></i>
+  <!-- PATIENT SEARCH -->
+  @if (!selectedPatient) {
+    <div class="patient-search-wrapper">
+      <div class="patient-search-heading">
+        <div class="patient-search-icon">
+          <i class="pi pi-search"></i>
         </div>
 
         <div>
-          <h4>Patient Information</h4>
+          <span class="patient-search-label"> Patient Selection </span>
 
-          <p>Select an existing registered patient.</p>
+          <span class="patient-search-description">
+            Search and select a registered patient to continue with admission.
+          </span>
         </div>
       </div>
 
-      @if (!selectedPatient) {
-        <div class="patient-search-box">
-          <div>
-            <h5>Select Patient</h5>
+      <app-patient-search
+        [searchFn]="searchPatientFn"
+        [config]="patientSearchConfig"
+        (patientSelected)="onPatientSelected($event)"
+      ></app-patient-search>
+    </div>
+  }
 
-            <p class="text-muted mb-0">
-              Search by patient number, name or mobile number.
-            </p>
+  <form [formGroup]="admissionForm" (ngSubmit)="saveAdmission()">
+    <!-- PATIENT INFORMATION -->
+    @if (selectedPatient) {
+      <div class="form-card patient-card">
+        <div class="section-header">
+          <div class="section-header-left">
+            <div class="section-icon patient-icon">
+              <i class="pi pi-user"></i>
+            </div>
+
+            <div>
+              <h4>Patient Information</h4>
+
+              <p>Selected patient for this inpatient admission.</p>
+            </div>
           </div>
 
-          <button
-            pButton
-            type="button"
-            label="Search Patient"
-            icon="pi pi-search"
-            (click)="openPatientSearch()"
-          ></button>
+          <div class="section-status">
+            <i class="pi pi-check-circle"></i>
+            Patient Selected
+          </div>
         </div>
-      }
 
-      @if (selectedPatient) {
         <div class="selected-patient">
           <div class="patient-avatar">
             <i class="pi pi-user"></i>
           </div>
 
           <div class="patient-info">
-            <div class="patient-name">
-              {{ selectedPatient.firstName }}
-              {{ selectedPatient.lastName }}
-            </div>
+            <div class="patient-name-row">
+              <div class="patient-name">
+                {{ selectedPatient.firstName }}
+                {{ selectedPatient.lastName }}
+              </div>
 
-            <div class="patient-meta">
-              @if (selectedPatient.abhaId) {
-                <span>
-                  <strong>ABHA:</strong>
-                  {{ selectedPatient.abhaId }}
+              @if (selectedPatient.patientId) {
+                <span class="patient-id-badge">
+                  ID #{{ selectedPatient.patientId }}
                 </span>
               }
             </div>
 
-            <div class="patient-meta">
+            <div class="patient-details-grid">
+              @if (selectedPatient.abhaId) {
+                <div class="patient-detail">
+                  <span class="detail-label">
+                    <i class="pi pi-id-card"></i>
+                    ABHA ID
+                  </span>
+
+                  <span class="detail-value">
+                    {{ selectedPatient.abhaId }}
+                  </span>
+                </div>
+              }
+
               @if (selectedPatient.dateOfBirth) {
-                <span>
-                  <strong>DOB:</strong>
-                  {{ selectedPatient.dateOfBirth | date: "dd MMM yyyy" }}
-                </span>
+                <div class="patient-detail">
+                  <span class="detail-label">
+                    <i class="pi pi-calendar"></i>
+                    Date of Birth
+                  </span>
+
+                  <span class="detail-value">
+                    {{ selectedPatient.dateOfBirth | date: "dd MMM yyyy" }}
+                  </span>
+                </div>
               }
 
               @if (selectedPatient.gender) {
-                <span>•</span>
+                <div class="patient-detail">
+                  <span class="detail-label">
+                    <i class="pi pi-user"></i>
+                    Gender
+                  </span>
 
-                <span>
-                  <strong>Gender:</strong>
-                  {{ selectedPatient.gender }}
-                </span>
+                  <span class="detail-value">
+                    {{ selectedPatient.gender }}
+                  </span>
+                </div>
               }
 
               @if (selectedPatient.bloodGroup) {
-                <span>•</span>
+                <div class="patient-detail">
+                  <span class="detail-label">
+                    <i class="pi pi-heart"></i>
+                    Blood Group
+                  </span>
 
-                <span>
-                  <strong>Blood Group:</strong>
-                  {{ selectedPatient.bloodGroup }}
-                </span>
+                  <span class="detail-value">
+                    {{ selectedPatient.bloodGroup }}
+                  </span>
+                </div>
               }
-            </div>
 
-            <div class="patient-meta">
               @if (selectedPatient.phone) {
-                <span>
-                  <i class="pi pi-phone me-1"></i>
-                  {{ selectedPatient.phone }}
-                </span>
+                <div class="patient-detail">
+                  <span class="detail-label">
+                    <i class="pi pi-phone"></i>
+                    Phone
+                  </span>
+
+                  <span class="detail-value">
+                    {{ selectedPatient.phone }}
+                  </span>
+                </div>
               }
 
               @if (selectedPatient.email) {
-                <span>•</span>
+                <div class="patient-detail">
+                  <span class="detail-label">
+                    <i class="pi pi-envelope"></i>
+                    Email
+                  </span>
 
-                <span>
-                  <i class="pi pi-envelope me-1"></i>
-                  {{ selectedPatient.email }}
-                </span>
+                  <span class="detail-value patient-email">
+                    {{ selectedPatient.email }}
+                  </span>
+                </div>
+              }
+
+              @if (
+                selectedPatient.address ||
+                selectedPatient.city ||
+                selectedPatient.state ||
+                selectedPatient.pincode
+              ) {
+                <div class="patient-detail patient-address">
+                  <span class="detail-label">
+                    <i class="pi pi-map-marker"></i>
+                    Address
+                  </span>
+
+                  <span class="detail-value">
+                    {{ selectedPatient.address }}
+
+                    @if (selectedPatient.city) {
+                      , {{ selectedPatient.city }}
+                    }
+
+                    @if (selectedPatient.state) {
+                      , {{ selectedPatient.state }}
+                    }
+
+                    @if (selectedPatient.pincode) {
+                      - {{ selectedPatient.pincode }}
+                    }
+                  </span>
+                </div>
               }
             </div>
-
-            @if (
-              selectedPatient.address ||
-              selectedPatient.city ||
-              selectedPatient.state ||
-              selectedPatient.pincode
-            ) {
-              <div class="patient-meta">
-                <i class="pi pi-map-marker me-1"></i>
-
-                <span>
-                  {{ selectedPatient.address }}
-
-                  @if (selectedPatient.city) {
-                    , {{ selectedPatient.city }}
-                  }
-
-                  @if (selectedPatient.state) {
-                    , {{ selectedPatient.state }}
-                  }
-
-                  @if (selectedPatient.pincode) {
-                    - {{ selectedPatient.pincode }}
-                  }
-                </span>
-              </div>
-            }
 
             @if (
               selectedPatient.emergencyContactName ||
               selectedPatient.emergencyContactPhone
             ) {
               <div class="patient-emergency">
-                <i class="pi pi-exclamation-circle"></i>
+                <div class="emergency-icon">
+                  <i class="pi pi-exclamation-triangle"></i>
+                </div>
 
-                <span>
-                  <strong>Emergency Contact:</strong>
+                <div>
+                  <span class="emergency-label"> Emergency Contact </span>
 
-                  @if (selectedPatient.emergencyContactName) {
-                    {{ selectedPatient.emergencyContactName }}
-                  }
+                  <span class="emergency-value">
+                    @if (selectedPatient.emergencyContactName) {
+                      {{ selectedPatient.emergencyContactName }}
+                    }
 
-                  @if (selectedPatient.emergencyContactPhone) {
-                    -
-                    {{ selectedPatient.emergencyContactPhone }}
-                  }
-                </span>
+                    @if (
+                      selectedPatient.emergencyContactName &&
+                      selectedPatient.emergencyContactPhone
+                    ) {
+                      <span class="emergency-separator">•</span>
+                    }
+
+                    @if (selectedPatient.emergencyContactPhone) {
+                      {{ selectedPatient.emergencyContactPhone }}
+                    }
+                  </span>
+                </div>
               </div>
             }
           </div>
@@ -171,139 +239,143 @@
             <button
               pButton
               type="button"
-              icon="pi pi-search"
-              class="p-button-text"
+              icon="pi pi-refresh"
+              class="p-button-text patient-action-button"
               pTooltip="Change Patient"
-              (click)="openPatientSearch()"
+              tooltipPosition="top"
+              (click)="changePatient()"
             ></button>
 
             <button
               pButton
               type="button"
               icon="pi pi-times"
-              class="p-button-text p-button-danger"
+              class="p-button-text p-button-danger patient-action-button"
               pTooltip="Remove Patient"
+              tooltipPosition="top"
               (click)="clearPatient()"
             ></button>
           </div>
         </div>
-      }
 
-      @if (isInvalid("patientId")) {
-        <small class="error-message"> Please select a patient. </small>
-      }
-    </div>
+        @if (isInvalid("patientId")) {
+          <small class="error-message">
+            <i class="pi pi-exclamation-circle"></i>
+            Please select a patient.
+          </small>
+        }
+      </div>
+    }
 
-    <div class="form-card">
-      <div class="section-header">
-        <div class="section-icon">
-          <i class="pi pi-sign-in"></i>
+    <!-- ADMISSION + DOCTOR -->
+    <div class="form-grid form-grid-two">
+      <!-- ADMISSION INFORMATION -->
+      <div class="form-card">
+        <div class="section-header">
+          <div class="section-header-left">
+            <div class="section-icon admission-icon">
+              <i class="pi pi-sign-in"></i>
+            </div>
+
+            <div>
+              <h4>Admission Information</h4>
+
+              <p>Basic details of the inpatient admission.</p>
+            </div>
+          </div>
         </div>
 
-        <div>
-          <h4>Admission Information</h4>
+        <div class="row g-3">
+          <div class="col-12 col-sm-6">
+            <label class="form-label">
+              Admission Date
+              <span class="required">*</span>
+            </label>
 
-          <p>Enter the basic details of this inpatient admission.</p>
+            <p-datepicker
+              formControlName="admissionDate"
+              [showIcon]="true"
+              dateFormat="dd M yy"
+              styleClass="w-100"
+            ></p-datepicker>
+          </div>
+
+          <div class="col-12 col-sm-6">
+            <label class="form-label">
+              Admission Type
+              <span class="required">*</span>
+            </label>
+
+            <p-select
+              formControlName="admissionType"
+              [options]="admissionTypeList"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Select admission type"
+              styleClass="w-100"
+            ></p-select>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">
+              Admission Status
+              <span class="required">*</span>
+            </label>
+
+            <p-select
+              formControlName="status"
+              [options]="statusList"
+              optionLabel="label"
+              optionValue="value"
+              placeholder="Select status"
+              styleClass="w-100"
+            ></p-select>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">
+              Reason for Admission
+              <span class="required">*</span>
+            </label>
+
+            <textarea
+              pTextarea
+              formControlName="reasonForAdmission"
+              rows="3"
+              class="w-100"
+              placeholder="Describe the reason for this admission"
+            ></textarea>
+
+            @if (isInvalid("reasonForAdmission")) {
+              <small class="error-message">
+                <i class="pi pi-exclamation-circle"></i>
+                Reason for admission is required.
+              </small>
+            }
+          </div>
         </div>
       </div>
 
-      <div class="row g-4">
+      <!-- DOCTOR ASSIGNMENT -->
+      <div class="form-card">
+        <div class="section-header">
+          <div class="section-header-left">
+            <div class="section-icon doctor-icon">
+              <i class="pi pi-user-plus"></i>
+            </div>
 
-        <div class="col-12 col-md-4">
-          <label class="form-label">
-            Admission Date
-            <span class="required">*</span>
-          </label>
+            <div>
+              <h4>Doctor Assignment</h4>
 
-          <p-datepicker
-            formControlName="admissionDate"
-            [showIcon]="true"
-            dateFormat="dd M yy"
-            styleClass="w-100"
-          >
-          </p-datepicker>
+              <p>Assign the attending doctor.</p>
+            </div>
+          </div>
         </div>
 
-
-        <div class="col-12 col-md-4">
-          <label class="form-label">
-            Admission Type
-            <span class="required">*</span>
-          </label>
-
-          <p-select
-            formControlName="admissionType"
-            [options]=admissionTypeList
-            optionLabel="label"
-            optionValue="value"
-            placeholder="Select admission type"
-            styleClass="w-100"
-          >
-          </p-select>
-        </div>
-
-
-        <div class="col-12 col-md-4">
-          <label class="form-label">
-            Admission Status
-            <span class="required">*</span>
-          </label>
-
-          <p-select
-            formControlName="status"
-            [options]=statusList
-            optionLabel="label"
-            optionValue="value"
-            placeholder="Select source"
-            styleClass="w-100"
-          >
-          </p-select>
-        </div>
-
-
-        <div class="col-12">
-          <label class="form-label">
-            Reason for Admission
-            <span class="required">*</span>
-          </label>
-
-          <textarea
-            pTextarea
-            formControlName="reasonForAdmission"
-            rows="3"
-            class="w-100"
-            placeholder="Enter reason for admission"
-          >
-          </textarea>
-
-          @if (isInvalid("reasonForAdmission")) {
-            <small class="error-message">
-              Reason for admission is required.
-            </small>
-          }
-        </div>
-      </div>
-    </div>
-
-    <div class="form-card">
-      <div class="section-header">
-        <div class="section-icon">
-          <i class="pi pi-user-plus"></i>
-        </div>
-
-        <div>
-          <h4>Doctor Assignment</h4>
-
-          <p>Assign the attending doctor responsible for the admission.</p>
-        </div>
-      </div>
-
-      <div class="row g-4">
-        <div class="col-12 col-md-6">
+        <div class="doctor-assignment-content">
           <label class="form-label">
             Attending Doctor
-
-            <span class="required"> * </span>
+            <span class="required">*</span>
           </label>
 
           <p-select
@@ -315,433 +387,233 @@
             styleClass="w-100"
           >
             <ng-template let-doctor pTemplate="item">
-              <div>
-                <div class="fw-semibold">
-                  {{ doctor.firstName + " " + doctor.lastName }}
+              <div class="doctor-option">
+                <div class="doctor-option-avatar">
+                  <i class="pi pi-user"></i>
                 </div>
 
-                @if (doctor.specialization) {
-                  <small class="text-muted">
-                    {{ doctor.specialization }}
-                  </small>
-                }
+                <div>
+                  <div class="fw-semibold">
+                    {{ doctor.firstName + " " + doctor.lastName }}
+                  </div>
+
+                  @if (doctor.specialization) {
+                    <small class="text-muted">
+                      {{ doctor.specialization }}
+                    </small>
+                  }
+                </div>
               </div>
             </ng-template>
           </p-select>
+
+          <div class="field-helper">
+            <i class="pi pi-info-circle"></i>
+            The assigned doctor will be responsible for this admission.
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="form-card">
+    <!-- BED ALLOCATION -->
+    <div class="form-card bed-card">
       <div class="section-header">
-        <div class="section-icon">
-          <i class="pi pi-building"></i>
+        <div class="section-header-left">
+          <div class="section-icon bed-icon">
+            <i class="pi pi-building"></i>
+          </div>
+
+          <div>
+            <h4>Bed Allocation</h4>
+
+            <p>Select the ward, room and available bed for the patient.</p>
+          </div>
         </div>
 
-        <div>
-          <h4>Ward / Room / Bed</h4>
-
-          <p>Select an available bed for this admission.</p>
+        <div class="allocation-flow">
+          <span>Ward</span>
+          <i class="pi pi-angle-right"></i>
+          <span>Room</span>
+          <i class="pi pi-angle-right"></i>
+          <span>Bed</span>
         </div>
       </div>
 
-      <div class="row g-4">
+      <div class="allocation-grid">
+        <!-- WARD -->
+        <div class="allocation-field">
+          <div class="allocation-number">01</div>
 
-        <div class="col-12 col-md-4">
-          <label class="form-label">
-            Ward
+          <div class="allocation-content">
+            <label class="form-label">
+              Ward
+              <span class="required">*</span>
+            </label>
 
-            <span class="required"> * </span>
-          </label>
+            <p-select
+              formControlName="wardId"
+              [options]="wards"
+              optionLabel="wardName"
+              optionValue="wardId"
+              placeholder="Select ward"
+              styleClass="w-100"
+              (onChange)="onWardChange()"
+              appendTo="body"
+            ></p-select>
 
-          <p-select
-            formControlName="wardId"
-            [options]="wards"
-            optionLabel="wardName"
-            optionValue="wardId"
-            placeholder="Select ward"
-            styleClass="w-100"
-            (onChange)="onWardChange()"
-          >
-          </p-select>
+            <small class="field-hint"> Select the patient's ward. </small>
+          </div>
         </div>
 
+        <!-- ROOM -->
+        <div class="allocation-field">
+          <div class="allocation-number">02</div>
 
-        <div class="col-12 col-md-4">
-          <label class="form-label">
-            Room
+          <div class="allocation-content">
+            <label class="form-label">
+              Room
+              <span class="required">*</span>
+            </label>
 
-            <span class="required"> * </span>
-          </label>
+            <p-select
+              formControlName="roomId"
+              [options]="rooms"
+              optionLabel="roomNumber"
+              optionValue="roomId"
+              placeholder="Select room"
+              styleClass="w-100"
+              [disabled]="!admissionForm.get('wardId')?.value"
+              (onChange)="onRoomChange()"
+              appendTo="body"
+            ></p-select>
 
-          <p-select
-            formControlName="roomId"
-            [options]="rooms"
-            optionLabel="roomNumber"
-            optionValue="roomId"
-            placeholder="Select room"
-            styleClass="w-100"
-            [disabled]="!admissionForm.get('wardId')?.value"
-            (onChange)="onRoomChange()"
-          >
-          </p-select>
+            <small class="field-hint">
+              Select a room from the chosen ward.
+            </small>
+          </div>
         </div>
 
-        <div class="col-12 col-md-4">
-          <label class="form-label">
-            Available Bed
+        <!-- BED -->
+        <div class="allocation-field">
+          <div class="allocation-number">03</div>
 
-            <span class="required"> * </span>
-          </label>
+          <div class="allocation-content">
+            <label class="form-label">
+              Available Bed
+              <span class="required">*</span>
+            </label>
 
-          <p-select
-            formControlName="bedId"
-            [options]="beds"
-            optionLabel="bedNumber"
-            optionValue="bedId"
-            placeholder="Select available bed"
-            styleClass="w-100"
-            [disabled]="!admissionForm.get('roomId')?.value"
-          >
-          </p-select>
+            <p-select
+              formControlName="bedId"
+              [options]="beds"
+              optionLabel="bedNumber"
+              optionValue="bedId"
+              placeholder="Select available bed"
+              styleClass="w-100"
+              [disabled]="!admissionForm.get('roomId')?.value"
+              appendTo="body"
+            ></p-select>
 
-          @if (selectedBed) {
-            <div class="available-message">
-              <i class="pi pi-check-circle"></i>
+            @if (selectedBed) {
+              <div class="available-message">
+                <i class="pi pi-check-circle"></i>
 
-              Bed {{ selectedBed.bedNumber }}
-              is available.
-            </div>
-          }
+                <span> Bed {{ selectedBed.bedNumber }} is available </span>
+              </div>
+            }
+
+            @if (!selectedBed && admissionForm.get("roomId")?.value) {
+              <small class="field-hint"> Select an available bed. </small>
+            }
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- CLINICAL INFORMATION -->
     <div class="form-card">
       <div class="section-header">
-        <div class="section-icon">
-          <i class="pi pi-file-edit"></i>
+        <div class="section-header-left">
+          <div class="section-icon clinical-icon">
+            <i class="pi pi-file-edit"></i>
+          </div>
+
+          <div>
+            <h4>Initial Clinical Information</h4>
+
+            <p>Record the patient's initial clinical observations.</p>
+          </div>
         </div>
 
-        <div>
-          <h4>Initial Clinical Information</h4>
-
-          <p>Record the initial reason and observations for admission.</p>
-        </div>
+        <span class="optional-badge"> Optional </span>
       </div>
 
-      <div class="row g-4">
-
-        <div class="col-12">
+      <div class="row g-3">
+        <div class="col-12 col-lg-5">
           <label class="form-label"> Chief Complaint </label>
 
           <textarea
             pTextarea
             formControlName="chiefComplaint"
-            rows="3"
-            class="w-100"
+            rows="5"
+            class="w-100 clinical-textarea"
             placeholder="Enter patient's chief complaint"
-          >
-          </textarea>
+          ></textarea>
+
+          <small class="field-hint">
+            Main complaint or symptoms reported by the patient.
+          </small>
         </div>
 
-        <div class="col-12">
+        <div class="col-12 col-lg-7">
           <label class="form-label"> Initial Notes </label>
 
           <textarea
             pTextarea
             formControlName="initialNotes"
-            rows="4"
-            class="w-100"
+            rows="5"
+            class="w-100 clinical-textarea"
             placeholder="Enter initial clinical notes"
-          >
-          </textarea>
+          ></textarea>
+
+          <small class="field-hint">
+            Add any relevant observations or initial clinical notes.
+          </small>
         </div>
       </div>
     </div>
 
-
+    <!-- FORM ACTIONS -->
     <div class="form-actions">
-      <button
-        pButton
-        type="button"
-        label="Cancel"
-        icon="pi pi-times"
-        class="p-button-outlined"
-        [disabled]="submitting"
-        (click)="cancel()"
-      ></button>
+      <div class="form-actions-info">
+        <i class="pi pi-info-circle"></i>
 
-      <button
-        pButton
-        type="submit"
-        label="Admit Patient"
-        icon="pi pi-check"
-        [loading]="submitting"
-      ></button>
-    </div>
-  </form>
-
-  <p-dialog
-    [(visible)]="patientDialogVisible"
-    [modal]="true"
-    [draggable]="false"
-    [resizable]="false"
-    header="Search Patient"
-    [style]="{
-      width: '850px',
-      maxWidth: '95vw',
-    }"
-    [dismissableMask]="true"
-  >
-    <div class="patient-search-dialog">
-      <div class="patient-search-header">
-        <div class="search-icon">
-          <i class="pi pi-search"></i>
-        </div>
-
-        <div>
-          <h5 class="mb-1">Find Patient</h5>
-
-          <p class="text-muted mb-0">
-            Search using Patient ID, ABHA ID or Mobile Number.
-          </p>
-        </div>
+        <span>
+          Fields marked with
+          <span class="required">*</span>
+          are required.
+        </span>
       </div>
 
-      <div class="patient-search-input mt-4">
-        <label class="form-label"> Patient Search </label>
-
-        <div class="d-flex gap-2">
-          <input
-            type="text"
-            pInputText
-            [(ngModel)]="patientSearchText"
-            placeholder="Enter Patient ID, ABHA ID or Mobile Number"
-            class="flex-grow-1"
-            (keyup.enter)="searchPatients()"
-          />
-
-          <button
-            pButton
-            type="button"
-            label="Search"
-            icon="pi pi-search"
-            [loading]="patientSearchLoading"
-            (click)="searchPatients()"
-          ></button>
-        </div>
-      </div>
-
-      @if (patientSearchLoading) {
-        <div class="patient-search-loading mt-4">
-          <i class="pi pi-spin pi-spinner"></i>
-
-          <span> Searching patient... </span>
-        </div>
-      }
-
-      @if (!patientSearchLoading && patientSuggestions.length === 1) {
-        <div class="single-patient-result mt-4">
-          <div class="result-header">
-            <div>
-              <h6 class="mb-1">Patient Found</h6>
-
-              <small class="text-muted">
-                The patient has been automatically selected.
-              </small>
-            </div>
-
-            <i class="pi pi-check-circle text-success"></i>
-          </div>
-
-          <div class="single-patient-card">
-            <div class="patient-result-avatar">
-              <i class="pi pi-user"></i>
-            </div>
-
-            <div class="patient-result-info">
-              <div class="patient-result-name">
-                {{
-                  patientSuggestions[0].firstName +
-                    " " +
-                    patientSuggestions[0].lastName
-                }}
-              </div>
-
-              <div class="patient-result-meta">
-                @if (patientSuggestions[0].patientNo) {
-                  <span>
-                    <strong>Patient No:</strong>
-                    {{ patientSuggestions[0].patientNo }}
-                  </span>
-                }
-              </div>
-
-              <div class="patient-result-meta">
-                @if (patientSuggestions[0].mobile) {
-                  <span>
-                    <strong>Mobile:</strong>
-                    {{ patientSuggestions[0].mobile }}
-                  </span>
-                }
-
-                @if (patientSuggestions[0].abhaId) {
-                  <span>
-                    <strong>ABHA:</strong>
-                    {{ patientSuggestions[0].abhaId }}
-                  </span>
-                }
-              </div>
-
-              <div class="patient-result-meta">
-                @if (patientSuggestions[0].age) {
-                  <span> {{ patientSuggestions[0].age }} Years </span>
-                }
-
-                @if (patientSuggestions[0].gender) {
-                  <span>
-                    {{ patientSuggestions[0].gender }}
-                  </span>
-                }
-              </div>
-            </div>
-          </div>
-        </div>
-      }
-
-      @if (!patientSearchLoading && patientSuggestions.length > 1) {
-        <div class="multiple-patient-result mt-4">
-          <div class="result-header">
-            <div>
-              <h6 class="mb-1">Multiple Patients Found</h6>
-
-              <small class="text-muted">
-                Select one patient to continue.
-              </small>
-            </div>
-
-            <span class="patient-count">
-              {{ patientSuggestions.length }} Patients
-            </span>
-          </div>
-
-
-          <p-table
-            [value]="patientSuggestions"
-            [tableStyle]="{ 'min-width': '100%' }"
-            responsiveLayout="scroll"
-          >
-            <ng-template pTemplate="header">
-              <tr>
-                <th style="width: 60px">Select</th>
-
-                <th>Patient ID</th>
-
-                <th>Patient Name</th>
-
-                <th>Mobile</th>
-
-                <th>ABHA ID</th>
-
-                <th>Gender</th>
-
-                <th>Date Of Birth</th>
-              </tr>
-            </ng-template>
-
-            <ng-template pTemplate="body" let-patient>
-              <tr
-                [class.selected-row]="
-                  searchSelectedPatient?.patientId === patient.patientId
-                "
-              >
-                <td>
-                  <p-radioButton
-                    name="patientSelection"
-                    [value]="patient"
-                    [(ngModel)]="searchSelectedPatient"
-                  ></p-radioButton>
-                </td>
-
-                <td>
-                  <strong>
-                    {{ patient.patientId }}
-                  </strong>
-                </td>
-
-                <td>
-                  {{ patient.firstName + " " + patient.lastName }}
-                </td>
-
-                <td>
-                  {{ patient.phone || "-" }}
-                </td>
-
-                <td>
-                  {{ patient.abhaId || "-" }}
-                </td>
-
-                <td>
-                  {{ patient.gender || "-" }}
-                </td>
-
-                <td>
-                  {{ patient.dateOfBirth || "-" }}
-                </td>
-              </tr>
-            </ng-template>
-
-
-            <ng-template pTemplate="emptymessage">
-              <tr>
-                <td colspan="7" class="text-center">No patients found.</td>
-              </tr>
-            </ng-template>
-          </p-table>
-        </div>
-      }
-
-
-      @if (
-        !patientSearchLoading &&
-        patientSearchText &&
-        patientSuggestions.length === 0
-      ) {
-        <div class="no-patient-found mt-4">
-          <i class="pi pi-info-circle"></i>
-
-          <div>
-            <strong> No patient found </strong>
-
-            <p class="mb-0 text-muted">
-              No patient matches the entered Patient ID, ABHA ID or Mobile
-              Number.
-            </p>
-          </div>
-        </div>
-      }
-
-
-      <div class="patient-search-actions mt-4">
+      <div class="form-action-buttons">
         <button
           pButton
           type="button"
           label="Cancel"
           icon="pi pi-times"
-          class="p-button-outlined p-button-secondary"
-          (click)="closePatientSearch()"
+          class="p-button-outlined"
+          [disabled]="submitting"
+          (click)="cancel()"
         ></button>
 
         <button
           pButton
-          type="button"
-          label="Select Patient"
+          type="submit"
+          label="Admit Patient"
           icon="pi pi-check"
-          [disabled]="patientSuggestions.length === 0 || !searchSelectedPatient"
-          (click)="confirmPatientSelection()"
+          [loading]="submitting"
         ></button>
       </div>
     </div>
-  </p-dialog>
+  </form>
 </div>
