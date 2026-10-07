@@ -25,6 +25,13 @@ export const MENU_ITEMS: MenuItem[] = [
     ],
   },
 
+//Visits
+  {
+  label: 'Visits',
+  icon: 'pi pi-calendar',
+  routerLink: '/main/visits'
+},
+
   // Doctor & Staff Management
   {
     label: 'Doctors & Staff',

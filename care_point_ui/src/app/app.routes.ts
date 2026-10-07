@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './layout/main-layout/main-layout/main-layout.component';
 import { LoginComponent } from './auth/login/page/login/login.component';
 import { MainDashboardComponent } from './features/dashborad/pages/main-dashboard/main-dashboard.component';
+import { EMR_ROUTES } from './features/emr/routes/emr.routes';
 
 export const routes: Routes = [
 
@@ -62,6 +63,15 @@ export const routes: Routes = [
             .then(m => m.BED_WARD_ROUTES)
       },
 
+
+      // EMR module
+{
+  path: 'emr',
+  loadChildren: () =>
+    import('./features/emr/routes/emr.routes')
+      .then(m => m.EMR_ROUTES)
+},
+
       // Add other modules here
       // {
       //   path: 'billing',
@@ -71,13 +81,21 @@ export const routes: Routes = [
       // },
       
            // Add other modules here
+           {
+          path: 'visits',
+          loadChildren: () =>
+          import('./features/visit/routes/visit.routes')
+          .then(m => m.VISIT_ROUTES)
+      }
+    ]
+  },
       {
         path: 'administrator',
         loadChildren: () =>
           import('./features/administrator/administrator.routes')
             .then(m => m.ADMINISTRATOR_ROUTES)
       }
-    ]
-  }
+,
+      
 
 ];
