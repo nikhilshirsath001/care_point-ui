@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../../../core/services/api.service';
 import { API_ENDPOINTS } from '../../../core/constants/api-endpoints';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -51,6 +52,19 @@ export class IpdService {
 
   getPrescriptionsByPatientId(patientId: any){
         return this.apiService.getObservable(`${API_ENDPOINTS.MEDICATION.PRESCRIPTION.PATIENT_PRESCRIPTION}/${patientId}`);
+  }
 
+  getPrescriptionsByAdmissionId(admissionId: any){
+        return this.apiService.getObservable(`${API_ENDPOINTS.MEDICATION.PRESCRIPTION.PATIENT_PRESCRIPTION}/${admissionId}`);
+  }
+
+  searchAdmissions(keyword: string, page: number = 0) {
+    // const params = new HttpParams().set('keyword', keyword.trim());
+    const params = new HttpParams()
+      .set('active', 'true')
+      .set('keyword', keyword.trim())
+      .set('page', page.toString() || '0')
+      .set('size', 100);
+    return this.apiService.getObservable(API_ENDPOINTS.IPD.SEARCH, params);
   }
 }

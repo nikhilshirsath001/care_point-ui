@@ -23,10 +23,16 @@
   ========================================================== -->
 
   <p-card styleClass="mb-4 search-card">
-    <app-patient-search
+    <!-- <app-patient-search
       [searchFn]="searchPatientFn"
       [config]="patientSearchConfig"
       (patientSelected)="onPatientSelected($event)"
+    ></app-patient-search> -->
+
+    <app-patient-search
+      [searchFn]="searchAdmissionFn"
+      [config]="admissionSearchConfig"
+      (itemSelected)="onAdmissionSelected($event)"
     ></app-patient-search>
   </p-card>
 
@@ -83,9 +89,9 @@
 
         <div class="col-6 col-md-3 col-lg-2">
           <div class="summary-item">
-            <span class="summary-label"> Admission </span>
+            <span class="summary-label"> Admission Number </span>
 
-            <strong> #{{ selectedAdmission.admissionId }} </strong>
+            <p>#{{ selectedAdmission.admissionNumber }}</p>
           </div>
         </div>
 
@@ -241,14 +247,14 @@
 
               <!-- Actions -->
               <div class="d-flex align-items-center gap-2">
-                <button
+                <!-- <button
                   pButton
                   type="button"
                   icon="pi pi-refresh"
                   class="p-button-sm p-button-text p-button-secondary"
                   pTooltip="Refresh prescriptions"
                   (click)="getAllPrescriptions()"
-                ></button>
+                ></button> -->
 
                 <button
                   pButton
@@ -1019,4 +1025,15 @@
       ></button>
     </ng-template>
   </p-dialog>
+
+  <app-shared-details
+  [(visible)]="viewTreatmentDialogVisible"
+  [title]="'Treatment Details'"
+  [data]="selectedTreatmentObj"
+  [fields]="treatmentDetailsFields"
+
+>
+</app-shared-details>
 </div>
+
+

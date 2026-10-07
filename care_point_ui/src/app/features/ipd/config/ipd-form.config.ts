@@ -1,6 +1,7 @@
 import { Validators } from '@angular/forms';
 import { DynamicFormConfig } from '../../../core/models/dynamic-form.model';
 import { DetailField } from '../../../shared/shared-details/shared-details.component';
+import { PatientSearchConfig } from '../../../shared/patient-search/patient-search.component';
 
 
 export const INPATIENT_FORM_CONFIG: DynamicFormConfig = {
@@ -247,3 +248,81 @@ export const STATUS_LIST =[
               { label: 'DISCHARGED', value: 'DISCHARGED' },
               { label: 'TRANSFERRED', value: 'TRANSFERRED' },
             ];
+
+export const  ADMISSION_SEARCH_CONFIG: PatientSearchConfig = {
+
+  searchType: 'admission',
+
+  title: 'Find Inpatient Admission',
+
+  description:
+    'Search using Admission ID, Patient ID, patient name or mobile number.',
+
+  placeholder:
+    'Enter Admission ID, Patient ID, patient name or mobile number',
+
+  searchButtonLabel: 'Search Admission',
+
+  selectButtonLabel: 'Select Admission',
+
+  entityLabel: 'Admission',
+
+  entityLabelPlural: 'Admissions',
+
+  identityField: 'admissionId',
+
+  displayNameField: 'patientName',
+
+    resultColumns: [
+
+    {
+       field: 'admissionNumber',
+      header: 'Admission Number',
+      type: 'number',
+    },
+    {
+      field: 'patientName',
+      header: 'Patient Name',
+      type: 'text',
+    },
+
+    {
+      field: 'admissionDate',
+      header: 'Admission Date',
+      type: 'datetime',
+      format: 'dd/MM/yyyy HH:mm',
+    },
+    {
+      field: 'status',
+      header: 'Status',
+      type: 'status',
+    }
+  ]
+};
+
+export const TREATMENT_DETAIL_FIELDS: DetailField[] = [
+  {
+    field: 'procedureCode',
+    label: 'Procedure Code'
+  },
+  {
+    field: 'procedureName',
+    label: 'Procedure Name'
+  },
+  {
+    field: 'description',
+    label: 'Description'
+  },
+  {
+    field: 'treatmentDate',
+    label: 'Treatment Date'
+  },
+  {
+    field: 'doctorName',
+    label: 'Doctor Name'
+  },
+  {
+    field: 'remarks',
+    label: 'Remarks'
+  }
+];

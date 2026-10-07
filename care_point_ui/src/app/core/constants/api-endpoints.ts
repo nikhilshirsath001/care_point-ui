@@ -6,7 +6,7 @@ export const API_ENDPOINTS = {
     BASE: HMIS_BASE,
     CREATE: `${HMIS_BASE}/create`,
     GET_ALL: `${HMIS_BASE}/get`,
-    SEARCH: `${HMIS_BASE}/search`,
+    SEARCH: `${HMIS_BASE}/patient/search`,
     UPDATE: `${HMIS_BASE}/update`,
     DELETE: `${HMIS_BASE}/delete`,
     EXISTS: `${HMIS_BASE}/exists`,
@@ -16,7 +16,8 @@ export const API_ENDPOINTS = {
     BASE: `${HMIS_BASE}/admission`,
     GET_ALL: `${HMIS_BASE}/admission/get-all`,
     CREATE: `${HMIS_BASE}/admission/create`,
-    GET_PATEINT_WORKSPACE_BY_PATIENT_ID :`${HMIS_BASE}/admission/treatment/patient/`,
+    SEARCH: `${HMIS_BASE}/admission/search`,
+    GET_PATEINT_WORKSPACE_BY_PATIENT_ID :`${HMIS_BASE}/admission/treatment/`,
     CREATE_TREATMENT :"/procedure/treatment",
     GET_TREATMENTS_BY_ADMISSION_ID:"/procedure/treatment/admission",
     CREATE_PRESCRIPTION:"/medication/prescription"
@@ -68,7 +69,8 @@ export const API_ENDPOINTS = {
     GET_ALL:`${MED_BASE}/medications`,
     PRESCRIPTION:{
       CREATE_PRESCRIPTION:`${MED_BASE}/prescription`,
-      PATIENT_PRESCRIPTION :`${MED_BASE}/prescription/patient`
+      PATIENT_PRESCRIPTION :`${MED_BASE}/prescription/patient`,
+      ADMISSION_PRESCRIPTION :`${MED_BASE}/prescription/admission`,
     }
   },
 

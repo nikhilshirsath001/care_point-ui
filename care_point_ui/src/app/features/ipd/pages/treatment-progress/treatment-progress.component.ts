@@ -23,6 +23,11 @@ import {
 } from '../../../../shared/patient-search/patient-search.component';
 
 import { IpdService } from '../../services/ipd.service';
+import {
+  ADMISSION_SEARCH_CONFIG,
+  TREATMENT_DETAIL_FIELDS,
+} from '../../config/ipd-form.config';
+import { SharedDetailsComponent } from '../../../../shared/shared-details/shared-details.component';
 
 @Component({
   selector: 'app-treatment-progress',
@@ -41,12 +46,15 @@ import { IpdService } from '../../services/ipd.service';
     TextareaModule,
     TooltipModule,
     PatientSearchComponent,
+    SharedDetailsComponent,
   ],
   templateUrl: './treatment-progress.component.html',
   styleUrl: './treatment-progress.component.css',
 })
 export class TreatmentProgressComponent implements OnInit {
-
+  viewTreatmentDialogVisible: boolean = false;
+  selectedTreatmentObj: any;
+  treatmentDetailsFields = TREATMENT_DETAIL_FIELDS;
   selectedPatient: any | null = null;
   selectedAdmission: any | null = null;
 
@@ -90,17 +98,10 @@ export class TreatmentProgressComponent implements OnInit {
     'Sublingual',
   ];
 
-  readonly patientSearchConfig: PatientSearchConfig = {
-    title: 'Find Patient',
-    description:
-      'Search for an existing patient using Patient ABHA ID, name or mobile number.',
-    placeholder: 'Enter Patient ABHA ID, name or mobile number',
-    searchButtonLabel: 'Search Patient',
-    selectButtonLabel: 'Select Patient',
-  };
+  readonly admissionSearchConfig: PatientSearchConfig = ADMISSION_SEARCH_CONFIG;
 
-  readonly searchPatientFn = (keyword: string) =>
-    this.patientService.searchPatientByKeyword(keyword);
+  readonly searchAdmissionFn = (keyword: string) =>
+    this.ipdService.searchAdmissions(keyword);
 
   constructor(
     private readonly patientService: PatientService,
@@ -135,16 +136,20 @@ export class TreatmentProgressComponent implements OnInit {
     );
   }
 
-  onPatientSelected(patient: any): void {
+  onAdmissionSelected(admission: any): void {
+    // Clear previous patient's/admission's workspace data
     this.resetWorkspace();
 
-    this.selectedPatient = patient;
+    // Store selected admission
+    this.selectedAdmission = admission;
 
-    if (!patient?.patientId) {
+    // Stop if no valid admission was selected
+    if (!admission?.admissionId) {
       return;
     }
 
-    this.loadTreatmentWorkspace(patient.patientId);
+    // Load treatment workspace for the selected admission
+    this.loadTreatmentWorkspace(admission.admissionId);
   }
 
   openPrescriptionDialog(): void {
@@ -226,8 +231,8 @@ export class TreatmentProgressComponent implements OnInit {
       next: (response: any) => {
         if (response?.status === 1) {
           this.prescriptionDialogVisible = false;
-          this.loadTreatmentWorkspace(this.selectedPatient.patientId);
-          this.loadPriscriptions(this.selectedPatient.patientId);
+          this.loadTreatmentWorkspace(this.selectedAdmission.admissionId);
+          // this.loadPriscriptions(this.selectedPatient.patientId);
         }
       },
       error: (error) => {
@@ -286,10 +291,11 @@ export class TreatmentProgressComponent implements OnInit {
       next: (response: any) => {
         if (response?.status === 1) {
           this.treatmentDialogVisible = false;
+          this.getAllTreatments();
 
-          if (this.selectedPatient?.patientId) {
-            this.loadTreatmentWorkspace(this.selectedPatient.patientId);
-          }
+          // if (this.selectedPatient?.admissionId) {
+          //   // this.loadTreatmentWorkspace(this.selectedPatient.admissionId);
+          // }
         }
       },
 
@@ -314,15 +320,16 @@ export class TreatmentProgressComponent implements OnInit {
   }
 
   getAllPrescriptions() {
-    if (!this.selectedPatient?.patientId) {
+    if (!this.selectedAdmission?.admissionId) {
       return;
     }
-
-    this.loadPriscriptions(this.selectedPatient?.patientId);
+    this.loadPriscriptions(this.selectedAdmission?.admissionId);
   }
 
   viewTreatment(treatment: any): void {
     console.log('View treatment:', treatment);
+    this.viewTreatmentDialogVisible = true;
+    this.selectedTreatmentObj = treatment;
   }
 
   viewProcedures(): void {
@@ -332,10 +339,10 @@ export class TreatmentProgressComponent implements OnInit {
     console.log('View procedures');
   }
 
-  private loadTreatmentWorkspace(patientId: number): void {
+  private loadTreatmentWorkspace(admissionId: number): void {
     this.loadingWorkspace = true;
 
-    this.ipdService.getTreatmentWorkspace(patientId).subscribe({
+    this.ipdService.getTreatmentWorkspace(admissionId).subscribe({
       next: (response: any) => {
         /*
          * Patient can exist without an admission.
