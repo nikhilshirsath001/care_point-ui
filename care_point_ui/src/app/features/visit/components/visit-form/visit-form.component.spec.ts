@@ -1,23 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+  import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VisitFormComponent } from './visit-form.component';
+  import { VisitFormComponent } from './visit-form.component';
 
-describe('VisitFormComponent', () => {
-  let component: VisitFormComponent;
-  let fixture: ComponentFixture<VisitFormComponent>;
+  describe('VisitFormComponent', () => {
+    let component: VisitFormComponent;
+    let fixture: ComponentFixture<VisitFormComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [VisitFormComponent]
-    })
-    .compileComponents();
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        imports: [VisitFormComponent]
+      })
+      .compileComponents();
 
-    fixture = TestBed.createComponent(VisitFormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+      fixture = TestBed.createComponent(VisitFormComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
   });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
