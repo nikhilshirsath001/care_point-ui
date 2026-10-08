@@ -194,6 +194,11 @@ export const MENU_ITEMS: MenuItem[] = [
         icon: 'pi pi-file',
         routerLink: ['/main/medication'],
       },
+        {
+        label: 'Prescriptions',
+        icon: 'pi pi-file',
+        routerLink: ['/main/medication/prescription'],
+      },
     ],
   },
   // Administration
@@ -228,19 +233,19 @@ export const MENU_ITEMS: MenuItem[] = [
       {
         label: 'Users',
         icon: 'pi pi-user',
-        routerLink: ['/main/admin/users'],
+        routerLink: ['/main/administrator/user'],
       },
 
       {
         label: 'Roles',
         icon: 'pi pi-users',
-        routerLink: ['/main/admin/roles'],
+        routerLink: ['/main/administrator/roles'],
       },
 
       {
         label: 'Permissions',
         icon: 'pi pi-lock',
-        routerLink: ['/main/admin/permissions'],
+        routerLink: ['/main/administrator/permissions'],
       },
     ],
   },

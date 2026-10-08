@@ -25,7 +25,7 @@ export const ADMINISTRATOR_ROUTES: Routes = [
       ),
   },
 
-    {
+  {
     path: 'service',
     loadComponent: () =>
       import('./pages/service/service/service.component').then(
@@ -33,6 +33,11 @@ export const ADMINISTRATOR_ROUTES: Routes = [
       ),
   },
 
+  {
+    path: 'user',
+    loadComponent: () =>
+      import('./pages/user/user.component').then((m) => m.UserComponent),
+  },
   // {
   //   path: 'allocation',
   //   loadComponent: () =>

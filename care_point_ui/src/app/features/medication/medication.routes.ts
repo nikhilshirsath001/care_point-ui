@@ -8,6 +8,12 @@ export const MEDICATION_ROUTES: Routes = [
       import('./pages/medication-list/medication-list.component')
         .then(m => m.MedicationListComponent)
   },
+   {
+    path: 'prescription',
+    loadComponent: () =>
+      import('./pages/priscription-list/priscription-list.component')
+        .then(m => m.PriscriptionListComponent)
+  },
 
 
 ];

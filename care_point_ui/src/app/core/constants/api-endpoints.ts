@@ -1,5 +1,7 @@
 const HMIS_BASE = '/hmis';
 const MED_BASE = '/medication';
+const USER_BASE = '/users';
+
 
 export const API_ENDPOINTS = {
   PATIENTS: {
@@ -17,10 +19,10 @@ export const API_ENDPOINTS = {
     GET_ALL: `${HMIS_BASE}/admission/get-all`,
     CREATE: `${HMIS_BASE}/admission/create`,
     SEARCH: `${HMIS_BASE}/admission/search`,
-    GET_PATEINT_WORKSPACE_BY_PATIENT_ID :`${HMIS_BASE}/admission/treatment/`,
-    CREATE_TREATMENT :"/procedure/treatment",
-    GET_TREATMENTS_BY_ADMISSION_ID:"/procedure/treatment/admission",
-    CREATE_PRESCRIPTION:"/medication/prescription"
+    GET_PATEINT_WORKSPACE_BY_PATIENT_ID: `${HMIS_BASE}/admission/treatment/`,
+    CREATE_TREATMENT: '/procedure/treatment',
+    GET_TREATMENTS_BY_ADMISSION_ID: '/procedure/treatment/admission',
+    CREATE_PRESCRIPTION: '/medication/prescription',
   },
 
   BED_WARD: {
@@ -64,17 +66,17 @@ export const API_ENDPOINTS = {
       CREATE: '/services/service/service-category',
     },
   },
-  MEDICATION:{
-    BASE:MED_BASE,
-    GET_ALL:`${MED_BASE}/medications`,
-    CREATE:`${MED_BASE}/medications`,
-    DELETE:`${MED_BASE}/medications`,
-    UPDATE:`${MED_BASE}/medications`,
-    PRESCRIPTION:{
-      CREATE_PRESCRIPTION:`${MED_BASE}/prescription`,
-      PATIENT_PRESCRIPTION :`${MED_BASE}/prescription/patient`,
-      ADMISSION_PRESCRIPTION :`${MED_BASE}/prescription/admission`,
-    }
+  MEDICATION: {
+    BASE: MED_BASE,
+    GET_ALL: `${MED_BASE}/medications`,
+    CREATE: `${MED_BASE}/medications`,
+    DELETE: `${MED_BASE}/medications`,
+    UPDATE: `${MED_BASE}/medications`,
+    PRESCRIPTION: {
+      CREATE_PRESCRIPTION: `${MED_BASE}/prescription`,
+      PATIENT_PRESCRIPTION: `${MED_BASE}/prescription/patient`,
+      ADMISSION_PRESCRIPTION: `${MED_BASE}/prescription/admission`,
+    },
   },
 
   DOCUMENT: {
@@ -85,6 +87,13 @@ export const API_ENDPOINTS = {
     GET_DOC_TYPES: '/documents/doctypes',
   },
 
+  USER: {
+    BASE: USER_BASE,
+    GET_ALL: `${USER_BASE}`,
+    CREATE: `${USER_BASE}`,
+    UPDATE: `${USER_BASE}`,
+    DELETE: `${USER_BASE}`,
+  },
 } as const;
 
 const API_NAVIGATION_BASE = '/main';
