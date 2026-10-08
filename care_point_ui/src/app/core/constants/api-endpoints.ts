@@ -67,6 +67,9 @@ export const API_ENDPOINTS = {
   MEDICATION:{
     BASE:MED_BASE,
     GET_ALL:`${MED_BASE}/medications`,
+    CREATE:`${MED_BASE}/medications`,
+    DELETE:`${MED_BASE}/medications`,
+    UPDATE:`${MED_BASE}/medications`,
     PRESCRIPTION:{
       CREATE_PRESCRIPTION:`${MED_BASE}/prescription`,
       PATIENT_PRESCRIPTION :`${MED_BASE}/prescription/patient`,

@@ -184,7 +184,18 @@ export const MENU_ITEMS: MenuItem[] = [
       },
     ],
   },
-
+  //medications
+  {
+    label: 'Medications',
+    icon: 'pi pi-folder',
+    items: [
+      {
+        label: 'Medications',
+        icon: 'pi pi-file',
+        routerLink: ['/main/medication'],
+      },
+    ],
+  },
   // Administration
   {
     label: 'Administration',
