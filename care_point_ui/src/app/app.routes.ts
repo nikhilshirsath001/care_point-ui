@@ -85,7 +85,7 @@ export const routes: Routes = [
             (m) => m.VISIT_ROUTES,
           ),
       },
-            // Ipd module
+      // Ipd module
       {
         path: 'medication',
         loadChildren: () =>
@@ -93,13 +93,13 @@ export const routes: Routes = [
             (m) => m.MEDICATION_ROUTES,
           ),
       },
+      {
+        path: 'administrator',
+        loadChildren: () =>
+          import('./features/administrator/administrator.routes').then(
+            (m) => m.ADMINISTRATOR_ROUTES,
+          ),
+      },
     ],
-  },
-  {
-    path: 'administrator',
-    loadChildren: () =>
-      import('./features/administrator/administrator.routes').then(
-        (m) => m.ADMINISTRATOR_ROUTES,
-      ),
   },
 ];
