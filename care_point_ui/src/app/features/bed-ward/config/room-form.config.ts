@@ -2,140 +2,64 @@ import { Validators } from '@angular/forms';
 import { DynamicFormConfig } from '../../../core/models/dynamic-form.model';
 
 export const ROOM_FORM_CONFIG: DynamicFormConfig = {
-
-  title: 'ward',
-
-  submitLabel: 'Save Bed',
-
+  title: 'Room',
+  submitLabel: 'Save Room',
   cancelLabel: 'Cancel',
-
   showReset: true,
 
   fields: [
-
     {
-      name: 'bedNumber',
-      label: 'Bed Number',
-      type: 'text',
-      placeholder: 'Enter bed number',
-      required: true,
-      validators: [
-        Validators.required,
-        Validators.maxLength(50)
-      ],
-      col: 'col-12 col-md-6'
-    },
-
-    {
-      name: 'bedType',
-      label: 'Bed Type',
+      name: 'wardId',
+      label: 'Ward',
       type: 'select',
-      placeholder: 'Select bed type',
+      placeholder: 'Select ward',
       required: true,
-      options: [
-        {
-          label: 'General',
-          value: 'GENERAL'
-        },
-        {
-          label: 'ICU',
-          value: 'ICU'
-        },
-        {
-          label: 'Private',
-          value: 'PRIVATE'
-        },
-        {
-          label: 'Semi Private',
-          value: 'SEMI_PRIVATE'
-        }
-      ],
-      validators: [
-        Validators.required
-      ],
-      col: 'col-12 col-md-6'
+      validators: [Validators.required],
+      options: [],
+      col: 'col-12 col-md-6',
     },
-
-    // {
-    //   name: 'wardId',
-    //   label: 'Ward',
-    //   type: 'select',
-    //   placeholder: 'Select ward',
-    //   required: true,
-    //   options: [],
-    //   validators: [
-    //     Validators.required
-    //   ],
-    //   col: 'col-12 col-md-6'
-    // },
-
-    // {
-    //   name: 'roomId',
-    //   label: 'Room',
-    //   type: 'select',
-    //   placeholder: 'Select room',
-    //   required: true,
-    //   options: [],
-    //   validators: [
-    //     Validators.required
-    //   ],
-    //   col: 'col-12 col-md-6'
-    // },
-
     {
-      name: 'floor',
-      label: 'Floor',
-      type: 'number',
-      placeholder: 'Enter floor number',
+      name: 'roomNumber',
+      label: 'Room Number',
+      type: 'text',
+      placeholder: 'e.g. 101',
       required: true,
-      validators: [
-        Validators.required
-      ],
-      col: 'col-12 col-md-6'
+      validators: [Validators.required, Validators.maxLength(30)],
+      col: 'col-12 col-md-6',
     },
-
+    {
+      name: 'roomType',
+      label: 'Room Type',
+      type: 'select',
+      placeholder: 'Select room type',
+      required: true,
+      validators: [Validators.required],
+      options: [],
+      col: 'col-12 col-md-6',
+    },
     {
       name: 'status',
-      label: 'Status',
+      label: 'Room Status',
       type: 'select',
       placeholder: 'Select status',
       required: true,
-      defaultValue: 'AVAILABLE',
+      validators: [Validators.required],
       options: [
-        {
-          label: 'Available',
-          value: 'AVAILABLE'
-        },
-        {
-          label: 'Occupied',
-          value: 'OCCUPIED'
-        },
-        {
-          label: 'Reserved',
-          value: 'RESERVED'
-        },
-        {
-          label: 'Maintenance',
-          value: 'MAINTENANCE'
-        },
-        {
-          label: 'Blocked',
-          value: 'BLOCKED'
-        }
+        { label: 'Available', value: 'AVAILABLE' },
+        { label: 'Occupied', value: 'OCCUPIED' },
+        { label: 'Maintenance', value: 'MAINTENANCE' },
+        { label: 'Unavailable', value: 'UNAVAILABLE' },
       ],
-      validators: [
-        Validators.required
-      ],
-      col: 'col-12 col-md-6'
+      col: 'col-12 col-md-6',
     },
-
-    {
-      name: 'active',
-      label: 'Active',
-      type: 'checkbox',
-      defaultValue: true,
-      col: 'col-12'
-    }
-
-  ]
+  ],
 };
+
+export const ROOM_TYPES = [
+  { value: "SINGLE", label: "Single" },
+  { value: "TWIN_SHARING", label: "Twin Sharing" },
+  { value: "GENERAL_WARD_ROOM", label: "General Ward Room" },
+  { value: "SUITE", label: "Suite" },
+  { value: "ISOLATION_ROOM", label: "Isolation Room" },
+  { value: "TREATMENT_ROOM", label: "Treatment Room" }
+];

@@ -2,140 +2,69 @@ import { Validators } from '@angular/forms';
 import { DynamicFormConfig } from '../../../core/models/dynamic-form.model';
 
 export const WARD_FORM_CONFIG: DynamicFormConfig = {
-
-  title: 'ward',
-
-  submitLabel: 'Save Bed',
-
+  title: 'Ward',
+  submitLabel: 'Save Ward',
   cancelLabel: 'Cancel',
-
   showReset: true,
 
   fields: [
-
     {
-      name: 'bedNumber',
-      label: 'Bed Number',
+      name: 'wardName',
+      label: 'Ward Name',
       type: 'text',
-      placeholder: 'Enter bed number',
+      placeholder: 'Enter ward name',
       required: true,
-      validators: [
-        Validators.required,
-        Validators.maxLength(50)
-      ],
-      col: 'col-12 col-md-6'
+      validators: [Validators.required, Validators.maxLength(100)],
+      col: 'col-12 col-md-6',
     },
-
     {
-      name: 'bedType',
-      label: 'Bed Type',
+      name: 'departmentId',
+      label: 'Department',
       type: 'select',
-      placeholder: 'Select bed type',
+      placeholder: 'Select Department',
       required: true,
-      options: [
-        {
-          label: 'General',
-          value: 'GENERAL'
-        },
-        {
-          label: 'ICU',
-          value: 'ICU'
-        },
-        {
-          label: 'Private',
-          value: 'PRIVATE'
-        },
-        {
-          label: 'Semi Private',
-          value: 'SEMI_PRIVATE'
-        }
-      ],
-      validators: [
-        Validators.required
-      ],
-      col: 'col-12 col-md-6'
+      validators: [Validators.required],
+      options: [],
+      col: 'col-12 col-md-6',
     },
-
-    // {
-    //   name: 'wardId',
-    //   label: 'Ward',
-    //   type: 'select',
-    //   placeholder: 'Select ward',
-    //   required: true,
-    //   options: [],
-    //   validators: [
-    //     Validators.required
-    //   ],
-    //   col: 'col-12 col-md-6'
-    // },
-
-    // {
-    //   name: 'roomId',
-    //   label: 'Room',
-    //   type: 'select',
-    //   placeholder: 'Select room',
-    //   required: true,
-    //   options: [],
-    //   validators: [
-    //     Validators.required
-    //   ],
-    //   col: 'col-12 col-md-6'
-    // },
-
     {
-      name: 'floor',
+      name: 'floorId',
       label: 'Floor',
-      type: 'number',
-      placeholder: 'Enter floor number',
-      required: true,
-      validators: [
-        Validators.required
-      ],
-      col: 'col-12 col-md-6'
-    },
-
-    {
-      name: 'status',
-      label: 'Status',
       type: 'select',
-      placeholder: 'Select status',
+      placeholder: 'Select floor',
       required: true,
-      defaultValue: 'AVAILABLE',
-      options: [
-        {
-          label: 'Available',
-          value: 'AVAILABLE'
-        },
-        {
-          label: 'Occupied',
-          value: 'OCCUPIED'
-        },
-        {
-          label: 'Reserved',
-          value: 'RESERVED'
-        },
-        {
-          label: 'Maintenance',
-          value: 'MAINTENANCE'
-        },
-        {
-          label: 'Blocked',
-          value: 'BLOCKED'
-        }
-      ],
-      validators: [
-        Validators.required
-      ],
-      col: 'col-12 col-md-6'
+      validators: [Validators.required],
+      options: [],
+      col: 'col-12 col-md-6',
     },
-
+    {
+      name: 'wardType',
+      label: 'Ward Type',
+      type: 'select',
+      placeholder: 'Select ward type',
+      required: true,
+      validators: [Validators.required],
+      options: [],
+      col: 'col-12 col-md-6',
+    },
     {
       name: 'active',
       label: 'Active',
       type: 'checkbox',
       defaultValue: true,
-      col: 'col-12'
-    }
-
-  ]
+      col: 'col-12',
+    },
+  ],
 };
+
+export const WARD_TYPES = [
+  { value: "GENERAL", label: "General" },
+  { value: "ICU", label: "ICU" },
+  { value: "NICU", label: "NICU" },
+  { value: "HDU", label: "HDU" },
+  { value: "MATERNITY", label: "Maternity" },
+  { value: "PEDIATRIC", label: "Pediatric" },
+  { value: "ISOLATION", label: "Isolation" },
+  { value: "PRIVATE", label: "Private" },
+  { value: "SEMI_PRIVATE", label: "Semi-Private" }
+];

@@ -1,57 +1,104 @@
 <div class="page-container">
-
-  <!-- ===================================================== -->
-  <!-- PAGE HEADER -->
-  <!-- ===================================================== -->
-
+  <!-- Page header -->
   <div
-    class="d-flex justify-content-between align-items-center mb-4"
+    class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 page-header"
   >
-
     <div>
-
-      <h2 class="mb-1">
-        Wards & Rooms
-      </h2>
-
+      <h2 class="mb-1">Hospital Infrastructure</h2>
       <p class="text-muted mb-0">
-        Manage hospital wards, rooms and their capacity.
+        Manage floors, wards, rooms and hospital capacity.
       </p>
-
     </div>
-
   </div>
 
-
-  <!-- ===================================================== -->
-  <!-- TABS -->
-  <!-- ===================================================== -->
-
-  <p-tabView>
-
-
-    <!-- =================================================== -->
-    <!-- WARDS -->
-    <!-- =================================================== -->
-
-    <p-tabPanel header="Wards">
-
-      <div
-        class="d-flex justify-content-between align-items-center mb-3"
-      >
-
+  <!-- Infrastructure summary -->
+  <div class="row g-3 mb-4">
+    <div class="col-12 col-sm-4">
+      <div class="infrastructure-card">
+        <div class="infrastructure-icon floor-icon">
+          <i class="pi pi-building"></i>
+        </div>
         <div>
+          <span class="text-muted small">Total Floors</span>
+          <h4 class="mb-0">{{ floors.length }}</h4>
+        </div>
+      </div>
+    </div>
 
-          <h5 class="mb-1">
-            Ward Management
-          </h5>
+    <div class="col-12 col-sm-4">
+      <div class="infrastructure-card">
+        <div class="infrastructure-icon ward-icon">
+          <i class="pi pi-th-large"></i>
+        </div>
+        <div>
+          <span class="text-muted small">Total Wards</span>
+          <h4 class="mb-0">{{ wards.length }}</h4>
+        </div>
+      </div>
+    </div>
 
-          <small class="text-muted">
-            Manage hospital wards and their details.
-          </small>
+    <div class="col-12 col-sm-4">
+      <div class="infrastructure-card">
+        <div class="infrastructure-icon room-icon">
+          <i class="pi pi-door-open"></i>
+        </div>
+        <div>
+          <span class="text-muted small">Total Rooms</span>
+          <h4 class="mb-0">{{ rooms.length }}</h4>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <!-- Management tabs -->
+  <p-tabView>
+    <!-- FLOORS -->
+    <p-tabPanel header="Floors">
+      <div
+        class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3"
+      >
+        <div>
+          <h5 class="mb-1">Floor Management</h5>
+          <p class="text-muted mb-0 small">
+            Manage hospital levels and floor information.
+          </p>
         </div>
 
+        <button
+          pButton
+          type="button"
+          label="Add Floor"
+          icon="pi pi-plus"
+          (click)="openCreateFloorForm()"
+        ></button>
+      </div>
+
+      <app-shared-table
+        [title]="'Floors'"
+        [subtitle]="'Manage hospital floors'"
+        [columns]="floorColumns"
+        [data]="filteredFloors"
+        [config]="floorTableConfig"
+        (view)="viewFloor($event)"
+        (edit)="openEditFloorForm($event)"
+        (delete)="deleteFloor($event)"
+        (searchRecord)="onFloorSearch($event)"
+        (refresh)="loadFloors()"
+        (createNewRecord)="openCreateFloorForm()"
+      ></app-shared-table>
+    </p-tabPanel>
+
+    <!-- WARDS -->
+    <p-tabPanel header="Wards">
+      <div
+        class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3"
+      >
+        <div>
+          <h5 class="mb-1">Ward Management</h5>
+          <p class="text-muted mb-0 small">
+            Manage wards and their associated floors.
+          </p>
+        </div>
 
         <button
           pButton
@@ -59,46 +106,35 @@
           label="Add Ward"
           icon="pi pi-plus"
           (click)="openCreateWardForm()"
-        >
-        </button>
-
+        ></button>
       </div>
-
 
       <app-shared-table
         [title]="'Wards'"
         [subtitle]="'Manage registered hospital wards'"
         [columns]="wardColumns"
-        [data]="wards"
+        [data]="filteredWards"
         [config]="wardTableConfig"
-      >
-      </app-shared-table>
-
+        (view)="viewWard($event)"
+        (edit)="openEditWardForm($event)"
+        (delete)="deleteWard($event)"
+        (searchRecord)="onWardSearch($event)"
+        (refresh)="loadWards()"
+        (createNewRecord)="openCreateWardForm()"
+      ></app-shared-table>
     </p-tabPanel>
 
-
-    <!-- =================================================== -->
     <!-- ROOMS -->
-    <!-- =================================================== -->
-
     <p-tabPanel header="Rooms">
-
       <div
-        class="d-flex justify-content-between align-items-center mb-3"
+        class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3"
       >
-
         <div>
-
-          <h5 class="mb-1">
-            Room Management
-          </h5>
-
-          <small class="text-muted">
-            Manage rooms within hospital wards.
-          </small>
-
+          <h5 class="mb-1">Room Management</h5>
+          <p class="text-muted mb-0 small">
+            Manage rooms, ward assignments and room capacity.
+          </p>
         </div>
-
 
         <button
           pButton
@@ -106,86 +142,92 @@
           label="Add Room"
           icon="pi pi-plus"
           (click)="openCreateRoomForm()"
-        >
-        </button>
-
+        ></button>
       </div>
-
 
       <app-shared-table
         [title]="'Rooms'"
-        [subtitle]="'Manage registered rooms'"
+        [subtitle]="'Manage registered hospital rooms'"
         [columns]="roomColumns"
-        [data]="rooms"
+        [data]="filteredRooms"
         [config]="roomTableConfig"
-      >
-      </app-shared-table>
-
+        (view)="viewRoom($event)"
+        (edit)="openEditRoomForm($event)"
+        (delete)="deleteRoom($event)"
+        (searchRecord)="onRoomSearch($event)"
+        (refresh)="loadRooms()"
+        (createNewRecord)="openCreateRoomForm()"
+      ></app-shared-table>
     </p-tabPanel>
-
-
   </p-tabView>
 
+  <!-- FLOOR FORM -->
+  <p-dialog
+    [(visible)]="showFloorForm"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [closable]="true"
+    [dismissableMask]="true"
+    [style]="{ width: '700px', maxWidth: '95vw' }"
+    [header]="floorFormMode === 'create' ? 'Create Floor' : 'Edit Floor'"
+  >
+    <app-floor-form
+      *ngIf="showFloorForm"
+      [mode]="floorFormMode"
+      [floor]="selectedFloor"
+      (saved)="onFloorSaved()"
+      (cancelled)="onFloorFormCancelled()"
+    ></app-floor-form>
 
-  <!-- ===================================================== -->
-  <!-- WARD FORM DIALOG -->
-  <!-- ===================================================== -->
 
+  </p-dialog>
+
+  <!-- WARD FORM -->
   <p-dialog
     [(visible)]="showWardForm"
     [modal]="true"
     [draggable]="false"
     [resizable]="false"
-    [style]="{
-      width: '750px',
-      maxWidth: '95vw'
-    }"
-    [header]="
-      wardFormMode === 'create'
-        ? 'Create Ward'
-        : 'Edit Ward'
-    "
+    [closable]="true"
+    [dismissableMask]="true"
+    [style]="{ width: '700px', maxWidth: '95vw' }"
+    [header]="wardFormMode === 'create' ? 'Create Ward' : 'Edit Ward'"
   >
-
     <app-ward-form
+      *ngIf="showWardForm"
       [mode]="wardFormMode"
       [ward]="selectedWard"
       (saved)="onWardSaved()"
       (cancelled)="onWardFormCancelled()"
-    >
-    </app-ward-form>
-
+    ></app-ward-form>
   </p-dialog>
 
-
-  <!-- ===================================================== -->
-  <!-- ROOM FORM DIALOG -->
-  <!-- ===================================================== -->
-
+  <!-- ROOM FORM -->
   <p-dialog
     [(visible)]="showRoomForm"
     [modal]="true"
     [draggable]="false"
     [resizable]="false"
-    [style]="{
-      width: '750px',
-      maxWidth: '95vw'
-    }"
-    [header]="
-      roomFormMode === 'create'
-        ? 'Create Room'
-        : 'Edit Room'
-    "
+    [closable]="true"
+    [dismissableMask]="true"
+    [style]="{ width: '700px', maxWidth: '95vw' }"
+    [header]="roomFormMode === 'create' ? 'Create Room' : 'Edit Room'"
   >
-
-    <!-- <app-room-form
+    <app-room-form
+      *ngIf="showRoomForm"
       [mode]="roomFormMode"
       [room]="selectedRoom"
       (saved)="onRoomSaved()"
       (cancelled)="onRoomFormCancelled()"
-    >
-    </app-room-form> -->
-
+    ></app-room-form>
   </p-dialog>
 
+  <!-- DETAILS -->
+  <app-shared-details
+    [(visible)]="showDetails"
+    [title]="detailsTitle"
+    [data]="selectedRecord"
+    [fields]="detailsFields"
+  ></app-shared-details>
 </div>

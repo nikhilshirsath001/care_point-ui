@@ -1,230 +1,138 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { DynamicFormComponent } from '../../../../shared/dynamic-form/dynamic-form.component';
 import { CommonModule } from '@angular/common';
-import { BedWardService } from '../../services/bed-ward.service';
-import { DynamicFormConfig } from '../../../../core/models/dynamic-form.model';
-import { WARD_FORM_CONFIG } from '../../config/ward-form.config';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
+
+import { DynamicFormComponent } from '../../../../shared/dynamic-form/dynamic-form.component';
+import { Room } from '../../models/room.model';
 import { Ward } from '../../models/ward.model';
+import { BedWardService } from '../../services/bed-ward.service';
+import { ROOM_FORM_CONFIG, ROOM_TYPES } from '../../config/room-form.config';
+
+
 @Component({
   selector: 'app-room-form',
-  imports: [
-    DynamicFormComponent,
-    CommonModule
-  ],
+  standalone: true,
+  imports: [CommonModule, DynamicFormComponent],
   templateUrl: './room-form.component.html',
-  styleUrl: './room-form.component.css'
 })
-export class RoomFormComponent  implements OnChanges {
+export class RoomFormComponent implements OnChanges {
+  @Input() mode: 'create' | 'edit' = 'create';
+  @Input() room: Room | null = null;
 
-  // =========================================================
-  // INPUTS
-  // =========================================================
+  @Output() saved = new EventEmitter<void>();
+  @Output() cancelled = new EventEmitter<void>();
 
-  @Input()
-  mode: 'create' | 'edit' = 'create';
-
-  @Input()
-  ward: Ward | null = null;
-
-
-  // =========================================================
-  // OUTPUTS
-  // =========================================================
-
-  @Output()
-  saved = new EventEmitter<void>();
-
-  @Output()
-  cancelled = new EventEmitter<void>();
-
-
-  // =========================================================
-  // FORM CONFIGURATION
-  // =========================================================
-
-  formConfig: DynamicFormConfig = {
-    ...WARD_FORM_CONFIG,
-
-    fields: WARD_FORM_CONFIG.fields.map(field => ({
-      ...field,
-      options: field.options
-        ? [...field.options]
-        : undefined
-    }))
+  formConfig = {
+    ...ROOM_FORM_CONFIG,
+    fields: ROOM_FORM_CONFIG.fields.map((field) => ({ ...field })),
   };
 
-
-  // =========================================================
-  // STATE
-  // =========================================================
-
+  formData: Partial<Room> = {};
+  wards: Ward[] = [];
   loading = false;
 
-
-  // =========================================================
-  // CONSTRUCTOR
-  // =========================================================
-
-  constructor(
-    private bedWardService: BedWardService
-  ) {}
-
-
-  // =========================================================
-  // INPUT CHANGE
-  // =========================================================
+  constructor(private readonly bedWardService: BedWardService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-
-    if (
-      changes['mode'] ||
-      changes['ward']
-    ) {
-      this.prepareForm();
+    if (changes['mode'] || changes['room']) {
+      this.formData =
+        this.mode === 'edit' && this.room
+          ? {
+              wardId: this.room.wardId,
+              roomNumber: this.room.roomNumber,
+              roomType: this.room.roomType,
+              status: this.room.status,
+            }
+          : { status: 'AVAILABLE' };
     }
 
+    this.loadWards();
+    this.setRoomTypeOptions();
   }
 
+  private loadWards(): void {
+    this.bedWardService.getAllWards().subscribe({
+      next: (response: any) => {
+        this.wards = response?.data?.content ?? response?.data ?? [];
 
-  // =========================================================
-  // PREPARE FORM
-  // =========================================================
-
-  private prepareForm(): void {
-
-    // Reset form configuration if required
-    this.formConfig = {
-      ...WARD_FORM_CONFIG,
-
-      fields: WARD_FORM_CONFIG.fields.map(field => ({
-        ...field,
-        options: field.options
-          ? [...field.options]
-          : undefined
-      }))
-    };
-
+        this.setFieldOptions(
+          'wardId',
+          this.wards.map((ward) => ({
+            label: ward.wardName,
+            value: ward.wardId,
+          })),
+        );
+      },
+      error: (error) => console.error('Failed to load wards', error),
+    });
   }
 
-
-  // =========================================================
-  // FORM SUBMIT
-  // =========================================================
-
-  onSubmit(
-    formData: Record<string, any>
+  // private setRoomTypeOptions(): void {
+  //   this.setFieldOptions(
+  //     'roomType',
+  //     ROOM_TYPES.map((type) => ({
+  //       label: type.replace(/_/g, ' '),
+  //       value: type,
+  //     })),
+  //   );
+  // }
+private setRoomTypeOptions(): void {
+  this.setFieldOptions(
+    'roomType',
+    ROOM_TYPES.map((type) => ({
+      label: type.label, // Directly use the pre-formatted label from the array
+      value: type.value, // Directly use the value
+    })),
+  );
+}
+  private setFieldOptions(
+    name: string,
+    options: { label: string; value: any }[],
   ): void {
+    this.formConfig = {
+      ...this.formConfig,
+      fields: this.formConfig.fields.map((field) =>
+        field.name === name ? { ...field, options } : field,
+      ),
+    };
+  }
+
+  onSubmit(value: Partial<Room>): void {
+    if (this.loading) return;
+
+    const request = {
+      wardId: Number(value.wardId),
+      roomNumber: value.roomNumber?.trim() ?? '',
+      roomType: value.roomType ?? '',
+      status: value.status ?? 'AVAILABLE',
+    };
 
     this.loading = true;
 
-    if (this.mode === 'create') {
+    const request$ =
+      this.mode === 'edit' && this.room
+        ? this.bedWardService.updateRoom(this.room.roomId, request)
+        : this.bedWardService.createRoom(request);
 
-      this.createWard(formData);
-
-    } else {
-
-      this.updateWard(formData);
-
-    }
-
+    request$.subscribe({
+      next: () => {
+        this.loading = false;
+        this.saved.emit();
+      },
+      error: (error) => {
+        console.error('Failed to save room', error);
+        this.loading = false;
+      },
+    });
   }
-
-
-  // =========================================================
-  // CREATE WARD
-  // =========================================================
-
-  private createWard(
-    formData: Record<string, any>
-  ): void {
-
-    // this.bedWardService
-    //   .createWard(formData as Ward)
-    //   .subscribe({
-
-    //     next: () => {
-
-    //       this.loading = false;
-
-    //       this.saved.emit();
-
-    //     },
-
-    //     error: (error) => {
-
-    //       this.loading = false;
-
-    //       console.error(
-    //         'Failed to create ward',
-    //         error
-    //       );
-
-    //     }
-
-    //   });
-
-  }
-
-
-  // =========================================================
-  // UPDATE WARD
-  // =========================================================
-
-  private updateWard(
-    formData: Record<string, any>
-  ): void {
-
-    if (!this.ward?.id) {
-
-      console.error(
-        'Ward ID is missing'
-      );
-
-      this.loading = false;
-
-      return;
-    }
-
-
-    // this.bedWardService
-    //   .updateWard(
-    //     this.ward.id,
-    //     formData as Ward
-    //   )
-    //   .subscribe({
-
-    //     next: () => {
-
-    //       this.loading = false;
-
-    //       this.saved.emit();
-
-    //     },
-
-    //     error: (error) => {
-
-    //       this.loading = false;
-
-    //       console.error(
-    //         'Failed to update ward',
-    //         error
-    //       );
-
-    //     }
-
-    //   });
-
-  }
-
-
-  // =========================================================
-  // CANCEL
-  // =========================================================
 
   onCancel(): void {
-
     this.cancelled.emit();
-
   }
-
 }

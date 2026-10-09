@@ -1,231 +1,155 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { DynamicFormComponent } from '../../../../shared/dynamic-form/dynamic-form.component';
 import { CommonModule } from '@angular/common';
-import { BedWardService } from '../../services/bed-ward.service';
-import { DynamicFormConfig } from '../../../../core/models/dynamic-form.model';
-import { WARD_FORM_CONFIG } from '../../config/ward-form.config';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
+
+import { DynamicFormComponent } from '../../../../shared/dynamic-form/dynamic-form.component';
 import { Ward } from '../../models/ward.model';
+import { Floor } from '../../models/floor.model';
+import { BedWardService } from '../../services/bed-ward.service';
+import { WARD_FORM_CONFIG, WARD_TYPES } from '../../config/ward-form.config';
+import { AdministratorService } from '../../../administrator/services/administrator.service';
 
 @Component({
   selector: 'app-ward-form',
-  imports: [
-     CommonModule,
-    DynamicFormComponent
-  ],
+  standalone: true,
+  imports: [CommonModule, DynamicFormComponent],
   templateUrl: './ward-form.component.html',
-  styleUrl: './ward-form.component.css'
 })
-export class WardFormComponent  implements OnChanges {
+export class WardFormComponent implements OnChanges {
+  @Input() mode: 'create' | 'edit' = 'create';
+  @Input() ward: Ward | null = null;
 
-  // =========================================================
-  // INPUTS
-  // =========================================================
+  @Output() saved = new EventEmitter<void>();
+  @Output() cancelled = new EventEmitter<void>();
 
-  @Input()
-  mode: 'create' | 'edit' = 'create';
-
-  @Input()
-  ward: Ward | null = null;
-
-
-  // =========================================================
-  // OUTPUTS
-  // =========================================================
-
-  @Output()
-  saved = new EventEmitter<void>();
-
-  @Output()
-  cancelled = new EventEmitter<void>();
-
-
-  // =========================================================
-  // FORM CONFIGURATION
-  // =========================================================
-
-  formConfig: DynamicFormConfig = {
+  formConfig = {
     ...WARD_FORM_CONFIG,
-
-    fields: WARD_FORM_CONFIG.fields.map(field => ({
-      ...field,
-      options: field.options
-        ? [...field.options]
-        : undefined
-    }))
+    fields: WARD_FORM_CONFIG.fields.map((field) => ({ ...field })),
   };
 
-
-  // =========================================================
-  // STATE
-  // =========================================================
-
+  formData: Partial<Ward> = {};
+  floors: Floor[] = [];
+  departments: any[] = [];
   loading = false;
-
-
-  // =========================================================
-  // CONSTRUCTOR
-  // =========================================================
+  wardTypes = WARD_TYPES;
 
   constructor(
-    private bedWardService: BedWardService
+    private readonly bedWardService: BedWardService,
+    private readonly administratorService: AdministratorService,
   ) {}
 
-
-  // =========================================================
-  // INPUT CHANGE
-  // =========================================================
-
   ngOnChanges(changes: SimpleChanges): void {
-
-    if (
-      changes['mode'] ||
-      changes['ward']
-    ) {
-      this.prepareForm();
+    if (changes['mode'] || changes['ward']) {
+      this.formData =
+        this.mode === 'edit' && this.ward
+          ? {
+              departmentId: this.ward.departmentId,
+              floorId: this.ward.floorId,
+              wardName: this.ward.wardName,
+              wardType: this.ward.wardType,
+              active: this.ward.active,
+            }
+          : { active: true };
     }
 
+    this.loadFloors();
+    this.setWardTypeOptions();
+    this.loadDepartments();
   }
 
+  private loadFloors(): void {
+    this.bedWardService.getAllFloors().subscribe({
+      next: (response: any) => {
+        this.floors = response?.data?.content ?? response?.data ?? [];
 
-  // =========================================================
-  // PREPARE FORM
-  // =========================================================
-
-  private prepareForm(): void {
-
-    // Reset form configuration if required
-    this.formConfig = {
-      ...WARD_FORM_CONFIG,
-
-      fields: WARD_FORM_CONFIG.fields.map(field => ({
-        ...field,
-        options: field.options
-          ? [...field.options]
-          : undefined
-      }))
-    };
-
+        this.setFieldOptions(
+          'floorId',
+          this.floors.map((floor) => ({
+            label: `${floor.floorName} (Floor ${floor.floorNumber})`,
+            value: floor.floorId,
+          })),
+        );
+      },
+      error: (error) => console.error('Failed to load floors', error),
+    });
   }
 
+  private loadDepartments(): void {
+    this.administratorService.getAllDepartments().subscribe({
+      next: (response: any) => {
+        this.departments = response?.data?.content ?? response?.data ?? [];
 
-  // =========================================================
-  // FORM SUBMIT
-  // =========================================================
+        this.setFieldOptions(
+          'departmentId',
+          this.departments.map((deparment) => ({
+            label: `${deparment.departmentName}`,
+            value: deparment.departmentId,
+          })),
+        );
+      },
+      error: (error) => console.error('Failed to load departments', error),
+    });
+  }
 
-  onSubmit(
-    formData: Record<string, any>
+  private setWardTypeOptions(): void {
+    this.setFieldOptions(
+      'wardType',
+      WARD_TYPES.map((type) => ({
+        label: type.label,
+        value: type.value,
+      })),
+    );
+  }
+
+  private setFieldOptions(
+    name: string,
+    options: { label: string; value: any }[],
   ): void {
+    this.formConfig = {
+      ...this.formConfig,
+      fields: this.formConfig.fields.map((field) =>
+        field.name === name ? { ...field, options } : field,
+      ),
+    };
+  }
+
+  onSubmit(value: Partial<Ward>): void {
+    if (this.loading) return;
+
+    const request = {
+      departmentId: Number(value.departmentId),
+      floorId: Number(value.floorId),
+      wardName: value.wardName?.trim() ?? '',
+      wardType: value.wardType ?? '',
+      active: value.active ?? true,
+    };
 
     this.loading = true;
 
-    if (this.mode === 'create') {
+    const request$ =
+      this.mode === 'edit' && this.ward
+        ? this.bedWardService.updateWard(this.ward.wardId, request)
+        : this.bedWardService.createWard(request);
 
-      this.createWard(formData);
-
-    } else {
-
-      this.updateWard(formData);
-
-    }
-
+    request$.subscribe({
+      next: () => {
+        this.loading = false;
+        this.saved.emit();
+      },
+      error: (error) => {
+        console.error('Failed to save ward', error);
+        this.loading = false;
+      },
+    });
   }
-
-
-  // =========================================================
-  // CREATE WARD
-  // =========================================================
-
-  private createWard(
-    formData: Record<string, any>
-  ): void {
-
-    // this.bedWardService
-    //   .createWard(formData as Ward)
-    //   .subscribe({
-
-    //     next: () => {
-
-    //       this.loading = false;
-
-    //       this.saved.emit();
-
-    //     },
-
-    //     error: (error) => {
-
-    //       this.loading = false;
-
-    //       console.error(
-    //         'Failed to create ward',
-    //         error
-    //       );
-
-    //     }
-
-    //   });
-
-  }
-
-
-  // =========================================================
-  // UPDATE WARD
-  // =========================================================
-
-  private updateWard(
-    formData: Record<string, any>
-  ): void {
-
-    if (!this.ward?.id) {
-
-      console.error(
-        'Ward ID is missing'
-      );
-
-      this.loading = false;
-
-      return;
-    }
-
-
-    // this.bedWardService
-    //   .updateWard(
-    //     this.ward.id,
-    //     formData as Ward
-    //   )
-    //   .subscribe({
-
-    //     next: () => {
-
-    //       this.loading = false;
-
-    //       this.saved.emit();
-
-    //     },
-
-    //     error: (error) => {
-
-    //       this.loading = false;
-
-    //       console.error(
-    //         'Failed to update ward',
-    //         error
-    //       );
-
-    //     }
-
-    //   });
-
-  }
-
-
-  // =========================================================
-  // CANCEL
-  // =========================================================
 
   onCancel(): void {
-
     this.cancelled.emit();
-
   }
-
 }

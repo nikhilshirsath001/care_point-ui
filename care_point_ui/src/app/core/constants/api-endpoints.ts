@@ -1,7 +1,7 @@
 const HMIS_BASE = '/hmis';
 const MED_BASE = '/medication';
 const USER_BASE = '/users';
-
+const ROLE_BASE = '/roles';
 
 export const API_ENDPOINTS = {
   PATIENTS: {
@@ -28,6 +28,25 @@ export const API_ENDPOINTS = {
   BED_WARD: {
     BASE: HMIS_BASE,
     GET_ALL_WARDS: `${HMIS_BASE}/ward/get-all`,
+    GET_ALL_FLOOR: `${HMIS_BASE}/floor/get-all`,
+    GET_ALL_BEDS: `${HMIS_BASE}/bed/get-all`,
+    GET_ALL_ROOMS: `${HMIS_BASE}/wardroom/get-all`,
+
+    DELETE_WARD: `${HMIS_BASE}/ward/delete`,
+    DELETE_FLOOR: `${HMIS_BASE}/floor/delete`,
+    DELETE_BED: `${HMIS_BASE}/bed/delete`,
+    DELETE_ROOM: `${HMIS_BASE}/wardroom/delete`,
+
+    UPDATE_WARD: `${HMIS_BASE}/ward/update`,
+    UPDATE_FLOOR: `${HMIS_BASE}/floor/update`,
+    UPDATE_BED: `${HMIS_BASE}/bed/update`,
+    UPDATE_ROOM: `${HMIS_BASE}/wardroom/update`,
+
+    CREATE_WARD: `${HMIS_BASE}/ward/create`,
+    CREATE_ROOM: `${HMIS_BASE}/wardroom/create`,
+    CREATE_BED: `${HMIS_BASE}/bed/create`,
+    CREATE_FLOOR: `${HMIS_BASE}/floor/create`,
+
     GET_ROOMS_BY_WARD_ID: `${HMIS_BASE}/wardroom/get-by-ward-id`,
     GET_AVAILABLE_BEDS_BY_ROOM_ID: `${HMIS_BASE}/bed/avaialble/get-by-roomId`,
     ASSIGN_BED: `${HMIS_BASE}/bed-assignment/create`,
@@ -93,6 +112,13 @@ export const API_ENDPOINTS = {
     CREATE: `${USER_BASE}`,
     UPDATE: `${USER_BASE}`,
     DELETE: `${USER_BASE}`,
+  },
+  ROLE: {
+    BASE: ROLE_BASE,
+    GET_ALL: `${ROLE_BASE}`,
+    CREATE: `${ROLE_BASE}`,
+    UPDATE: `${ROLE_BASE}`,
+    DELETE: `${ROLE_BASE}`,
   },
 } as const;
 

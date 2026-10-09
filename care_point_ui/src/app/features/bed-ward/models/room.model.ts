@@ -1,18 +1,14 @@
 export interface Room {
-
-  id?: number;
-
-  bedNumber: string;
-
-  bedType: string;
-
-  wardId: number;
-
   roomId: number;
-
-  floor: number;
-
+  wardId: number;
+  roomNumber: string;
+  roomType: string;
   status: string;
+}
 
-  active: boolean;
+export interface RoomRequest {
+  wardId: number;
+  roomNumber: string;
+  roomType: string;
+  status: string;
 }

@@ -1,18 +1,16 @@
 export interface Ward {
-
-  id?: number;
-
-  bedNumber: string;
-
-  bedType: string;
-
   wardId: number;
+  departmentId: number;
+  floorId: number;
+  wardName: string;
+  wardType: string;
+  active: boolean;
+}
 
-  roomId: number;
-
-  floor: number;
-
-  status: string;
-
+export interface WardRequest {
+  departmentId: number;
+  floorId: number;
+  wardName: string;
+  wardType: string;
   active: boolean;
 }

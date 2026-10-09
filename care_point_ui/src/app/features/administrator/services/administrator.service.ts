@@ -77,4 +77,8 @@ export class AdministratorService {
       `${API_ENDPOINTS.USER.DELETE}/${userId}`,
     );
   }
+
+  getAllRoles(): Observable<any> {
+    return this.apiService.getObservable(API_ENDPOINTS.ROLE.GET_ALL);
+  }
 }

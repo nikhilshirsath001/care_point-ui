@@ -3,7 +3,6 @@ import { DynamicFormConfig } from '../../../core/models/dynamic-form.model';
 import { DetailField } from '../../../shared/shared-details/shared-details.component';
 
 export const STAFF_FORM_CONFIG: DynamicFormConfig = {
-
   title: 'Staff',
 
   submitLabel: 'Save Staff',
@@ -13,18 +12,14 @@ export const STAFF_FORM_CONFIG: DynamicFormConfig = {
   showReset: true,
 
   fields: [
-
     {
       name: 'employeeNo',
       label: 'Employee No',
       type: 'text',
       placeholder: 'Enter employee number',
       required: true,
-      validators: [
-        Validators.required,
-        Validators.maxLength(30)
-      ],
-      col: 'col-12 col-md-6'
+      validators: [Validators.required, Validators.maxLength(30)],
+      col: 'col-12 col-md-6',
     },
 
     {
@@ -33,11 +28,8 @@ export const STAFF_FORM_CONFIG: DynamicFormConfig = {
       type: 'text',
       placeholder: 'Enter first name',
       required: true,
-      validators: [
-        Validators.required,
-        Validators.maxLength(50)
-      ],
-      col: 'col-12 col-md-6'
+      validators: [Validators.required, Validators.maxLength(50)],
+      col: 'col-12 col-md-6',
     },
 
     {
@@ -46,11 +38,8 @@ export const STAFF_FORM_CONFIG: DynamicFormConfig = {
       type: 'text',
       placeholder: 'Enter last name',
       required: true,
-      validators: [
-        Validators.required,
-        Validators.maxLength(50)
-      ],
-      col: 'col-12 col-md-6'
+      validators: [Validators.required, Validators.maxLength(50)],
+      col: 'col-12 col-md-6',
     },
 
     {
@@ -59,11 +48,8 @@ export const STAFF_FORM_CONFIG: DynamicFormConfig = {
       type: 'text',
       placeholder: 'Enter phone number',
       required: true,
-      validators: [
-        Validators.required,
-        Validators.maxLength(20)
-      ],
-      col: 'col-12 col-md-6'
+      validators: [Validators.required, Validators.maxLength(20)],
+      col: 'col-12 col-md-6',
     },
 
     {
@@ -75,9 +61,9 @@ export const STAFF_FORM_CONFIG: DynamicFormConfig = {
       validators: [
         Validators.required,
         Validators.email,
-        Validators.maxLength(100)
+        Validators.maxLength(100),
       ],
-      col: 'col-12 col-md-6'
+      col: 'col-12 col-md-6',
     },
 
     {
@@ -86,11 +72,8 @@ export const STAFF_FORM_CONFIG: DynamicFormConfig = {
       type: 'text',
       placeholder: 'Enter designation',
       required: true,
-      validators: [
-        Validators.required,
-        Validators.maxLength(100)
-      ],
-      col: 'col-12 col-md-6'
+      validators: [Validators.required, Validators.maxLength(100)],
+      col: 'col-12 col-md-6',
     },
 
     {
@@ -99,10 +82,8 @@ export const STAFF_FORM_CONFIG: DynamicFormConfig = {
       type: 'text',
       placeholder: 'Enter specialization',
       required: false,
-      validators: [
-        Validators.maxLength(100)
-      ],
-      col: 'col-12 col-md-6'
+      validators: [Validators.maxLength(100)],
+      col: 'col-12 col-md-6',
     },
 
     {
@@ -112,10 +93,18 @@ export const STAFF_FORM_CONFIG: DynamicFormConfig = {
       placeholder: 'Select department',
       required: true,
       options: [],
-      validators: [
-        Validators.required
-      ],
-      col: 'col-12 col-md-6'
+      validators: [Validators.required],
+      col: 'col-12 col-md-6',
+    },
+    {
+      name: 'roleId',
+      label: 'Role',
+      type: 'select',
+      placeholder: 'Select Role',
+      required: true,
+      options: [],
+      validators: [Validators.required],
+      col: 'col-12 col-md-6',
     },
 
     {
@@ -124,10 +113,8 @@ export const STAFF_FORM_CONFIG: DynamicFormConfig = {
       type: 'date',
       placeholder: 'Select joining date',
       required: true,
-      validators: [
-        Validators.required
-      ],
-      col: 'col-12 col-md-6'
+      validators: [Validators.required],
+      col: 'col-12 col-md-6',
     },
 
     {
@@ -135,66 +122,61 @@ export const STAFF_FORM_CONFIG: DynamicFormConfig = {
       label: 'Active',
       type: 'checkbox',
       defaultValue: true,
-      col: 'col-12'
-    }
-
-  ]
-
+      col: 'col-12',
+    },
+  ],
 };
 
-
 export const STAFF_DETAIL_FIELDS: DetailField[] = [
-
   {
     field: 'employeeNo',
-    label: 'Employee No'
+    label: 'Employee No',
   },
 
   {
     field: 'firstName',
-    label: 'First Name'
+    label: 'First Name',
   },
 
   {
     field: 'lastName',
-    label: 'Last Name'
+    label: 'Last Name',
   },
 
   {
     field: 'phone',
-    label: 'Phone'
+    label: 'Phone',
   },
 
   {
     field: 'email',
-    label: 'Email'
+    label: 'Email',
   },
 
   {
     field: 'designation',
-    label: 'Designation'
+    label: 'Designation',
   },
 
   {
     field: 'specialization',
-    label: 'Specialization'
+    label: 'Specialization',
   },
 
   {
     field: 'department.departmentName',
-    label: 'Department'
+    label: 'Department',
   },
 
   {
     field: 'joiningDate',
     label: 'Joining Date',
-    type: 'date'
+    type: 'date',
   },
 
   {
     field: 'active',
     label: 'Status',
-    type: 'status'
-  }
-
+    type: 'status',
+  },
 ];
