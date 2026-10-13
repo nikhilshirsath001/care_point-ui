@@ -1,41 +1,20 @@
 
-<div class="page-container">
-
-  <!-- PAGE HEADER -->
-  <div
-    class="d-flex justify-content-between align-items-center mb-4"
-  >
-
-    <div>
-      <h2 class="mb-1">
-        Staff Management
-      </h2>
-
-      <p class="text-muted mb-0">
-        Manage hospital Staff and their availability.
-      </p>
-    </div>
-
-    <button
-      pButton
-      label="Add Staff"
-      icon="pi pi-plus"
-      (click)="openCreateForm()"
-    ></button>
-
-  </div>
-
-
   <!-- BED TABLE -->
 
   <app-shared-table
-  [title]="'Doctors & Staff'"
+  [title]="'Staffs'"
   [subtitle]="'Manage registered Doctors & Staff'"
   [columns]="patientColumns"
   [data]="staffList"
   [config]="tableConfig"
 
-  (view)="onViewStaff($event)"
+  (view)="onViewTable($event)"
+  (createNewRecord)="onCreateTable()"
+  (pageChange)="onPageChangeTable($event)"
+  (refresh)="onRefreshTable()"
+  (edit)="OnEditTable($event)"
+  (delete)="onDeleteTable($event)"
+  (searchRecord)="onSearchTable($event)"
   >
   </app-shared-table>
 
@@ -72,4 +51,3 @@
   [data]="selectedStaff"
   [fields]="staffDetailFields">
 </app-shared-details>
-</div>

@@ -12,6 +12,7 @@ export const API_ENDPOINTS = {
     UPDATE: `${HMIS_BASE}/update`,
     DELETE: `${HMIS_BASE}/delete`,
     EXISTS: `${HMIS_BASE}/exists`,
+    GET_BY_PATIENT_ID: `${HMIS_BASE}/get-patient-id`,
   },
 
   IPD: {
@@ -104,6 +105,8 @@ export const API_ENDPOINTS = {
     GET_ALL_BY_PATIENT_ID: `/documents`,
     DOWNLOAD: '/documents/:id/download',
     GET_DOC_TYPES: '/documents/doctypes',
+    DELETE: '/documents/:id',
+    VERIFY_DOCUENT: '/documents/:id/verification',
   },
 
   USER: {

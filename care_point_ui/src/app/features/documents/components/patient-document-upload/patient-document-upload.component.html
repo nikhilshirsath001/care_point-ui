@@ -1,0 +1,464 @@
+<div class="upload-page">
+  <div class="upload-header">
+    <div>
+      <h3>Patient Document Upload</h3>
+      <p>Select the document context and upload files by category.</p>
+    </div>
+    <span class="patient-badge" *ngIf="abhaId"> ABHA ID: {{ abhaId }} </span>
+  </div>
+
+  <div class="context-field">
+    <label for="context">Document Context</label>
+    <p-select
+      inputId="context"
+      [options]="contextOptions"
+      [(ngModel)]="context"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Select context"
+      (ngModelChange)="onContextChange($event)"
+      styleClass="context-select"
+    >
+    </p-select>
+  </div>
+
+  @if (context !== "Personal") {
+    <div class="record-selection">
+      <div>
+        <span class="field-label">Selected {{ context }}</span>
+
+        @if (selectedRecord) {
+          <strong
+            >#{{
+              selectedRecord.id ||
+                selectedRecord?.["admissionId"] ||
+                selectedRecord?.["visitId"]
+            }}</strong
+          >
+          <span class="record-date">
+            {{
+              selectedRecord.date ||
+                selectedRecord["visitDate"] ||
+                selectedRecord["admissionDate"] ||
+                selectedRecord["createdAt"] ||
+                ""
+            }}
+          </span>
+        } @else {
+          <span class="muted">No {{ context.toLowerCase() }} selected</span>
+        }
+      </div>
+
+      <p-button
+        [label]="selectedRecord ? 'Change ' + context : 'Search ' + context"
+        icon="pi pi-search"
+        severity="secondary"
+        [outlined]="true"
+        (onClick)="recordDialogVisible = true"
+      >
+      </p-button>
+    </div>
+  }
+
+  @if (context === "Personal" || selectedRecord) {
+    <div class="category-grid">
+      @for (category of categories; track category.value) {
+        <section class="category-card">
+          <div class="category-heading">
+            <div class="category-icon"><i class="pi pi-file"></i></div>
+
+            <div>
+              <h4>{{ category.label }}</h4>
+              <p>{{ filesFor(category.value).length }} file(s) selected</p>
+            </div>
+          </div>
+
+          <label class="file-picker">
+            <i class="pi pi-cloud-upload"></i>
+            <span>Choose files</span>
+            <input
+              type="file"
+              multiple
+              accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+              (change)="onFilesSelected($event, category.value)"
+            />
+          </label>
+
+          @for (item of filesFor(category.value); track item.id) {
+            <div class="queued-file">
+              <i class="pi pi-file"></i>
+
+              <div class="file-details">
+                <span class="file-name">{{ item.file.name }}</span>
+                <small>
+                  {{ item.file.size / 1024 | number: "1.0-0" }} KB ·
+                  {{ item.status }}
+                </small>
+
+                @if (item.error) {
+                  <small class="error-text">{{ item.error }}</small>
+                }
+              </div>
+
+              <button
+                type="button"
+                class="icon-button"
+                title="Preview"
+                (click)="previewFile(item)"
+              >
+                <i class="pi pi-eye"></i>
+              </button>
+              <!-- <button
+                pButton
+                type="button"
+                icon="pi pi-eye"
+                severity="info"
+                [outlined]="true"
+                pTooltip="View"
+                tooltipPosition="top"
+                (click)="viewDocument(document)"
+              ></button> -->
+
+              @if (item.status !== "uploaded" && item.status !== "uploading") {
+                <button
+                  type="button"
+                  class="icon-button danger"
+                  title="Remove"
+                  (click)="removeFile(item.id)"
+                >
+                  <i class="pi pi-trash"></i>
+                </button>
+              }
+            </div>
+          }
+
+          @if (showUploadButton(category.value)) {
+            <p-button
+              [label]="'Upload ' + category.label"
+              icon="pi pi-upload"
+              [disabled]="uploadingAll"
+              [loading]="
+                uploadingAll && isCategoryUploading(category.value, 'uploading')
+              "
+              (onClick)="uploadCategory(category.value)"
+              styleClass="category-upload-button"
+            >
+            </p-button>
+          }
+        </section>
+      }
+    </div>
+  }
+
+  @if (message) {
+    <div class="upload-message" role="status">{{ message }}</div>
+  }
+
+  @if (files.length > 0) {
+    <div class="upload-footer">
+      <span>{{ files.length }} file(s) in queue</span>
+
+      <p-button
+        label="Remove Uploaded"
+        icon="pi pi-trash"
+        severity="danger"
+        [outlined]="true"
+        [disabled]="!isCategoryUploading('', 'uploaded')"
+        (onClick)="removeUploaded()"
+      >
+      </p-button>
+      <p-button
+        label="Upload All"
+        icon="pi pi-cloud-upload"
+        [disabled]="!canUploadAll || uploadingAll"
+        [loading]="uploadingAll"
+        (onClick)="uploadAll()"
+      >
+      </p-button>
+    </div>
+  }
+</div>
+
+<p-dialog
+  [header]="
+    `${!(existingRecords().length > 0) ? 'No ' + context + ' are available for this patient!' : 'Search ' + context}`
+  "
+  [(visible)]="recordDialogVisible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="true"
+  [closable]="true"
+  [dismissableMask]="true"
+  [blockScroll]="true"
+  [appendTo]="'body'"
+  [style]="{
+    width: 'min(1100px, 96vw)',
+    height: 'auto',
+    maxHeight: '92vh',
+  }"
+  [contentStyle]="{
+    padding: '1rem',
+    overflow: 'auto',
+  }"
+  [breakpoints]="{
+    '1100px': '96vw',
+    '768px': '98vw',
+  }"
+  styleClass="record-search-dialog"
+  (onHide)="closeSerchRecord()"
+>
+  @if (existingRecords().length > 0) {
+    <div class="record-search-panel">
+      <div class="record-search">
+        <i class="pi pi-search"></i>
+
+        <input
+          pInputText
+          type="text"
+          [(ngModel)]="recordSearch"
+          [placeholder]="'Enter ' + context + ' ID'"
+          (ngModelChange)="message = ''"
+          (keyup.enter)="searchRecord()"
+        />
+
+        <p-button
+          label="Search"
+          icon="pi pi-search"
+          [loading]="loadingRecords"
+          [disabled]="loadingRecords || !recordSearch.trim()"
+          (onClick)="searchRecord()"
+        >
+        </p-button>
+      </div>
+
+      @if (message) {
+        <div class="upload-message" role="status">
+          {{ message }}
+        </div>
+      }
+
+      @if (loadingRecords) {
+        <div class="empty-records">
+          <i class="pi pi-spin pi-spinner"></i>
+          <span>Searching for {{ context.toLowerCase() }}...</span>
+        </div>
+      }
+
+      <div class="record-search-panel">
+        <!-- Records table -->
+
+        <!-- @if (existingRecords().length > 0) { -->
+        <div class="record-table-wrapper">
+          <p-table
+            [value]="existingRecords()"
+            [lazy]="true"
+            (onLazyLoad)="onRecordPageChange($event)"
+            [paginator]="true"
+            [first]="page * size"
+            [rows]="size"
+            [totalRecords]="totalRecords"
+            [rowsPerPageOptions]="[10, 20, 50, 100]"
+            [loading]="loadingRecords"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} records"
+            [dataKey]="context === 'Visit' ? 'visitId' : 'admissionId'"
+            responsiveLayout="scroll"
+            styleClass="p-datatable-sm p-datatable-striped"
+          >
+            <!-- Visit columns -->
+            @if (context === "Visit") {
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Sr.No</th>
+                  <th>Doctor</th>
+                  <th>Department</th>
+                  <th>Visit Type</th>
+                  <th>Visit Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-record let-rowIndex="rowIndex">
+                <tr>
+                  <td>{{ rowIndex + 1 }}</td>
+                  <td>
+                    {{ record.doctorFirstName }}
+                    {{ record.doctorLastName }}
+                  </td>
+                  <td>{{ record.departmentName }}</td>
+                  <td>{{ record.visitType }}</td>
+                  <td>
+                    {{
+                      record.visitDate
+                        ? (record.visitDate | date: "dd/MM/yyyy")
+                        : "-"
+                    }}
+                  </td>
+                  <td>{{ record.status }}</td>
+                  <td>
+                    <p-button
+                      label="Select"
+                      icon="pi pi-check"
+                      size="small"
+                      (onClick)="onSelectRecord(record)"
+                    >
+                    </p-button>
+                  </td>
+                </tr>
+              </ng-template>
+            }
+
+            <!-- Admission columns -->
+            @if (context === "Admission") {
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Sr.No</th>
+                  <th>Admission Number</th>
+                  <th>Patient Name</th>
+                  <th>Admitting Doctor</th>
+                  <th>Admission Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-record let-rowIndex="rowIndex">
+                <tr>
+                  <td>{{ rowIndex + 1 }}</td>
+                  <td>{{ record.admissionNumber }}</td>
+                  <td>{{ record.patientName }}</td>
+                  <td>{{ record.admittingDoctorName }}</td>
+                  <td>
+                    {{
+                      record.admissionDate
+                        ? (record.admissionDate | date: "dd/MM/yyyy")
+                        : "-"
+                    }}
+                  </td>
+                  <td>{{ record.status }}</td>
+                  <td>
+                    <p-button
+                      label="Select"
+                      icon="pi pi-check"
+                      size="small"
+                      (onClick)="onSelectRecord(record)"
+                    >
+                    </p-button>
+                  </td>
+                </tr>
+              </ng-template>
+            }
+
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td
+                  [attr.colspan]="context === 'Visit' ? 7 : 7"
+                  class="text-center"
+                >
+                  No {{ context.toLowerCase() }} records found.
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+        <!-- } -->
+      </div>
+    </div>
+  }
+</p-dialog>
+<div class="document-preview document-preview-pdf">
+  <!-- <p-dialog
+[(visible)]="previewVisible"
+[header]="previewName"
+(onHide)="closePreview()"
+
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '85vw', height: '90vh' }"
+  [contentStyle]="{ padding: '0', overflow: 'hidden' }"
+>
+
+@if (previewUrl) {
+<iframe
+[src]="previewUrl"
+title="File preview"
+class="preview-frame"
+> </iframe>
+
+<a
+  [href]="previewObjectUrl"
+  [download]="previewName"
+  class="preview-download">
+  Download preview
+</a>
+
+} </p-dialog> -->
+  <div class="document-preview document-preview-pdf">
+    <p-dialog
+      [header]="previewName || 'Document Preview'"
+      [(visible)]="previewVisible"
+      [modal]="true"
+      [draggable]="false"
+      [resizable]="true"
+      [dismissableMask]="true"
+      [style]="{
+        width: '85vw',
+        maxWidth: '1200px',
+      }"
+      [contentStyle]="{
+        padding: '0',
+        overflow: 'hidden',
+      }"
+      (onHide)="closePreview()"
+    >
+      <div class="preview-content">
+        <img
+          *ngIf="getPreviewType() === 'image'"
+          [src]="previewUrl"
+          [alt]="previewName || 'Document preview'"
+          class="preview-image"
+        />
+
+        <iframe
+          *ngIf="getPreviewType() === 'pdf'"
+          [src]="previewUrl"
+          [title]="previewName || 'Document preview'"
+          class="preview-frame"
+        >
+        </iframe>
+
+        <div *ngIf="getPreviewType() === 'other'" class="preview-other">
+          <i class="pi pi-file"></i>
+
+          <h3>
+            {{ previewName }}
+          </h3>
+
+          <p>This document cannot be previewed directly in the browser.</p>
+
+          <div class="preview-actions">
+            <button
+              pButton
+              type="button"
+              label="Open Document"
+              icon="pi pi-external-link"
+              (click)="openDocumentInNewTab()"
+            ></button>
+
+            <button
+              pButton
+              type="button"
+              label="Download"
+              icon="pi pi-download"
+              severity="secondary"
+              (click)="downloadPreview()"
+            ></button>
+          </div>
+        </div>
+      </div>
+    </p-dialog>
+  </div>
+</div>

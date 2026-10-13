@@ -43,7 +43,7 @@
           pButton
           type="button"
           icon="pi pi-plus"
-          label= 'Create {{title.substring(0,(title.length)-1)}}'
+          label= 'Create {{title.endsWith("s")?title.substring(0,(title.length)-1):title}}'
           class="p-button-success export-btn"
           (click)="onCreateNewRecord()">
         </button>

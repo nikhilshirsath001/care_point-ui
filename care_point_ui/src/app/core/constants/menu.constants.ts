@@ -180,7 +180,7 @@ export const MENU_ITEMS: MenuItem[] = [
       {
         label: 'Documents',
         icon: 'pi pi-file',
-        routerLink: ['/main/documents'],
+        routerLink: ['/main/patient/documents'],
       },
     ],
   },

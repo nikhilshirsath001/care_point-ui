@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { PatientDocumentManagementComponent } from '../documents/components/patient-document-management/patient-document-management.component';
+import { PatientDocumentUploadComponent } from '../documents/components/patient-document-upload/patient-document-upload.component';
 
 export const PATIENT_ROUTES: Routes = [
   {
@@ -14,6 +16,11 @@ export const PATIENT_ROUTES: Routes = [
       import('./pages/patient-create/patient-create.component')
         .then(m => m.PatientCreateComponent)
   },
+  
+  {
+    path: 'documents',
+    loadComponent: () => PatientDocumentManagementComponent
+  },  
 //   {
 //     path: ':id',
 //     loadComponent: () =>

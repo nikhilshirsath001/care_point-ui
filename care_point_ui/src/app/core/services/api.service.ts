@@ -56,4 +56,8 @@ export class ApiService {
     });
   };
 
+  public patchObservableById(url: string, params?: HttpParams) {
+    return this.httpClient.patch(environment.apiUrl + url,{}, { withCredentials:true, params:params });
+  }
+
 }

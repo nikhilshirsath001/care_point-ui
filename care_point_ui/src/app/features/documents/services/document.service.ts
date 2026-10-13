@@ -90,9 +90,8 @@ uploadDocuments(patientId: number, uploadedBy: number, visitId: number | null, a
   }
 
   deleteDocument(documentId: number | string) {
-    const params = new HttpParams();
-    params.set('documentId',documentId);
-    return this.apiService.getObservable(API_ENDPOINTS.DOCUMENT.GET_ALL_BY_PATIENT_ID, params);
+    const params = new HttpParams().set('documentId',documentId);
+    return this.apiService.deleteObservable(API_ENDPOINTS.DOCUMENT.DELETE.replace(':id', String(documentId)));
   }
 
   downloadDocument(documentId: number | string) {
@@ -130,4 +129,8 @@ uploadDocuments(patientId: number, uploadedBy: number, visitId: number | null, a
   // }
 
 
+  verifyDocument(documentId: number,verified:boolean): any {
+    const params = new HttpParams().set('verified',verified);
+    return this.apiService.patchObservableById(API_ENDPOINTS.DOCUMENT.VERIFY_DOCUENT.replace(':id', String(documentId)),params);
+    }
 }

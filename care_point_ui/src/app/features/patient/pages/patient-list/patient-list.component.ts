@@ -10,14 +10,14 @@ import { PatientModel } from '../../models/patient-model';
 import { SharedDetailsComponent } from '../../../../shared/shared-details/shared-details.component';
 import { Router } from '@angular/router';
 import { API_NAVIGATION } from '../../../../core/constants/api-endpoints';
-import { DocumentUploadComponent } from '../../../document/pages/document-upload/document-upload.component';
 import { Dialog } from 'primeng/dialog';
-import { DocumentItem } from '../../../document/model/document-model';
-import { DocumentListComponent } from '../../../document/pages/document-list/document-list.component';
+import { PatientDocumentManagementComponent } from '../../../documents/components/patient-document-management/patient-document-management.component';
+import { PatientDocumentUploadComponent } from '../../../documents/components/patient-document-upload/patient-document-upload.component';
+import { DocumentItem } from '../../../documents/models/document.model';
 
 @Component({
   selector: 'app-patient-list',
-  imports: [SharedTableComponent, SharedDetailsComponent, DocumentUploadComponent, Dialog, DocumentListComponent],
+  imports: [SharedTableComponent, SharedDetailsComponent, PatientDocumentUploadComponent, Dialog, PatientDocumentManagementComponent],
   templateUrl: './patient-list.component.html',
   styleUrl: './patient-list.component.css',
 })
@@ -39,7 +39,7 @@ export class PatientListComponent {
   documentUploadVisible=false
   selectedPatientId!:number;
   selectedViewPatientId!:number;
-  uploadedBy!:number;
+  logedInUser:number = 1;
   documents: DocumentItem[] = [];
   
   documentViewVisible=false
@@ -61,7 +61,6 @@ export class PatientListComponent {
     showRefresh: true,
     loading: false,
     emptyMessage: 'No patients found',
-    canUploadDocuments:true,
     canCreateNewRecord:true,
     canViewDocuments:true,
   };
@@ -144,13 +143,13 @@ editPatient(event: { patient: PatientModel }): void {
   uploadPatientDocuments(patient: PatientModel) {
     this.documents = [];
     this.documentUploadVisible=true;
-    this.uploadedBy=1;//update when login token
+    this.logedInUser=1;//update when login token
     this.selectedPatientId = patient?.patientId!;
     
   }
   closeDocumentUpload() {
     this.documentUploadVisible=false;
-    this.uploadedBy!=null;
+    this.logedInUser!=null;
     this.selectedPatientId!=null;
     this.documents = [];
   }

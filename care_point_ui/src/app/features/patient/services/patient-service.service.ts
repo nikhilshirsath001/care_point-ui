@@ -69,4 +69,8 @@ export class PatientService {
     return this.apiService.getObservable(API_ENDPOINTS.PATIENTS.EXISTS, params);
   }
 
+  getPatientByPatientId(patientId: any) {
+    const params = new HttpParams().set('patientId', patientId);
+    return this.apiService.getObservable(API_ENDPOINTS.PATIENTS.GET_BY_PATIENT_ID, params);
+  }
 }

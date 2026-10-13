@@ -86,10 +86,12 @@ export const STAFFS = [
 export  let  TABLE_CONFIG: SharedTableConfig = {
     searchable: true,
     paginator: true,
-    rows: 10,
-    rowsPerPageOptions: [10, 25, 50],
     exportable: true,
     showRefresh: true,
     loading: false,
-    emptyMessage: 'No patients found'
+    emptyMessage: 'No patients found',
+    
+    rows: 10,
+    rowsPerPageOptions: [10, 20, 50, 100],
+    canCreateNewRecord:true,
   };
