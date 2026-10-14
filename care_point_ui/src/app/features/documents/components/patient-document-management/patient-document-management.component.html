@@ -1,0 +1,434 @@
+
+<p-dialog
+  header="Search Patient"
+  [(visible)]="showPatientSearch"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+  [dismissableMask]="true"
+  [blockScroll]="true"
+  [appendTo]="'body'"
+  [style]="{ width: '850px' }"
+  [breakpoints]="{
+    '960px': '90vw',
+    '640px': '95vw'
+  }"
+  (onHide)="closePatientSearch()">
+
+  <app-patient-search
+    [searchFn]="searchPatientFn"
+    [config]="patientSearchConfig"
+    (patientSelected)="onPatientSelected($event)">
+  </app-patient-search>
+
+</p-dialog>
+ <div class="document-management">
+  
+<section class="patient-info">
+
+  <div class="patient-info-header">
+
+    <!-- Patient name -->
+    <div class="patient-details">
+      
+      @if(canProfileShow) {<span class="section-label">PATIENT INFORMATION</span>}
+      @else {<span class="section-label">PATIENT NAME</span>}
+      <h2>{{ patientName || 'Patient' }}</h2>
+    </div>
+
+    <!-- Actions + ABHA -->
+    <div class="patient-header-right">
+
+      <div class="patient-actions">
+
+        @if(canProfileShow){<button
+          pButton
+          type="button"
+          icon="pi pi-search"
+          label="Search Patient"
+          class="search-patient-btn"
+          (click)="isSearchVisible()">
+        </button>
+      }
+
+      @if(patientId) {
+        <button
+          pButton
+          type="button"
+          icon="pi pi-upload"
+          label="Upload Document"
+          class="upload-btn"
+          (click)="isDocumentUploadeVisible()">
+        </button>
+      }
+
+      </div>
+    @if(canProfileShow){
+      <div class="patient-id">
+        ABHA ID: <strong>{{ patient?.abhaId || '-' }}</strong>
+      </div>
+    }
+    </div>
+
+  </div>
+  @if(canProfileShow){
+  <div class="patient-info-grid">
+
+    <div>
+      <span>Gender</span>
+      <strong>{{ patient?.gender || '-' }}</strong>
+    </div>
+
+    <div>
+      <span>Age</span>
+      <strong>{{ patientAge }}</strong>
+    </div>
+
+    <div>
+      <span>Date of Birth</span>
+      <strong>
+        {{
+          patient?.dateOfBirth
+            ? (patient?.dateOfBirth | date:'dd/MM/yyyy')
+            : '-'
+        }}
+      </strong>
+    </div>
+
+    <div>
+      <span>Blood Group</span>
+      <strong>{{ patient?.bloodGroup || '-' }}</strong>
+    </div>
+
+    <div>
+      <span>Mobile</span>
+      <strong>{{ patient?.mobile || patient?.phone || '-' }}</strong>
+    </div>
+
+  </div>
+}
+
+</section>
+
+      @if (showDocumentUploade) {
+<app-patient-document-upload
+
+  [style.margin-top]="'10px'"
+  [patientId]="patientId"
+  [uploadedBy]="loggedInUserId"
+  (uploaded)="loadDocuments()">
+</app-patient-document-upload>
+}
+  <section class="documents-header">
+    <div>
+      <h1>Patient Documents <span>{{ allDocuments.length }} files</span></h1>
+      <div class="header-line"></div>
+    </div>
+
+    <div class="view-toggle">
+      <button pButton type="button" icon="pi pi-list" class="p-button-text" [class.active]="viewMode === 'list'" pTooltip="List View" tooltipPosition="top" (click)="setViewMode('list')"></button>
+      <button pButton type="button" icon="pi pi-th-large" class="p-button-text" [class.active]="viewMode === 'grid'" pTooltip="Grid View" tooltipPosition="top" (click)="setViewMode('grid')"></button>
+    </div>
+  </section>
+
+
+  <section class="filter-toolbar">
+    <div class="search-box">
+      <i class="pi pi-search"></i>
+
+      <input
+        pInputText
+        type="text"
+        [(ngModel)]="searchText"
+        (input)="applyFilters()"
+        placeholder="Search..." />
+    </div>
+
+    <p-select
+      [options]="categoryOptions"
+      [(ngModel)]="filterCategory"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Category"
+      (onChange)="applyFilters()">
+    </p-select>
+
+    <p-select
+      [options]="dateOptions"
+      [(ngModel)]="selectedDate"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Date"
+      (onChange)="applyFilters()">
+    </p-select>
+
+    <p-select
+      [options]="sortOptions"
+      [(ngModel)]="selectedSort"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Sort"
+      (onChange)="applyFilters()">
+    </p-select>
+
+    <p-select
+      [options]="verifiedOptions"
+      [(ngModel)]="selectedSensitive"
+      optionLabel="label"
+      optionValue="value"
+      placeholder="Verified"
+      (onChange)="applyFilters()">
+    </p-select>
+
+    <button
+      pButton
+      type="button"
+      label="Reset"
+      icon="pi pi-refresh"
+      [text]="true"
+      (click)="resetFilters()">
+    </button>
+  </section>
+
+  <section class="documents-section">
+    <div class="section-title">DOCUMENTS</div>
+
+    <div *ngIf="loading" class="loading-state">
+      <i class="pi pi-spin pi-spinner"></i>
+      <span>Loading documents...</span>
+    </div>
+
+    <div *ngIf="!loading && filteredDocuments.length === 0" class="empty-state">
+      <i class="pi pi-folder-open"></i>
+      <span>No documents found</span>
+    </div>
+
+    <div *ngIf="!loading && filteredDocuments.length > 0 && viewMode === 'grid'" class="document-grid">
+      <article class="document-card" *ngFor="let doc of filteredDocuments">
+        <div class="document-card-header">
+          <div class="document-category">
+            <i [class]="getDocumentIcon(doc)"></i>
+            <span>{{ getCategoryLabel(doc.documentType) }}</span>
+          </div>
+        </div>
+
+        <div class="document-card-body">
+          <div class="document-name">{{ doc.fileName }}</div>
+          <div class="document-meta">
+            {{ getFileSize(doc.fileSize) }}
+            <span>{{ getDocumentDate(doc) }}</span>
+          </div>
+        </div>
+
+        <div class="document-status">
+          <p-tag *ngIf="doc.verified" value="Verified" icon="pi pi-check"></p-tag>
+          <p-tag *ngIf="!doc.verified" value="Not Verified" icon="pi pi-exclamation-triangle" severity="warn"></p-tag>
+        </div>
+
+        <div class="document-actions">
+          <button pButton type="button" icon="pi pi-eye" class="p-button-text p-button-sm" pTooltip="Preview" tooltipPosition="top" (click)="preview(doc)"></button>
+          <button *ngIf="!doc.verified" pButton type="button" icon="pi pi-check" class="p-button-text p-button-sm" pTooltip="verify" tooltipPosition="top" (click)="verifyDocument(doc)"></button>
+          <button pButton type="button" icon="pi pi-trash" class="p-button-text p-button-sm" pTooltip="Delete" tooltipPosition="top" (click)="delete(doc)"></button>
+          <!-- <button pButton type="button" icon="pi pi-tag" class="p-button-text p-button-sm" pTooltip="Update Category" tooltipPosition="top" (click)="updateCategory(doc)"></button> -->
+        </div>
+      </article>
+    </div>
+
+    <div *ngIf="!loading && filteredDocuments.length > 0 && viewMode === 'list'" class="document-list">
+      <div class="document-list-header">
+        <div></div>
+        <div>DOCUMENT</div>
+        <div>CATEGORY</div>
+        <div>SIZE</div>
+        <div>DATE</div>
+        <div>STATUS</div>
+        <div>ACTIONS</div>
+      </div>
+
+      <div class="document-list-row" *ngFor="let doc of filteredDocuments">
+        <div class="document-list-icon">
+          <i [class]="getDocumentIcon(doc)"></i>
+        </div>
+
+        <div class="document-list-name">{{ doc.fileName }}</div>
+        <div>{{ getCategoryLabel(doc.documentType) }}</div>
+        <div>{{ getFileSize(doc.fileSize) }}</div>
+        <div>{{ getDocumentDate(doc) }}</div>
+
+        <div>
+          <p-tag *ngIf="doc.verified" value="Verified" icon="pi pi-check"></p-tag>
+          <p-tag *ngIf="!doc.verified" value="Not Verified" icon="pi pi-exclamation-triangle" severity="warn"></p-tag>
+        </div>
+
+        <div class="document-actions">
+          <!-- <button pButton type="button" icon="pi pi-eye" class="p-button-text p-button-sm" pTooltip="Preview" tooltipPosition="top" (click)="preview(doc)"></button> -->
+          <!-- <button pButton type="button" icon="pi pi-refresh" class="p-button-text p-button-sm" pTooltip="Replace" tooltipPosition="top" (click)="replace(doc)"></button> -->
+          <!-- <button pButton type="button" icon="pi pi-trash" class="p-button-text p-button-sm" pTooltip="Delete" tooltipPosition="top" (click)="delete(doc)"></button>
+          <button pButton type="button" icon="pi pi-tag" class="p-button-text p-button-sm" pTooltip="Update Category" tooltipPosition="top" (click)="updateCategory(doc)"></button> -->
+        <button pButton type="button" icon="pi pi-eye" class="p-button-text p-button-sm" pTooltip="Preview" tooltipPosition="top" (click)="preview(doc)"></button>
+          <button *ngIf="!doc.verified" pButton type="button" icon="pi pi-check" class="p-button-text p-button-sm" pTooltip="verify" tooltipPosition="top" (click)="verifyDocument(doc)"></button>
+          <button pButton type="button" icon="pi pi-trash" class="p-button-text p-button-sm" pTooltip="Delete" tooltipPosition="top" (click)="delete(doc)"></button>
+          <!-- <button pButton type="button" icon="pi pi-tag" class="p-button-text p-button-sm" pTooltip="Update Category" tooltipPosition="top" (click)="updateCategory(doc)"></button> -->
+        
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<p-dialog
+  [header]="previewDocument?.fileName || 'Document Preview'"
+  [(visible)]="previewVisible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="true"
+  [dismissableMask]="true"
+  [style]="{
+    width: '85vw',
+    maxWidth: '1200px'
+  }"
+  [contentStyle]="{
+    padding: '0',
+    overflow: 'hidden'
+  }"
+  (onHide)="closePreview()">
+
+  <div class="preview-content">
+
+    <img
+      *ngIf="getPreviewType(previewDocument) === 'image'"
+      [src]="previewUrl"
+      [alt]="previewDocument?.fileName || 'Document preview'"
+      class="preview-image">
+
+    <iframe
+      *ngIf="getPreviewType(previewDocument) === 'pdf'"
+      [src]="previewUrl"
+      title="Document preview"
+      class="preview-frame">
+    </iframe>
+
+    <div
+      *ngIf="getPreviewType(previewDocument) === 'other'"
+      class="preview-other">
+
+      <i class="pi pi-file"></i>
+
+      <h3>
+        {{ previewDocument?.fileName }}
+      </h3>
+
+      <p>
+        This document cannot be previewed directly in the browser.
+      </p>
+
+      <div class="preview-actions">
+
+        <button
+          pButton
+          type="button"
+          label="Open Document"
+          icon="pi pi-external-link"
+          (click)="openDocumentInNewTab()">
+        </button>
+
+        <button
+          *ngIf="previewDocument"
+          pButton
+          type="button"
+          label="Download"
+          icon="pi pi-download"
+          severity="secondary"
+          (click)="preview(previewDocument)">
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</p-dialog>
+
+
+<p-dialog
+  header="Update Document Category"
+  [(visible)]="categoryDialogVisible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: 'min(420px, 92vw)' }"
+  [contentStyle]="{ overflow: 'visible' }"
+  styleClass="category-dialog">
+
+  <div class="dialog-content">
+
+    <div class="form-field">
+      <label for="documentCategory">Category</label>
+
+      <p-select
+        inputId="documentCategory"
+        [options]="uploadCategoryOptions"
+        [(ngModel)]="selectedDocumentCategory"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Select Category"
+        appendTo="body"
+        [filter]="true"
+        filterPlaceholder="Search category"
+        styleClass="category-select">
+      </p-select>
+    </div>
+
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="dialog-footer">
+
+      <button
+        pButton
+        type="button"
+        label="Cancel"
+        icon="pi pi-times"
+        severity="secondary"
+        [outlined]="true"
+        (click)="categoryDialogVisible = false">
+      </button>
+
+      <button
+        pButton
+        type="button"
+        label="Save"
+        icon="pi pi-check"
+        [disabled]="!selectedDocumentCategory"
+        (click)="saveCategory()">
+      </button>
+
+    </div>
+  </ng-template>
+
+</p-dialog>
+
+
+
+<p-dialog
+  header="Delete Document"
+  [(visible)]="deleteDialogVisible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '420px' }">
+  <div class="delete-content">
+    <i class="pi pi-exclamation-triangle"></i>
+    <p>Are you sure you want to delete <strong>{{ selectedDocument?.fileName }}</strong>?</p>
+    <span>This action cannot be undone.</span>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Cancel" class="p-button-text" (click)="deleteDialogVisible = false"></button>
+    <button pButton type="button" label="Delete" severity="danger" (click)="confirmDelete()"></button>
+  </ng-template>
+</p-dialog>

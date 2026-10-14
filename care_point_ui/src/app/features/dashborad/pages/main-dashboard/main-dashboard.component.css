@@ -1,0 +1,20 @@
+.dashboard-container {
+  padding: 5px;
+}
+
+.dashboard-header {
+  margin-bottom: 25px;
+
+  h2 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 600;
+    color: #1f2937;
+  }
+
+  p {
+    margin: 5px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+  }
+}

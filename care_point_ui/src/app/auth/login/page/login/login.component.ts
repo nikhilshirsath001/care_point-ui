@@ -64,7 +64,7 @@ export class LoginComponent {
   login(event: any) {
     this.formGroup.markAllAsTouched();
     if (!this.formGroup.valid) return;
-    this.authService.login(this.formGroup.value).subscribe((res: any) => {
+   // this.authService.login(this.formGroup.value).subscribe((res: any) => {
       // if (res.status == 1 || res.status == 3) {
       //   const userRole = res.data.roles;
         
@@ -85,6 +85,13 @@ export class LoginComponent {
       //   console.log('Error Page');
       //   this.tostr.showError(res.message, 'Error');
       // }
-    });
+
+        this.router.navigate(['/main']);
+
+
+
+  
+
+    
   }
 }

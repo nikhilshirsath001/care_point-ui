@@ -1,0 +1,53 @@
+
+  <!-- BED TABLE -->
+
+  <app-shared-table
+  [title]="'Staffs'"
+  [subtitle]="'Manage registered Doctors & Staff'"
+  [columns]="patientColumns"
+  [data]="staffList"
+  [config]="tableConfig"
+
+  (view)="onViewTable($event)"
+  (createNewRecord)="onCreateTable()"
+  (pageChange)="onPageChangeTable($event)"
+  (refresh)="onRefreshTable()"
+  (edit)="OnEditTable($event)"
+  (delete)="onDeleteTable($event)"
+  (searchRecord)="onSearchTable($event)"
+  >
+  </app-shared-table>
+
+
+  <!-- BED FORM -->
+
+  <p-dialog
+    [(visible)]="showForm"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{
+      width: '750px',
+      maxWidth: '95vw'
+    }"
+    [header]="formMode === 'create'
+      ? 'Create Staff'
+      : 'Edit Staff'"
+  >
+
+    <app-staff-form
+      [mode]="formMode"
+      [staff]="selectedStaff"
+      (saved)="onStaffSaved()"
+      (cancelled)="onFormCancelled()"
+    >
+    </app-staff-form>
+
+  </p-dialog>
+
+  <app-shared-details
+  [(visible)]="viewDialogVisible"
+  [title]="'Staff Details'"
+  [data]="selectedStaff"
+  [fields]="staffDetailFields">
+</app-shared-details>

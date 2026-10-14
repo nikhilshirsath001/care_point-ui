@@ -1,0 +1,72 @@
+
+<div class="page-container">
+
+  <div
+    class="d-flex justify-content-between align-items-center mb-4"
+  >
+
+    <div>
+      <h2 class="mb-1">
+        Diagnosis Management
+      </h2>
+
+      <p class="text-muted mb-0">
+        Manage hospital Diagnosis and their availability.
+      </p>
+    </div>
+
+    <button
+      pButton
+      label="Add Diagnosis"
+      icon="pi pi-plus"
+      (click)="openCreateForm()"
+    ></button>
+
+  </div>
+
+
+
+  <app-shared-table
+  [title]="'Doctors & Diagnosis'"
+  [subtitle]="'Manage registered Doctors & Diagnosis'"
+  [columns]="patientColumns"
+  [data]="diagnosisList"
+  [config]="tableConfig"
+
+  (view)="onViewDiagnosis($event)"
+  >
+  </app-shared-table>
+
+
+
+  <p-dialog
+    [(visible)]="showForm"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [style]="{
+      width: '750px',
+      maxWidth: '95vw'
+    }"
+    [header]="formMode === 'create'
+      ? 'Create Diagnosis'
+      : 'Edit Diagnosis'"
+  >
+
+    <app-diagnosis-form
+      [mode]="formMode"
+      [diagnosis]="selectedDiagnosis"
+      (saved)="onDiagnosisSaved()"
+      (cancelled)="onFormCancelled()"
+    >
+    </app-diagnosis-form>
+
+  </p-dialog>
+
+  <app-shared-details
+  [(visible)]="viewDialogVisible"
+  [title]="'Diagnosis Details'"
+  [data]="selectedDiagnosis"
+  [fields]="DiagnosisDetailFields">
+</app-shared-details>
+</div>

@@ -1,0 +1,56 @@
+<div class="page-container">
+  <div
+    class="d-flex justify-content-between align-items-center mb-4 page-header"
+  >
+    <div>
+      <h2 class="mb-1">Medications</h2>
+
+      <p class="text-muted mb-0">Manage hospital medications.</p>
+    </div>
+  </div>
+
+  <app-shared-table
+    [title]="'Medications'"
+    [subtitle]="'Manage hospital medications'"
+    [columns]="medicationColumns"
+    [data]="filteredMedications()"
+    [config]="tableConfig"
+    [totalRecords]="totalRecords()"
+    (view)="viewMedication($event)"
+    (pageChange)="onPageChange($event)"
+    (refresh)="onRefresh()"
+    (edit)="editMedication($event)"
+    (delete)="deleteMedication($event)"
+    (searchRecord)="onSearch($event)"
+    (createNewRecord)="createNewMedication()"
+  >
+  </app-shared-table>
+
+  <app-shared-details
+    [(visible)]="viewDialogVisible"
+    [title]="'Medication Details'"
+    [data]="selectedMedication()"
+    [fields]="medicationDetailsFields"
+  >
+  </app-shared-details>
+
+  <p-dialog
+    [(visible)]="showForm"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [closable]="true"
+    [dismissableMask]="true"
+    [style]="{ width: '700px', maxWidth: '95vw' }"
+    [header]="formMode === 'create' ? 'Create Medication' : 'Edit Medication'"
+  >
+    <app-medication-form
+      *ngIf="showForm"
+      [mode]="formMode"
+      [medication]="selectedMedication()"
+      (saved)="onMedicationSaved()"
+      (cancelled)="onFormCancelled()"
+    >
+    </app-medication-form>
+  </p-dialog>
+</div>

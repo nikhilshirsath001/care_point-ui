@@ -13,7 +13,7 @@ export class ApiService {
     return firstValueFrom(this.httpClient.get(environment.apiUrl + url, { withCredentials:true, ...params }));
   }
   public getObservable(url: string, params?: HttpParams) {
-    return this.httpClient.get(environment.apiUrl + url, { withCredentials:true, ...params });
+    return this.httpClient.get(environment.apiUrl + url, {withCredentials: true,params: params});
   }
 
   public getObservableURI<T>(url: string, options?: { params?: HttpParams; responseType?: any; withCredentials?: boolean }) {
@@ -28,7 +28,7 @@ export class ApiService {
     return firstValueFrom(this.httpClient.post(environment.apiUrl + url, body, { withCredentials:true, ...params }))
   }
   public postObservable(url: string, body: any, params?: any) {
-    return this.httpClient.post(environment.apiUrl + url, body, { withCredentials:true, ...params });
+    return this.httpClient.post(environment.apiUrl + url, body, { withCredentials:true, params:params });
   }
   public patchPromise(url: string, body: any, params?: HttpParams) {
     return firstValueFrom(this.httpClient.patch(environment.apiUrl + url, body, { withCredentials:true, ...params }))
@@ -36,10 +36,28 @@ export class ApiService {
   public patchObservable(url: string, body: any, params?: HttpParams) {
     return this.httpClient.patch(environment.apiUrl + url, body, { withCredentials:true, ...params });
   }
-  public deletePromise(url: string, body?: any, params?: HttpParams) {
-    return firstValueFrom(this.httpClient.patch(environment.apiUrl + url, body, { withCredentials:true, ...params }))
+  public deletePromise(url: string, params?: HttpParams) {
+    return firstValueFrom(this.httpClient.delete(environment.apiUrl + url, { withCredentials:true, params:params }))
   }
-  public deleteObservable(url: string, body?: any, params?: HttpParams) {
-    return this.httpClient.patch(environment.apiUrl + url, body, { withCredentials:true, ...params });
+  public deleteObservable(url: string, params?: HttpParams) {
+    return this.httpClient.delete(environment.apiUrl + url, { withCredentials:true, params });
   }
+  
+    public putObservable(url: string, body: any, params?: HttpParams) {
+    return this.httpClient.put(environment.apiUrl + url, body, { withCredentials:true, ...params });
+  }
+  
+  public postObservableTest(url: string, body: any, options?: { observe?: 'events'; reportProgress?: boolean }):
+    any{
+    return this.httpClient.post<any>(environment.apiUrl + url, body, {
+      observe: 'events',
+      reportProgress: options?.reportProgress ?? false,
+      withCredentials: true
+    });
+  };
+
+  public patchObservableById(url: string, params?: HttpParams) {
+    return this.httpClient.patch(environment.apiUrl + url,{}, { withCredentials:true, params:params });
+  }
+
 }
