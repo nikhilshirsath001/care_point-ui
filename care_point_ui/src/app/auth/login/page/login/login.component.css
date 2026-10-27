@@ -231,67 +231,37 @@ outline: none;
 /* =========================================================
 PrimeNG Password
 ========================================================= */
-
 .password-wrapper {
-width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
 }
-
-.login-password {
-width: 100%;
+/* PrimeNG password component */
+:host ::ng-deep .password-wrapper p-password {
+  display: block;
+  flex: 1 1 0%;
+  width: 100%;
+  min-width: 0;
 }
-
-/*
-
-* PrimeNG password component internally contains
-* the actual input element.
-  */
-
-:host ::ng-deep .login-password {
-width: 100%;
+/* Actual password input */
+:host ::ng-deep .password-wrapper .login-password,
+:host ::ng-deep .password-wrapper .login-password input,
+:host ::ng-deep .password-wrapper .p-password-input {
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
 }
-
-:host ::ng-deep .login-password .p-password-input {
-width: 100%;
-
-height: 48px;
-
-padding-left: 44px !important;
-padding-right: 45px !important;
-
-border: 1px solid #d0d5dd !important;
-
-border-radius: 9px !important;
-
-background: #ffffff !important;
-
-font-size: 14px;
-
-color: #101828;
-
-transition:
-border-color 0.2s ease,
-box-shadow 0.2s ease;
+:host ::ng-deep .password-wrapper .login-password input {
+  height: 48px !important;
+  padding-left: 44px !important;
+  padding-right: 45px !important;
+  border: 1px solid #d0d5dd !important;
+  border-radius: 9px !important;
+  background: #fff !important;
+  font-size: 14px !important;
 }
-
-:host ::ng-deep .login-password .p-password-input:hover {
-border-color: #98a2b3 !important;
-}
-
-:host ::ng-deep .login-password .p-password-input:focus {
-border-color: var(--theme-color, #0d6efd) !important;
-
-box-shadow:
-0 0 0 3px rgba(13, 110, 253, 0.12) !important;
-
-outline: none;
-}
-
-/* Password eye icon */
-
-:host ::ng-deep .login-password .p-password-toggle-mask {
-color: #667085;
-}
-
 /* =========================================================
 Validation
 ========================================================= */

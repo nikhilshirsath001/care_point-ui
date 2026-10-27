@@ -31,6 +31,7 @@ import { Constants } from '../../../../core/constants/app.constants';
 })
 export class LoginComponent {
     Constants = Constants;
+  errorMessage: string = '';
 
  formGroup: FormGroup;
   isPasswordVisible: boolean = false;
@@ -61,37 +62,25 @@ export class LoginComponent {
     return this.formGroup.controls;
   }
 
-  login(event: any) {
+
+  login(event: Event) {
+    event.preventDefault();
+
     this.formGroup.markAllAsTouched();
-    if (!this.formGroup.valid) return;
-   // this.authService.login(this.formGroup.value).subscribe((res: any) => {
-      // if (res.status == 1 || res.status == 3) {
-      //   const userRole = res.data.roles;
-        
-      //   if ((userRole.includes(Roles.EXECUTIVE))) {
-      //     this.router.navigate([this.route]).then(() => {
-      //       this.tostr.showSuccess(res.message, "Success");
-      //     })
-      //   }
-      //   else if(userRole.includes(Roles.ADMIN) || userRole.includes(Roles.SUPERVISOR)) {
-      //     this.router.navigate(['/dashboard/dashboard']).then(() => {
-      //       this.tostr.showSuccess(res.message, "Success");
-      //       if (res.status == 3) {
-      //         this.tostr.showWarning("Please Change Password", "Warning");
-      //       }
-      //     });
-      //   }
-      // } else {
-      //   console.log('Error Page');
-      //   this.tostr.showError(res.message, 'Error');
-      // }
-
-        this.router.navigate(['/main']);
-
-
-
+    if (this.formGroup.invalid) {
+      return;
+    }
   
-
-    
-  }
-}
+  this.errorMessage = '';
+this.authService.login(this.formGroup.value).subscribe({
+  next: (res: any) => {
+    if (res.status === 1) {
+      this.router.navigate(['/main']);
+    } else {
+      this.errorMessage = res.message || 'Login failed';
+    }
+  },
+  error: (err) => {
+    this.errorMessage = err?.error?.message || 'Invalid username or password';
+  },
+      });}}

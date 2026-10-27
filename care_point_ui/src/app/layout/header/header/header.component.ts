@@ -6,6 +6,9 @@ import { MENU_ITEMS } from '../../../core/constants/menu.constants';
 import { Menu } from 'primeng/menu';
 import { DialogModule } from 'primeng/dialog';
 import { ProfileComponent } from '../../profile/profile/profile.component';
+import { filterMenu } from '../../../core/constants/menu.filter';
+import { AuthService } from '../../../core/auth/auth.service';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -15,15 +18,20 @@ import { ProfileComponent } from '../../profile/profile/profile.component';
 })
 export class HeaderComponent {
 
-items: MenuItem[] | undefined;
-showProfile:boolean= false;
+  items: MenuItem[] | undefined;
+  showProfile: boolean = false;
 
-constructor(private router: Router) {}
 
-ngOnInit() {
-  this.items = MENU_ITEMS;
-}
-profileItems: MenuItem[] = [
+  private auth = inject(AuthService);
+
+  constructor(private router: Router) {
+  }
+
+  ngOnInit() {
+    this.items = filterMenu(MENU_ITEMS, p => this.auth.hasPermission(p));
+  }
+
+  profileItems: MenuItem[] = [
     {
       label: 'My Profile',
       icon: 'pi pi-user',
@@ -52,7 +60,7 @@ profileItems: MenuItem[] = [
 
 
   openProfile(): void {
-    this.showProfile= true;
+    this.showProfile = true;
     console.log('Open profile');
   }
 
@@ -63,9 +71,9 @@ profileItems: MenuItem[] = [
 
 
   logout(): void {
-  localStorage.removeItem('access_token');
-  this.router.navigate(['/login']);
-    console.log('Logout');
+    this.auth.logout().subscribe({
+      complete: () => this.router.navigate(['/login']),
+      error: () => this.router.navigate(['/login']),
+    });
   }
-
 }
