@@ -1,14 +1,37 @@
 import { MenuItem } from 'primeng/api';
 
-export function filterMenu(items: MenuItem[], has: (p: string) => boolean): MenuItem[] {
-  return items
-    .map(item => {
-      if (item.items?.length) {
-        const children = filterMenu(item.items as MenuItem[], has);
-        return children.length ? {...item, items: children} : null;
+type PermissionMenuItem = MenuItem & {
+  permission?: string;
+  items?: PermissionMenuItem[];
+};
+
+export function filterMenu(
+  items: PermissionMenuItem[],
+  hasPermission: (permission: string) => boolean,
+): PermissionMenuItem[] {
+  return items.reduce<PermissionMenuItem[]>((visibleItems, item) => {
+    if (item.items?.length) {
+      const visibleChildren = filterMenu(item.items, hasPermission);
+
+      if (visibleChildren.length === 0) {
+        return visibleItems;
       }
-      const permission = item['permission'] as string | undefined;
-      return permission && !has(permission) ? null : item;
-    })
-    .filter((item): item is MenuItem => item !== null);
+
+      visibleItems.push({
+        ...item,
+        items: visibleChildren,
+      });
+
+      return visibleItems;
+    }
+
+    const permission = item.permission;
+
+    if (permission && !hasPermission(permission)) {
+      return visibleItems;
+    }
+
+    visibleItems.push(item);
+    return visibleItems;
+  }, []);
 }

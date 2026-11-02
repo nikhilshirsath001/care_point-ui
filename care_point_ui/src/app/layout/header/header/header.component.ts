@@ -1,50 +1,42 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { Menubar } from 'primeng/menubar';
-import { MENU_ITEMS } from '../../../core/constants/menu.constants';
 import { Menu } from 'primeng/menu';
 import { DialogModule } from 'primeng/dialog';
+
 import { ProfileComponent } from '../../profile/profile/profile.component';
-import { filterMenu } from '../../../core/constants/menu.filter';
 import { AuthService } from '../../../core/auth/auth.service';
-import { inject } from '@angular/core';
 
 @Component({
   selector: 'app-header',
-  imports: [ProfileComponent ,Menubar, Menu,DialogModule],
+  standalone: true,
+  imports: [
+    Menubar,
+    Menu,
+    DialogModule,
+    ProfileComponent
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
 
-  items: MenuItem[] | undefined;
-  showProfile: boolean = false;
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
 
-
-  private auth = inject(AuthService);
-
-  constructor(private router: Router) {
-  }
-
-  ngOnInit() {
-    this.items = filterMenu(MENU_ITEMS, p => this.auth.hasPermission(p));
-  }
+  showProfile = false;
 
   profileItems: MenuItem[] = [
     {
       label: 'My Profile',
       icon: 'pi pi-user',
-      command: () => {
-        this.openProfile();
-      }
+      command: () => this.openProfile()
     },
     {
       label: 'Settings',
       icon: 'pi pi-cog',
-      command: () => {
-        this.openSettings();
-      }
+      command: () => this.openSettings()
     },
     {
       separator: true
@@ -52,28 +44,26 @@ export class HeaderComponent {
     {
       label: 'Logout',
       icon: 'pi pi-sign-out',
-      command: () => {
-        this.logout();
-      }
+      command: () => this.logout()
     }
   ];
 
-
   openProfile(): void {
     this.showProfile = true;
-    console.log('Open profile');
   }
-
 
   openSettings(): void {
-    console.log('Open settings');
+    // Implement the settings navigation when available.
   }
-
 
   logout(): void {
     this.auth.logout().subscribe({
-      complete: () => this.router.navigate(['/login']),
-      error: () => this.router.navigate(['/login']),
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: () => {
+        this.router.navigate(['/login']);
+      }
     });
   }
 }

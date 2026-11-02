@@ -21,12 +21,12 @@ export const PATIENT_ROUTES: Routes = [
     path: 'documents',
     loadComponent: () => PatientDocumentManagementComponent
   },  
-//   {
-//     path: ':id',
-//     loadComponent: () =>
-//       import('./pages/patient-details/patient-details.component')
-//         .then(m => m.PatientDetailsComponent)
-//   },
+  // {
+  //   path: 'new-patient',
+  //   loadComponent: () =>
+  //     import('../new_patient/component/patient-registration/patient-registration.component')
+  //       .then(m => m.PatientRegistrationComponent)
+  // },
 
 //   {
 //     path: ':id/edit',

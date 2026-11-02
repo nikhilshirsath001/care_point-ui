@@ -1,69 +1,4 @@
-<div class="table-card">
-
-  <!-- ================= HEADER ================= -->
-  <div class="table-header">
-
-    <div class="table-title-section">
-
-      <div class="table-icon">
-        <i class="pi pi-list"></i>
-      </div>
-
-      <div>
-        <h5 class="table-title mb-1">
-          {{ title }}
-        </h5>
-
-        @if (subtitle) {
-          <p class="table-subtitle mb-0">
-            {{ subtitle }}
-          </p>
-        }
-      </div>
-
-    </div>
-
-
-    <div class="table-actions">
-
-      @if (config.showRefresh) {
-        <button
-          pButton
-          type="button"
-          icon="pi pi-refresh"
-          class="p-button-outlined p-button-secondary table-action-btn"
-          pTooltip="Refresh"
-          (click)="onRefresh()">
-        </button>
-      }
-
-
-      @if (config.canCreateNewRecord) {
-        <button
-          pButton
-          type="button"
-          icon="pi pi-plus"
-          label= 'Create {{title.endsWith("s")?title.substring(0,(title.length)-1):title}}'
-          class="p-button-success export-btn"
-          (click)="onCreateNewRecord()">
-        </button>
-      }
-
-      @if (config.exportable) {
-        <button
-          pButton
-          type="button"
-          icon="pi pi-file-excel"
-          label="Export"
-          class="p-button-success export-btn"
-          (click)="onDownloadExcel()">
-        </button>
-      }
-
-    </div>
-
-  </div>
-
+<div>
 
   <!-- ================= TOOLBAR ================= -->
   <div class="table-toolbar">
@@ -87,15 +22,41 @@
     }
 
 
-    <div class="record-count">
+    <div class="table-actions">
 
-      <span class="record-label">
-        Total Records
-      </span>
+      @if (config.showRefresh) {
+        <button
+          pButton
+          type="button"
+          icon="pi pi-refresh"
+          class="p-button-outlined p-button-secondary table-action-btn"
+          pTooltip="Refresh"
+          (click)="onRefresh()">
+        </button>
+      }
 
-      <span class="record-number">
-        {{ data.length }}
-      </span>
+
+      @if (config.canCreateNewRecord) {
+        <button
+          pButton
+          type="button"
+          icon="pi pi-plus"
+          label= 'Create {{removeSFromRecordName(title)}}'
+          class="p-button-success create-btn"
+          (click)="onCreateNewRecord()">
+        </button>
+      }
+
+      @if (config.exportable) {
+        <button
+          pButton
+          type="button"
+          icon="pi pi-file-excel"
+          label="Export"
+          class="p-button-success export-btn"
+          (click)="onDownloadExcel()">
+        </button>
+      }
 
     </div>
 
@@ -337,8 +298,19 @@
 
       </ng-template>
 
+  <!-- RIGHT SIDE: TOTAL RECORDS -->
+  <ng-template #paginatorleft>
+    <div class="record-label">
+      <span>Total Records</span>
+      <span class="record-number">{{ totalRecords || data.length }}</span>
+    </div>
+  </ng-template>
     </p-table>
-
   </div>
 
 </div>
+
+
+
+
+

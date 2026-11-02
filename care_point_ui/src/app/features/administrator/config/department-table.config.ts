@@ -44,5 +44,6 @@ export  let  TABLE_CONFIG: SharedTableConfig = {
     exportable: true,
     showRefresh: true,
     loading: false,
-    emptyMessage: 'No patients found'
+    emptyMessage: 'No patients found',
+    canCreateNewRecord:true,
   };

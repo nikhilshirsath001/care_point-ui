@@ -71,7 +71,7 @@ export class PatientListComponent {
     this.currentPage = event.page;
     this.currentPageSize = event.size;
     this.loadPatients();
-  }
+  } 
 
   loadPatients(): void {
     this.patientService.getAllPatients(this.currentPage, this.currentPageSize).subscribe((response) => {
@@ -101,7 +101,7 @@ editPatient(event: { patient: PatientModel }): void {
       console.error('Patient ID is undefined. Cannot delete patient.');
       return;
     }
-    const confirmDelete = window.confirm(`Are you sure you want to delete patient ${patient.firstName} ${patient.lastName}?`);
+    const confirmDelete = window.confirm(`Are you sure you want to delete patient ${patient.patientName}?`);
     if (confirmDelete) {
       this.patientService.deletePatient(patientId).subscribe({
         next: () => {
@@ -127,11 +127,9 @@ editPatient(event: { patient: PatientModel }): void {
       this.filteredPatients.set(this.patients().filter((patient) => {
         const lowerSearchValue = searchValue.toLowerCase();
         return (
-          patient.firstName.toLowerCase().includes(lowerSearchValue) ||
-          patient.lastName.toLowerCase().includes(lowerSearchValue) ||
-          // patient.email.toLowerCase().includes(lowerSearchValue) ||
-          patient.phone.toLowerCase().includes(lowerSearchValue) ||
-          patient.abhaId.toLowerCase().includes(lowerSearchValue)
+          patient.patientName.toLowerCase().includes(lowerSearchValue) ||
+          patient.patientMob.toLowerCase().includes(lowerSearchValue) ||
+          patient.abhaNumber.toLowerCase().includes(lowerSearchValue)
         );
       }));
     }

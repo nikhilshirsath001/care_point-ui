@@ -89,7 +89,8 @@
       exportable: true,
       showRefresh: true,
       loading: false,
-      emptyMessage: 'No visits found'
+      emptyMessage: 'No visits found',
+      canCreateNewRecord:true,
     };
 
     visitDetailFields: DetailField[] = [
@@ -162,7 +163,7 @@
 
           this.patients.forEach((patient: any) => {
 
-            const name =`${patient.firstName ?? ''} ${patient.lastName ?? ''}`.trim();
+            const name =`${patient.patientName ?? ''} ''}`.trim();
 
             patientMap.set(patient.patientId, name); });
 
@@ -186,7 +187,7 @@
         ...visit,
 
         patientName: patient
-          ? `${patient.firstName ?? ''} ${patient.lastName ?? ''}`
+          ? `${patient.patientName ?? ''}`
               .trim()
               .replace(/\s+/g, ' ')
           : `Patient #${visit.patientId}`,

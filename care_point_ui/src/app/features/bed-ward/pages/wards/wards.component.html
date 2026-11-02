@@ -1,15 +1,4 @@
 <div class="page-container">
-  <!-- Page header -->
-  <div
-    class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4 page-header"
-  >
-    <div>
-      <h2 class="mb-1">Hospital Infrastructure</h2>
-      <p class="text-muted mb-0">
-        Manage floors, wards, rooms and hospital capacity.
-      </p>
-    </div>
-  </div>
 
   <!-- Infrastructure summary -->
   <div class="row g-3 mb-4">
@@ -54,25 +43,6 @@
   <p-tabView>
     <!-- FLOORS -->
     <p-tabPanel header="Floors">
-      <div
-        class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3"
-      >
-        <div>
-          <h5 class="mb-1">Floor Management</h5>
-          <p class="text-muted mb-0 small">
-            Manage hospital levels and floor information.
-          </p>
-        </div>
-
-        <button
-          pButton
-          type="button"
-          label="Add Floor"
-          icon="pi pi-plus"
-          (click)="openCreateFloorForm()"
-        ></button>
-      </div>
-
       <app-shared-table
         [title]="'Floors'"
         [subtitle]="'Manage hospital floors'"
@@ -90,25 +60,6 @@
 
     <!-- WARDS -->
     <p-tabPanel header="Wards">
-      <div
-        class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3"
-      >
-        <div>
-          <h5 class="mb-1">Ward Management</h5>
-          <p class="text-muted mb-0 small">
-            Manage wards and their associated floors.
-          </p>
-        </div>
-
-        <button
-          pButton
-          type="button"
-          label="Add Ward"
-          icon="pi pi-plus"
-          (click)="openCreateWardForm()"
-        ></button>
-      </div>
-
       <app-shared-table
         [title]="'Wards'"
         [subtitle]="'Manage registered hospital wards'"
@@ -126,25 +77,6 @@
 
     <!-- ROOMS -->
     <p-tabPanel header="Rooms">
-      <div
-        class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3"
-      >
-        <div>
-          <h5 class="mb-1">Room Management</h5>
-          <p class="text-muted mb-0 small">
-            Manage rooms, ward assignments and room capacity.
-          </p>
-        </div>
-
-        <button
-          pButton
-          type="button"
-          label="Add Room"
-          icon="pi pi-plus"
-          (click)="openCreateRoomForm()"
-        ></button>
-      </div>
-
       <app-shared-table
         [title]="'Rooms'"
         [subtitle]="'Manage registered hospital rooms'"
@@ -179,8 +111,6 @@
       (saved)="onFloorSaved()"
       (cancelled)="onFloorFormCancelled()"
     ></app-floor-form>
-
-
   </p-dialog>
 
   <!-- WARD FORM -->

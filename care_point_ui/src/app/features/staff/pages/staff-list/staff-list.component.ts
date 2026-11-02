@@ -125,7 +125,7 @@ export class StaffListComponent implements OnInit {
         console.error('Patient ID is undefined. Cannot delete.');
         return;
       }
-      const confirmDelete = window.confirm(`Are you sure you want to delete ${record.firstName} ${record.lastName}?`);
+      const confirmDelete = window.confirm(`Are you sure you want to delete ${record.patientName}?`);
       if (confirmDelete) {
         // this.staffService.deletePatient(patientId).subscribe({
         //   next: () => {

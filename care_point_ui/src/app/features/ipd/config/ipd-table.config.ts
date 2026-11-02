@@ -82,6 +82,8 @@ export const INPATIENT_TABLE_CONFIG: SharedTableConfig = {
 
   loading: false,
 
-  emptyMessage: 'No inpatient records found'
+  emptyMessage: 'No inpatient records found',
+  
+  canCreateNewRecord:true,
 
 };

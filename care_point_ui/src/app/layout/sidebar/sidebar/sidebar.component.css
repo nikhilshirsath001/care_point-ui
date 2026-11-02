@@ -1,592 +1,587 @@
+
 /* =========================================================
-Sidebar
-========================================================= */
+   SIDEBAR — CARE POINT HMIS
+   Angular 19 | PrimeNG 19
+   ========================================================= */
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100dvh;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+:host,
+:host * {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   SIDEBAR CONTAINER
+   ========================================================= */
 
 .sidebar-content {
-height: 100vh;
-width: 100%;
+  --sidebar-width: 240px;
+  --sidebar-collapsed-width: 65px;
 
-display: flex;
-flex-direction: column;
+  position: fixed;
+  left: 0;
+  z-index: 30;
 
-background: #ffffff;
+  display: flex;
+  flex-direction: column;
 
-border-right: 1px solid #e7edf4;
+  width: var(--sidebar-width);
+  height: 100vh;
+  height: 100dvh;
 
-color: #344054;
+  min-width: 0;
+  min-height: 0;
 
-overflow: hidden;
+  overflow: hidden;
+
+  background: #ffffff;
+  color: #344054;
+
+  transition:
+    width 0.25s ease,
+    background-color 0.2s ease;
+}
+
+.sidebar-content.sidebar-collapsed {
+  width: var(--sidebar-collapsed-width);
 }
 
 /* =========================================================
-Sidebar Header
-========================================================= */
+   SIDEBAR INNER LAYOUT
+   ========================================================= */
 
-.sidebar-header {
-min-height: 82px;
+.fixed-sidebar-content {
+  display: flex;
+  flex-direction: column;
 
-display: flex;
-align-items: center;
+  flex: 1 1 auto;
 
-gap: 12px;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
 
-padding: 18px 20px;
-
-border-bottom: 1px solid #eef2f6;
-
-background: linear-gradient(
-180deg,
-#ffffff 0%,
-#f9fbfd 100%
-);
-}
-
-/* Brand Icon */
-
-.brand-icon {
-width: 42px;
-height: 42px;
-
-min-width: 42px;
-
-display: flex;
-align-items: center;
-justify-content: center;
-
-border-radius: 11px;
-
-background: var(--theme-color, #0d6efd);
-
-color: #ffffff;
-
-font-size: 19px;
-
-box-shadow:
-0 5px 12px rgba(13, 110, 253, 0.20);
-}
-
-/* Brand Text */
-
-.brand-details {
-min-width: 0;
-
-display: flex;
-flex-direction: column;
-}
-
-.brand-details h3 {
-margin: 0;
-
-font-size: 19px;
-
-font-weight: 700;
-
-line-height: 1.3;
-
-color: #123b5d;
-}
-
-.brand-details span {
-margin-top: 2px;
-
-font-size: 10px;
-
-font-weight: 500;
-
-color: #98a2b3;
-
-letter-spacing: 0.2px;
-
-white-space: nowrap;
+  overflow: hidden;
 }
 
 /* =========================================================
-Navigation
-========================================================= */
+   INDEPENDENT NAVIGATION SCROLL
+   ========================================================= */
 
 .sidebar-navigation {
-flex: 1;
+  position: relative;
+  z-index: 1;
 
-padding: 20px 12px;
+  flex: 1 1 0;
 
-overflow-y: auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
 
-overflow-x: hidden;
+  /* padding: 16px 12px; */
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+
+  /* Hide scrollbar but preserve scrolling */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-/* Navigation heading */
-
-.navigation-title {
-padding: 0 12px;
-
-margin-bottom: 10px;
-}
-
-.navigation-title span {
-font-size: 10px;
-
-font-weight: 700;
-
-letter-spacing: 0.8px;
-
-color: #98a2b3;
+.sidebar-navigation::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 /* =========================================================
-PrimeNG Panel Menu
-========================================================= */
+   PRIMENG PANEL MENU
+   ========================================================= */
 
 :host ::ng-deep .hms-panel-menu {
-border: none !important;
-
-background: transparent !important;
+  width: 100%;
+  border: none !important;
+  background: transparent !important;
 }
-
-/* Remove default panel borders */
 
 :host ::ng-deep .hms-panel-menu .p-panelmenu-panel {
-border: none !important;
-
-margin-bottom: 4px;
-
-background: transparent !important;
+  margin-bottom: 5px;
+  border: none !important;
+  background: transparent !important;
 }
-
-/* Menu header */
 
 :host ::ng-deep .hms-panel-menu .p-panelmenu-header-content {
-border: none !important;
+  border: none !important;
+  border-radius: 9px;
+  background: transparent !important;
 
-border-radius: 9px;
-
-background: transparent !important;
-
-transition:
-background-color 0.2s ease,
-color 0.2s ease,
-transform 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
-
-/* Header link */
 
 :host ::ng-deep .hms-panel-menu .p-panelmenu-header-link {
-min-height: 45px;
+  display: flex;
+  align-items: center;
 
-padding: 11px 12px !important;
+  min-height: 44px;
+  padding: 11px 12px !important;
+  gap: 10px;
 
-gap: 10px;
+  border-radius: 9px;
 
-border-radius: 9px;
+  color: #475467 !important;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
 
-color: #475467 !important;
-
-font-size: 13px;
-
-font-weight: 500;
-
-text-decoration: none;
-
-transition:
-background-color 0.2s ease,
-color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
-/* Header icon */
+:host ::ng-deep .hms-panel-menu .p-menuitem-icon {
+  flex-shrink: 0;
+  width: 20px;
 
-:host ::ng-deep .hms-panel-menu .p-panelmenu-header-link .p-menuitem-icon {
-width: 20px;
+  color: #667085;
+  font-size: 16px;
 
-font-size: 16px;
-
-color: #667085;
-
-transition: color 0.2s ease;
+  transition: color 0.2s ease;
 }
 
-/* Arrow */
+:host ::ng-deep .hms-panel-menu .p-panelmenu-header-link .p-submenu-icon {
+  flex-shrink: 0;
+  margin-left: auto;
 
-:host ::ng-deep .hms-panel-menu
-.p-panelmenu-header-link
-.p-submenu-icon {
-margin-left: auto;
-
-font-size: 11px;
-
-color: #98a2b3;
+  color: #98a2b3;
+  font-size: 11px;
 }
 
 /* Hover */
 
-:host ::ng-deep .hms-panel-menu
-.p-panelmenu-header-content:hover {
-background: #f2f7fc !important;
+:host ::ng-deep .hms-panel-menu .p-panelmenu-header-content:hover {
+  background: #f0f7f7 !important;
 }
 
-:host ::ng-deep .hms-panel-menu
-.p-panelmenu-header-content:hover
+:host ::ng-deep .hms-panel-menu .p-panelmenu-header-content:hover
 .p-panelmenu-header-link {
-color: var(--theme-color, #0d6efd) !important;
+  color: #0f766e !important;
 }
 
-:host ::ng-deep .hms-panel-menu
-.p-panelmenu-header-content:hover
+:host ::ng-deep .hms-panel-menu .p-panelmenu-header-content:hover
 .p-menuitem-icon {
-color: var(--theme-color, #0d6efd);
+  color: #0f766e;
+}
+
+/* Active / expanded header */
+
+:host ::ng-deep .hms-panel-menu .p-panelmenu-header-content.p-highlight {
+  background: #e8f5f3 !important;
+}
+
+:host ::ng-deep .hms-panel-menu .p-panelmenu-header-content.p-highlight
+.p-panelmenu-header-link {
+  color: #0f766e !important;
+  font-weight: 600;
+}
+
+:host ::ng-deep .hms-panel-menu .p-panelmenu-header-content.p-highlight
+.p-menuitem-icon {
+  color: #0f766e;
 }
 
 /* =========================================================
-Active / Expanded Menu
-========================================================= */
+   SUBMENU — SMOOTH EXPANSION / COLLAPSE
+   ========================================================= */
 
-:host ::ng-deep .hms-panel-menu
-.p-panelmenu-header-content.p-highlight {
-background: #edf5ff !important;
+:host ::ng-deep .hms-panel-menu .p-panelmenu-content {
+  padding: 5px 0;
+  border: none !important;
+  background: transparent !important;
+
+  overflow: hidden;
 }
 
-:host ::ng-deep .hms-panel-menu
-.p-panelmenu-header-content.p-highlight
-.p-panelmenu-header-link {
-color: var(--theme-color, #0d6efd) !important;
+:host ::ng-deep .hms-panel-menu .p-panelmenu-content .p-menuitem-content {
+  margin: 2px 0;
+  border-radius: 8px;
+  background: transparent;
 
-font-weight: 600;
+  transition: background-color 0.2s ease;
 }
 
-:host ::ng-deep .hms-panel-menu
-.p-panelmenu-header-content.p-highlight
-.p-menuitem-icon {
-color: var(--theme-color, #0d6efd);
+:host ::ng-deep .hms-panel-menu .p-panelmenu-content .p-menuitem-link {
+  display: flex;
+  align-items: center;
+
+  min-height: 40px;
+  padding: 9px 12px 9px 42px !important;
+  gap: 8px;
+
+  border-radius: 8px;
+
+  color: #667085 !important;
+  font-size: 12.5px;
+  font-weight: 400;
+  text-decoration: none;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
-/* =========================================================
-Sub Menu
-========================================================= */
-
-:host ::ng-deep .hms-panel-menu
-.p-panelmenu-content {
-border: none !important;
-
-background: transparent !important;
-
-padding: 4px 0 5px 0;
-}
-
-/* Submenu items */
-
-:host ::ng-deep .hms-panel-menu
-.p-panelmenu-content
-.p-menuitem-content {
-margin: 2px 0;
-
-border-radius: 8px;
-
-background: transparent;
-
-transition: background-color 0.2s ease;
-}
-
-/* Submenu links */
-
-:host ::ng-deep .hms-panel-menu
-.p-panelmenu-content
-.p-menuitem-link {
-min-height: 40px;
-
-padding: 9px 12px 9px 43px !important;
-
-border-radius: 8px;
-
-color: #667085 !important;
-
-font-size: 12.5px;
-
-font-weight: 450;
-
-transition:
-background-color 0.2s ease,
-color 0.2s ease,
-padding-left 0.2s ease;
-}
-
-/* Submenu icons */
-
-:host ::ng-deep .hms-panel-menu
-.p-panelmenu-content
-.p-menuitem-icon {
-margin-right: 8px;
-
-font-size: 12px;
-
-color: #98a2b3;
-
-transition: color 0.2s ease;
+:host ::ng-deep .hms-panel-menu .p-panelmenu-content .p-menuitem-icon {
+  flex-shrink: 0;
+  color: #98a2b3;
+  font-size: 12px;
 }
 
 /* Submenu hover */
 
-:host ::ng-deep .hms-panel-menu
-.p-panelmenu-content
+:host ::ng-deep .hms-panel-menu .p-panelmenu-content
 .p-menuitem-content:hover {
-background: #f5f9fd;
+  background: #f0f7f7;
 }
 
-:host ::ng-deep .hms-panel-menu
-.p-panelmenu-content
-.p-menuitem-content:hover
-.p-menuitem-link {
-color: var(--theme-color, #0d6efd) !important;
-
-padding-left: 47px !important;
+:host ::ng-deep .hms-panel-menu .p-panelmenu-content
+.p-menuitem-content:hover .p-menuitem-link {
+  color: #0f766e !important;
 }
 
-:host ::ng-deep .hms-panel-menu
-.p-panelmenu-content
-.p-menuitem-content:hover
-.p-menuitem-icon {
-color: var(--theme-color, #0d6efd);
+:host ::ng-deep .hms-panel-menu .p-panelmenu-content
+.p-menuitem-content:hover .p-menuitem-icon {
+  color: #0f766e;
 }
 
 /* =========================================================
-Active Submenu Item
-========================================================= */
+   SUBMENU ARROW TRANSITION
+   ========================================================= */
 
-:host ::ng-deep .hms-panel-menu
-.p-menuitem-content.p-menuitem-active {
-background: #edf5ff !important;
-}
-
-:host ::ng-deep .hms-panel-menu
-.p-menuitem-content.p-menuitem-active
-.p-menuitem-link {
-color: var(--theme-color, #0d6efd) !important;
-
-font-weight: 600;
+:host ::ng-deep .hms-panel-menu .p-submenu-icon {
+  transition: transform 0.25s ease;
 }
 
 /* =========================================================
-Sidebar Scrollbar
-========================================================= */
-
-.sidebar-navigation::-webkit-scrollbar {
-width: 5px;
-}
-
-.sidebar-navigation::-webkit-scrollbar-track {
-background: transparent;
-}
-
-.sidebar-navigation::-webkit-scrollbar-thumb {
-background: #d9e2ec;
-
-border-radius: 10px;
-}
-
-.sidebar-navigation::-webkit-scrollbar-thumb:hover {
-background: #b8c6d6;
-}
-
-/* =========================================================
-Bottom Section
-========================================================= */
+   FOOTER
+   ========================================================= */
 
 .sidebar-bottom {
-padding: 12px;
+  position: relative;
+  z-index: 2;
 
-border-top: 1px solid #eef2f6;
+  flex: 0 0 auto;
 
-background: #ffffff;
+  width: 100%;
+  padding: 12px;
+
+  border-top: 1px solid #eef2f6;
+  background: #ffffff;
 }
 
 /* =========================================================
-Support Card
-========================================================= */
+   SUPPORT CARD
+   ========================================================= */
 
 .support-card {
-min-height: 58px;
+  display: flex;
+  align-items: center;
 
-display: flex;
-align-items: center;
+  min-width: 0;
+  min-height: 58px;
 
-gap: 10px;
+  gap: 10px;
+  padding: 10px;
 
-padding: 9px 10px;
+  border: 1px solid #e4eaf0;
+  border-radius: 10px;
 
-border: 1px solid #e7edf4;
+  background: #f8fafc;
+  cursor: pointer;
 
-border-radius: 10px;
-
-background: #f8fafc;
-
-cursor: pointer;
-
-transition:
-background-color 0.2s ease,
-border-color 0.2s ease,
-transform 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .support-card:hover {
-background: #f2f7fc;
-
-border-color: #d5e2ef;
-
-transform: translateY(-1px);
+  background: #f0f7f7;
+  border-color: #c8e4df;
 }
-
-/* Support icon */
 
 .support-icon {
-width: 34px;
-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-min-width: 34px;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
 
-display: flex;
-align-items: center;
-justify-content: center;
+  border-radius: 8px;
 
-border-radius: 8px;
-
-background: #eaf3ff;
-
-color: var(--theme-color, #0d6efd);
-
-font-size: 15px;
+  background: #e4f3f0;
+  color: #0f766e;
+  font-size: 15px;
 }
 
-/* Support text */
-
 .support-content {
-display: flex;
-flex-direction: column;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
 
-min-width: 0;
-
-flex: 1;
+  min-width: 0;
 }
 
 .support-content strong {
-font-size: 11px;
-
-font-weight: 600;
-
-color: #344054;
+  color: #344054;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .support-content span {
-margin-top: 2px;
-
-font-size: 10px;
-
-color: #98a2b3;
+  margin-top: 3px;
+  color: #667085;
+  font-size: 10px;
 }
-
-/* Arrow */
 
 .support-arrow {
-font-size: 11px;
-
-color: #98a2b3;
+  flex-shrink: 0;
+  color: #98a2b3;
+  font-size: 12px;
 }
-
-/* Version */
 
 .sidebar-version {
-padding-top: 10px;
+  padding-top: 12px;
 
-text-align: center;
-
-font-size: 9px;
-
-color: #b0b8c4;
+  color: #98a2b3;
+  font-size: 10px;
+  text-align: center;
 }
 
 /* =========================================================
-Responsive
-========================================================= */
+   COLLAPSED SIDEBAR
+   ========================================================= */
+
+.sidebar-content.sidebar-collapsed
+.sidebar-navigation {
+  /* padding: 16px 8px; */
+}
+
+:host ::ng-deep .sidebar-content.sidebar-collapsed
+.hms-panel-menu .p-panelmenu-header-link {
+  justify-content: center;
+  min-height: 44px;
+  padding: 11px 8px !important;
+  gap: 0;
+}
+
+:host ::ng-deep .sidebar-content.sidebar-collapsed
+.hms-panel-menu .p-panelmenu-header-label,
+:host ::ng-deep .sidebar-content.sidebar-collapsed
+.hms-panel-menu .p-menuitem-text {
+  display: none !important;
+}
+
+:host ::ng-deep .sidebar-content.sidebar-collapsed
+.hms-panel-menu .p-panelmenu-header-link .p-submenu-icon {
+  display: none !important;
+}
+
+/* :host ::ng-deep .sidebar-content.sidebar-collapsed
+.hms-panel-menu .p-panelmenu-content {
+  display: none !important;
+} */
+
+.sidebar-content.sidebar-collapsed .sidebar-bottom {
+  padding: 8px 6px;
+}
+
+.sidebar-content.sidebar-collapsed .support-card {
+  justify-content: center;
+  min-height: 44px;
+  padding: 5px;
+
+  border-color: transparent;
+  background: transparent;
+}
+
+.sidebar-content.sidebar-collapsed .support-content,
+.sidebar-content.sidebar-collapsed .support-arrow,
+.sidebar-content.sidebar-collapsed .sidebar-version {
+  display: none;
+}
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-content,
+  .support-card,
+  :host ::ng-deep .hms-panel-menu * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* =========================================================
+   SMALL SCREENS
+   ========================================================= */
 
 @media (max-width: 768px) {
-
-.sidebar-header {
-padding: 16px;
-}
-
-.sidebar-navigation {
-padding: 16px 10px;
-}
-
-.sidebar-bottom {
-padding: 10px;
-}
-
-}
-
-.heartbeat {
-  text-shadow: 0 0 10px #65e21c;
-  animation: heartbeat 1.2s ease-in-out infinite;
-  transform-origin: center;
-}
-
-@keyframes heartbeat {
-  0% {
-    transform: scale(1);
+  .sidebar-navigation {
+    padding: 12px 10px;
   }
 
-  14% {
-    transform: scale(1.25);
+  .sidebar-bottom {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .sidebar-navigation {
+    padding: 10px 8px;
   }
 
-  28% {
-    transform: scale(1);
+  .sidebar-bottom {
+    padding: 8px;
   }
 
-  42% {
-    transform: scale(1.2);
-  }
-
-  70%,
-  100% {
-    transform: scale(1);
+  .support-card {
+    min-height: 48px;
   }
 }
 
 
 /* =========================================================
-Compact Sidebar
-========================================================= */
+   NESTED SUBMENU — SMOOTH ANIMATION
+   ========================================================= */
 
-@media (max-width: 576px) {
-
-.brand-details span {
-display: none;
+:host ::ng-deep .hms-panel-menu .p-toggleable-content {
+  overflow: hidden;
 }
 
-.brand-details h3 {
-font-size: 17px;
-}
-
-.brand-icon {
-width: 38px;
-height: 38px;
-min-width: 38px;
-
-
-font-size: 17px;
-
-
-}
-
-}
-:host ::ng-deep .p-panelmenu-item-link {
+:host ::ng-deep .hms-panel-menu .p-panelmenu-content {
+  padding: 5px 0;
+  border: none !important;
   background: transparent !important;
-  color: #475467;
 }
 
-:host ::ng-deep .p-panelmenu-item-link:hover {
-background: #f2f7fc !important;
-color: var(--theme-color, #0d6efd) !important;
+/* Submenu items */
+
+:host ::ng-deep .hms-panel-menu .p-panelmenu-content
+.p-menuitem-content {
+  margin: 2px 0;
+  border-radius: 8px;
+  background: transparent;
+
+  transition: background-color 0.2s ease;
 }
 
-:host ::ng-deep .p-panelmenu-item-link:hover
+:host ::ng-deep .hms-panel-menu .p-panelmenu-content
+.p-menuitem-link {
+  display: flex;
+  align-items: center;
+
+  min-height: 40px;
+  padding: 9px 12px 9px 42px !important;
+  gap: 8px;
+
+  border-radius: 8px;
+
+  color: #667085 !important;
+  font-size: 12.5px;
+  font-weight: 400;
+  text-decoration: none;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+/* Submenu icons */
+
+:host ::ng-deep .hms-panel-menu .p-panelmenu-content
 .p-menuitem-icon {
-color: var(--theme-color, #0d6efd);
+  flex-shrink: 0;
+  color: #98a2b3;
+  font-size: 12px;
+}
+
+/* Hover */
+
+:host ::ng-deep .hms-panel-menu .p-panelmenu-content
+.p-menuitem-content:hover {
+  background: #f0f7f7;
+}
+
+:host ::ng-deep .hms-panel-menu .p-panelmenu-content
+.p-menuitem-content:hover .p-menuitem-link {
+  color: #0f766e !important;
+}
+
+:host ::ng-deep .hms-panel-menu .p-panelmenu-content
+.p-menuitem-content:hover .p-menuitem-icon {
+  color: #0f766e;
+}
+
+/* Parent submenu arrow */
+
+:host ::ng-deep .hms-panel-menu .p-submenu-icon {
+  transition: transform 0.25s ease;
+}
+
+.sidebar-content {
+  border-right: none !important;
+  box-shadow: none !important;
+  position: fixed;
+  isolation: isolate;
+}
+
+.sidebar-content::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
+  background: #e7edf4;
+  pointer-events: none;
+}
+
+.sidebar-content {
+  --sidebar-width: 240px;
+  --sidebar-collapsed-width: 72px;
+
+  width: var(--sidebar-width);
+  border-right: 1px solid #e7edf4;
+
+  box-shadow: 2px 0 10px rgba(16, 24, 40, 0.03);
+
+  transition: width 0.25s ease;
+}
+
+.sidebar-content.sidebar-collapsed {
+  width: var(--sidebar-collapsed-width);
+}
+
+/* If your actual class is sidebar */
+.sidebar.sidebar-collapsed {
+  flex-basis: 72px;
+  width: 72px;
+  min-width: 72px;
+  flex-shrink: 0;
+  border-right: 1px solid #e7edf4;
 }

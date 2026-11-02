@@ -152,7 +152,7 @@ export class PatientCreateComponent implements OnInit {
 
   private mapFormToPatient(
     formData: Record<string, any>
-  ): PatientModel {
+  ): any {
 
     return {
       // patientId: this.patient?.patientId ?? 0,

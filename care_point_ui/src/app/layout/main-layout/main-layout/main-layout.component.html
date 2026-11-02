@@ -1,17 +1,32 @@
-<app-header></app-header>
-<app-global-loader></app-global-loader>
+<div class="app-layout">
 
+  <!-- Header -->
+  <app-header></app-header>
 
-<div class="layout-container">
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <app-sidebar></app-sidebar>
-  </aside>
+  <!-- Global loader -->
+  <app-global-loader></app-global-loader>
 
-  <!-- Main Content -->
-  <main class="main">
-    <router-outlet></router-outlet>
-  </main>
+  <!-- Main workspace -->
+  <div class="layout-container">
+
+    <!-- Sidebar -->
+    <aside
+      class="sidebar"
+      [class.sidebar-collapsed]="sidebarCollapsed"
+    >
+      <app-sidebar
+        (collapsedChange)="onSidebarCollapsedChange($event)"
+      ></app-sidebar>
+    </aside>
+
+    <!-- Page content -->
+    <main class="main">
+      <router-outlet></router-outlet>
+    </main>
+
+  </div>
+
+  <!-- Footer -->
+  <app-footer></app-footer>
+
 </div>
-
-<app-footer></app-footer>
