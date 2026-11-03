@@ -1,29 +1,134 @@
 .dynamic-form {
+  width: 100%;
+  min-width: 0;
+}
 
-  .form-label {
-    font-weight: 500;
-    margin-bottom: 6px;
+.dynamic-form-heading {
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dynamic-form-heading h3 {
+  margin: 0;
+  color: #183b3a;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.dynamic-form .form-label {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: #344054;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.dynamic-form input[pInputText],
+.dynamic-form textarea,
+.dynamic-form .form-control {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.dynamic-form .p-inputnumber,
+.dynamic-form .p-select,
+.dynamic-form .p-multiselect {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+}
+
+.dynamic-form .form-control,
+.dynamic-form input[pInputText],
+.dynamic-form textarea {
+  border-radius: 7px;
+}
+
+.dynamic-form input[readonly],
+.dynamic-form textarea[readonly] {
+  background-color: #f3f5f7;
+  color: #667085;
+  cursor: default;
+}
+
+.dynamic-form .checkbox-field {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 42px;
+  margin-top: 1.6rem;
+}
+
+.dynamic-form .checkbox-field .form-check-label {
+  margin: 0;
+  color: #344054;
+  cursor: pointer;
+}
+
+.dynamic-form .radio-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  min-height: 40px;
+}
+
+.dynamic-form .radio-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.dynamic-form .radio-option label {
+  margin: 0;
+  color: #344054;
+  cursor: pointer;
+}
+
+.dynamic-form .validation-message {
+  display: block;
+  margin-top: 0.35rem;
+  color: #dc2626;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.dynamic-form .help-text {
+  display: block;
+  margin-top: 0.35rem;
+  color: #667085;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.dynamic-form .text-danger {
+  color: #dc2626;
+}
+
+.dynamic-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.65rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+@media (max-width: 575.98px) {
+  .dynamic-form-actions {
+    display: grid;
+    grid-template-columns: 1fr;
   }
 
-  input,
-  textarea {
+  .dynamic-form-actions button {
     width: 100%;
   }
 
-  .p-inputnumber {
-    width: 100%;
-  }
-
-  .p-select {
-    width: 100%;
-  }
-
-  .p-multiselect {
-    width: 100%;
-  }
-
-  small.text-danger {
-    display: block;
-    margin-top: 4px;
+  .dynamic-form .checkbox-field {
+    margin-top: 0.5rem;
   }
 }

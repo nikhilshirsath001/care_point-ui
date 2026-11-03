@@ -13,20 +13,14 @@ export const PATIENT_ROUTES: Routes = [
   {
     path: 'create',
     loadComponent: () =>
-      import('./pages/patient-create/patient-create.component')
-        .then(m => m.PatientCreateComponent)
+      import('./pages/patient-registration/patient-registration.component')
+        .then(m => m.PatientRegistrationComponent)
   },
   
   {
     path: 'documents',
     loadComponent: () => PatientDocumentManagementComponent
   },  
-  // {
-  //   path: 'new-patient',
-  //   loadComponent: () =>
-  //     import('../new_patient/component/patient-registration/patient-registration.component')
-  //       .then(m => m.PatientRegistrationComponent)
-  // },
 
 //   {
 //     path: ':id/edit',
