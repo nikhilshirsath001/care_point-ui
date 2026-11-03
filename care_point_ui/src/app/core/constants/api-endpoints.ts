@@ -32,6 +32,8 @@ export const API_ENDPOINTS = {
     GET_ALL_FLOOR: `${HMIS_BASE}/floor/get-all`,
     GET_ALL_BEDS: `${HMIS_BASE}/bed/get-all`,
     GET_ALL_ROOMS: `${HMIS_BASE}/wardroom/get-all`,
+    GET_WARDS_BY_FLOOR: `${HMIS_BASE}/ward/floor`,
+    GET_BEDS_BY_ROOM: `${HMIS_BASE}/bed/room`,
 
     DELETE_WARD: `${HMIS_BASE}/ward/delete`,
     DELETE_FLOOR: `${HMIS_BASE}/floor/delete`,

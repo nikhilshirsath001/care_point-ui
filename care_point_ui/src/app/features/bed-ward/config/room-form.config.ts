@@ -19,15 +19,6 @@ export const ROOM_FORM_CONFIG: DynamicFormConfig = {
       col: 'col-12 col-md-6',
     },
     {
-      name: 'roomNumber',
-      label: 'Room Number',
-      type: 'text',
-      placeholder: 'e.g. 101',
-      required: true,
-      validators: [Validators.required, Validators.maxLength(30)],
-      col: 'col-12 col-md-6',
-    },
-    {
       name: 'roomType',
       label: 'Room Type',
       type: 'select',
@@ -35,6 +26,15 @@ export const ROOM_FORM_CONFIG: DynamicFormConfig = {
       required: true,
       validators: [Validators.required],
       options: [],
+      col: 'col-12 col-md-6',
+    },
+    {
+      name: 'roomNumber',
+      label: 'Room Number',
+      type: 'text',
+      placeholder: 'e.g. 101',
+      required: true,
+      validators: [Validators.required, Validators.maxLength(30)],
       col: 'col-12 col-md-6',
     },
     {

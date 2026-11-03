@@ -8,13 +8,14 @@ export const WARD_FORM_CONFIG: DynamicFormConfig = {
   showReset: true,
 
   fields: [
-    {
-      name: 'wardName',
-      label: 'Ward Name',
-      type: 'text',
-      placeholder: 'Enter ward name',
+        {
+      name: 'floorId',
+      label: 'Floor',
+      type: 'select',
+      placeholder: 'Select floor',
       required: true,
-      validators: [Validators.required, Validators.maxLength(100)],
+      validators: [Validators.required],
+      options: [],
       col: 'col-12 col-md-6',
     },
     {
@@ -28,13 +29,12 @@ export const WARD_FORM_CONFIG: DynamicFormConfig = {
       col: 'col-12 col-md-6',
     },
     {
-      name: 'floorId',
-      label: 'Floor',
-      type: 'select',
-      placeholder: 'Select floor',
+      name: 'wardName',
+      label: 'Ward Name',
+      type: 'text',
+      placeholder: 'Enter ward name',
       required: true,
-      validators: [Validators.required],
-      options: [],
+      validators: [Validators.required, Validators.maxLength(100)],
       col: 'col-12 col-md-6',
     },
     {
@@ -47,13 +47,13 @@ export const WARD_FORM_CONFIG: DynamicFormConfig = {
       options: [],
       col: 'col-12 col-md-6',
     },
-    {
-      name: 'active',
-      label: 'Active',
-      type: 'checkbox',
-      defaultValue: true,
-      col: 'col-12',
-    },
+    // {
+    //   name: 'active',
+    //   label: 'Active',
+    //   type: 'checkbox',
+    //   defaultValue: true,
+    //   col: 'col-12',
+    // },
   ],
 };
 

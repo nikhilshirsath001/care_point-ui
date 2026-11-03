@@ -12,15 +12,15 @@ export const STAFF_FORM_CONFIG: DynamicFormConfig = {
   showReset: true,
 
   fields: [
-    {
-      name: 'employeeNo',
-      label: 'Employee No',
-      type: 'text',
-      placeholder: 'Enter employee number',
-      required: true,
-      validators: [Validators.required, Validators.maxLength(30)],
-      col: 'col-12 col-md-6',
-    },
+    // {
+    //   name: 'employeeNo',
+    //   label: 'Employee No',
+    //   type: 'text',
+    //   placeholder: 'Enter employee number',
+    //   required: true,
+    //   validators: [Validators.required, Validators.maxLength(30)],
+    //   col: 'col-12 col-md-6',
+    // },
 
     {
       name: 'firstName',
@@ -117,13 +117,13 @@ export const STAFF_FORM_CONFIG: DynamicFormConfig = {
       col: 'col-12 col-md-6',
     },
 
-    {
-      name: 'active',
-      label: 'Active',
-      type: 'checkbox',
-      defaultValue: true,
-      col: 'col-12',
-    },
+    // {
+    //   name: 'active',
+    //   label: 'Active',
+    //   type: 'checkbox',
+    //   defaultValue: true,
+    //   col: 'col-12',
+    // },
   ],
 };
 
