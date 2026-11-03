@@ -50,15 +50,15 @@ export class PatientService {
 
   public updatePatient(
     patientId: number,
-    patient: PatientModel,
-  ): Observable<ApiResponse<PatientModel>> {
+    patient: any,
+  ): Observable<ApiResponse<any>> {
     // const params = new HttpParams()
     //   .set('patientId', patientId.toString());
 
     return this.apiService.putObservable(
       `${API_ENDPOINTS.PATIENTS.UPDATE}/${patientId}`,
       patient,
-    ) as Observable<ApiResponse<PatientModel>>;
+    ) as Observable<ApiResponse<any>>;
   }
 
   deletePatient(patientId: number) {

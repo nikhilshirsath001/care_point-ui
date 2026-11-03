@@ -154,10 +154,20 @@
 
       <span class="action-spacer"></span>
 
-      <button type="button" class="btn btn-primary" (click)="next()">
-        Next
-        <span>→</span>
-      </button>
+            @if (isEditMode()) {
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="submitting()"
+          (click)="submitUpdate()"
+        >
+          @if (submitting()) { Updating... } @else { Update Patient }
+        </button>
+      } @else {
+        <button type="button" class="btn btn-primary" (click)="next()">
+          Next <span>→</span>
+        </button>
+      }
     </div>
   </section>
 

@@ -50,6 +50,21 @@ function createInitialDocuments(): PatientDocument[] {
   ];
 }
 
+type ExistingPatient = Record<string, any>;
+
+const STEP_PATIENT = { id: 1, label: 'Patient' };
+const STEP_INSURANCE = { id: 2, label: 'Insurance' };
+const STEP_DOCUMENTS = { id: 3, label: 'Documents' };
+
+/** Handles "yyyy-MM-dd", ISO datetime strings and Jackson [y, m, d] arrays. */
+function normalizeDate(value: unknown): string | null {
+  if (Array.isArray(value) && value.length >= 3) {
+    const [y, m, d] = value;
+    return `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  }
+  return toIsoDate(value);
+}
+
 @Component({
   selector: 'app-patient-registration',
   standalone: true,
@@ -58,11 +73,11 @@ function createInitialDocuments(): PatientDocument[] {
   styleUrl: './patient-registration.component.css',
 })
 export class PatientRegistrationComponent implements OnDestroy {
-  readonly steps = [
-    { id: 1, label: 'Patient' },
-    { id: 2, label: 'Insurance' },
-    { id: 3, label: 'Documents' },
-  ];
+  // readonly steps = [
+  //   { id: 1, label: 'Patient' },
+  //   { id: 2, label: 'Insurance' },
+  //   { id: 3, label: 'Documents' },
+  // ];
 
   currentStep = signal(1);
   submitting = signal(false);
@@ -102,13 +117,129 @@ export class PatientRegistrationComponent implements OnDestroy {
 
   documents = signal<PatientDocument[]>(createInitialDocuments());
   patientFieldsConfig = patientFieldsConfig;
+  readonly steps: { id: number; label: string }[];
+  private existingPatient: ExistingPatient | null = null;
+  private patientId: number | null = null;
   addressFieldsConfig = addressFieldsConfig;
   contactPersonFieldsConfig = contactPersonFieldsConfig;
   subscriberFieldsConfig = subscriberFieldsConfig;
   insuranceFieldsConfig = insuranceFieldsConfig;
 
-  constructor(private registrationService: PatientService) {}
+    constructor(private registrationService: PatientService) {
+    const state: Record<string, any> =
+      this.router.getCurrentNavigation()?.extras.state ?? history.state ?? {};
 
+    // The list currently sends { patient: { patient: PatientModel } }, so unwrap both shapes.
+    const raw = state['patient'];
+    const patient: ExistingPatient | null = raw?.patient ?? raw ?? null;
+
+    if (state['mode'] === 'edit') {
+      if (patient?.['patientId'] == null) {
+        // State was lost (e.g. direct URL hit) - nothing to edit.
+        this.router.navigate([API_NAVIGATION.PATIENTS.LIST]);
+      } else {
+        this.existingPatient = patient;
+        this.patientId = Number(patient['patientId']);
+        this.isEditMode.set(true);
+      }
+    }
+
+    this.steps = this.isEditMode()
+      ? [STEP_PATIENT, STEP_INSURANCE]
+      : [STEP_PATIENT, STEP_INSURANCE, STEP_DOCUMENTS];
+
+    this.patientFieldsConfig = this.isEditMode()
+      ? this.buildEditPatientConfig()
+      : patientFieldsConfig;
+  }
+
+  /** Edit-only copy of the config (shared config is not mutated) with a read-only MR number. */
+  private buildEditPatientConfig(): DynamicFormConfig {
+    const fields = [...patientFieldsConfig.fields];
+    const abhaIndex = fields.findIndex((f) => f.name === 'abhaNumber');
+
+    fields.splice(abhaIndex + 1, 0, {
+      name: 'patientMrNumber',
+      label: 'MR Number',
+      type: 'text',
+      col: 'col-12 col-md-6',
+      validators: [],
+    } as (typeof fields)[number]);
+
+    return { ...patientFieldsConfig, fields };
+  }
+
+    // ---------- edit-mode hydration ----------
+
+  private hydrate(
+    form: FormGroup | null,
+    value: Record<string, any> | null | undefined,
+    dateKeys: string[] = [],
+  ): void {
+    if (!form || !value) {
+      return;
+    }
+
+    const data: Record<string, any> = { ...value };
+    dateKeys.forEach((key) => (data[key] = normalizeDate(data[key])));
+
+    // patchValue ignores keys the form does not have.
+    form.patchValue(data, { emitEvent: false });
+    form.markAsPristine();
+  }
+
+  private hydratePatientForm(form: FormGroup): void {
+    const p = this.existingPatient;
+    if (!p) {
+      return;
+    }
+
+    this.communicationAddressSame = p['isCommAddressSameAsCardAddress'] ?? true;
+
+    this.hydrate(
+      form,
+      {
+        ...p,
+        isChildRegistration: p['isChildRegistration'] ?? false,
+        isCommAddressSameAsCardAddress: this.communicationAddressSame,
+      },
+      ['patientDob'],
+    );
+
+    // ABHA number and MR number are immutable once registered.
+    form.get('abhaNumber')?.disable({ emitEvent: false });
+    form.get('patientMrNumber')?.disable({ emitEvent: false });
+
+    // Relation was patched silently, so apply subscriber visibility explicitly.
+    this.updateSubscriberVisibility(form.get('relation')?.value);
+  }
+
+  private restoreExistingValues(): void {
+    const p = this.existingPatient;
+    if (!p) {
+      return;
+    }
+    if (this.patientForm) {
+      this.hydratePatientForm(this.patientForm);
+    }
+    this.hydrate(this.permanentAddressForm, p['patientAddress']);
+    this.hydrate(this.communicationAddressForm, p['patientCommAddress']);
+    this.hydrate(this.contactPersonForm, p['contactPerson']);
+    this.hydrate(this.subscriberForm, p['subscriber'], ['dob']);
+    this.hydrate(this.insuranceForm, this.getExistingPolicy(), [
+      'policyStartDate',
+      'policyEndDate',
+      'insuranceBenefitStartDate',
+      'insuranceBenefitEndDate',
+    ]);
+  }
+
+  private getExistingPolicy(): Record<string, any> | null {
+    const p = this.existingPatient;
+    return p?.['patientPolicyDetails'] ?? p?.['policyDetails'] ?? null;
+  }
+
+  
   ngOnDestroy(): void {
     this.relationSub?.unsubscribe();
     this.revokeAllPreviews();
@@ -128,6 +259,10 @@ export class PatientRegistrationComponent implements OnDestroy {
       ?.valueChanges.subscribe((relation) => {
         this.updateSubscriberVisibility(relation);
       });
+
+    if (this.existingPatient) {
+      Promise.resolve().then(() => this.hydratePatientForm(form));
+    }
   }
 
   private updateSubscriberVisibility(relation: string | null): void {
@@ -141,22 +276,52 @@ export class PatientRegistrationComponent implements OnDestroy {
 
   onPermanentAddressReady(form: FormGroup): void {
     this.permanentAddressForm = form;
+    if (this.existingPatient) {
+      Promise.resolve().then(() =>
+        this.hydrate(form, this.existingPatient!['patientAddress']),
+      );
+    }
   }
 
   onCommunicationAddressReady(form: FormGroup): void {
     this.communicationAddressForm = form;
+    if (this.existingPatient) {
+      Promise.resolve().then(() =>
+        this.hydrate(form, this.existingPatient!['patientCommAddress']),
+      );
+    }
   }
 
   onContactPersonReady(form: FormGroup): void {
     this.contactPersonForm = form;
+    if (this.existingPatient) {
+      Promise.resolve().then(() =>
+        this.hydrate(form, this.existingPatient!['contactPerson']),
+      );
+    }
   }
 
   onSubscriberReady(form: FormGroup): void {
     this.subscriberForm = form;
+    if (this.existingPatient) {
+      Promise.resolve().then(() =>
+        this.hydrate(form, this.existingPatient!['subscriber'], ['dob']),
+      );
+    }
   }
 
   onInsuranceFormReady(form: FormGroup): void {
     this.insuranceForm = form;
+    if (this.existingPatient) {
+      Promise.resolve().then(() =>
+        this.hydrate(form, this.getExistingPolicy(), [
+          'policyStartDate',
+          'policyEndDate',
+          'insuranceBenefitStartDate',
+          'insuranceBenefitEndDate',
+        ]),
+      );
+    }
   }
 
   onPatientFormChanged(value: Record<string, any>): void {
@@ -626,6 +791,10 @@ export class PatientRegistrationComponent implements OnDestroy {
       : this.communicationAddressForm?.getRawValue();
 
     return {
+      ...(this.isEditMode() && {
+        patientId: this.patientId,
+        patientMrNumber: this.existingPatient?.['patientMrNumber'],
+      }),
       abhaNumber: patient.abhaNumber,
       patientName: patient.patientName,
       patientDob: toIsoDate(patient.patientDob),
@@ -857,6 +1026,14 @@ export class PatientRegistrationComponent implements OnDestroy {
   }
 
   private resetAll(): void {
+
+     if (this.isEditMode()) {
+      this.clearMessages();
+      this.restoreExistingValues();
+      this.currentStep.set(1);
+      return;
+    }
+    
     this.revokeAllPreviews();
     this.documents.set(createInitialDocuments());
     this.documentErrors.set({});
@@ -881,5 +1058,42 @@ export class PatientRegistrationComponent implements OnDestroy {
     if (step < this.currentStep()) {
       this.currentStep.set(step);
     }
+  }
+
+    submitUpdate(): void {
+    if (this.submitting() || this.patientId == null) {
+      return;
+    }
+
+    this.clearMessages();
+
+    if (!this.validateStepOne()) {
+      this.currentStep.set(1);
+      return;
+    }
+
+    if (!this.validateInsurance()) {
+      this.currentStep.set(2);
+      return;
+    }
+
+    const payload = {
+      patientDetails: this.buildPatientDetails(),
+      patientPolicyDetails: this.buildPolicyDetails(),
+    };
+
+    this.submitting.set(true);
+
+    this.registrationService.updatePatient(this.patientId, payload).subscribe({
+      next: () => {
+        this.submitting.set(false);
+        alert('Patient details updated successfully.');
+        this.router.navigate([API_NAVIGATION.PATIENTS.LIST]);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.submitting.set(false);
+        this.showErrors(this.extractErrorMessages(error), 'Update failed');
+      },
+    });
   }
 }
