@@ -1,42 +1,42 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { Menubar } from 'primeng/menubar';
-import { MENU_ITEMS } from '../../../core/constants/menu.constants';
 import { Menu } from 'primeng/menu';
 import { DialogModule } from 'primeng/dialog';
+
 import { ProfileComponent } from '../../profile/profile/profile.component';
+import { AuthService } from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-header',
-  imports: [ProfileComponent ,Menubar, Menu,DialogModule],
+  standalone: true,
+  imports: [
+    Menubar,
+    Menu,
+    DialogModule,
+    ProfileComponent
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 export class HeaderComponent {
 
-items: MenuItem[] | undefined;
-showProfile:boolean= false;
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
 
-constructor(private router: Router) {}
+  showProfile = false;
 
-ngOnInit() {
-  this.items = MENU_ITEMS;
-}
-profileItems: MenuItem[] = [
+  profileItems: MenuItem[] = [
     {
       label: 'My Profile',
       icon: 'pi pi-user',
-      command: () => {
-        this.openProfile();
-      }
+      command: () => this.openProfile()
     },
     {
       label: 'Settings',
       icon: 'pi pi-cog',
-      command: () => {
-        this.openSettings();
-      }
+      command: () => this.openSettings()
     },
     {
       separator: true
@@ -44,28 +44,26 @@ profileItems: MenuItem[] = [
     {
       label: 'Logout',
       icon: 'pi pi-sign-out',
-      command: () => {
-        this.logout();
-      }
+      command: () => this.logout()
     }
   ];
 
-
   openProfile(): void {
-    this.showProfile= true;
-    console.log('Open profile');
+    this.showProfile = true;
   }
-
 
   openSettings(): void {
-    console.log('Open settings');
+    // Implement the settings navigation when available.
   }
-
 
   logout(): void {
-  localStorage.removeItem('access_token');
-  this.router.navigate(['/login']);
-    console.log('Logout');
+    this.auth.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: () => {
+        this.router.navigate(['/login']);
+      }
+    });
   }
-
 }

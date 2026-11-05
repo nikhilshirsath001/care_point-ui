@@ -97,7 +97,8 @@ export class PatientDocumentUploadComponent implements OnChanges {
 
   readonly categoryConfig: Record<DocumentContext, UploadCategory[]> = {
     Personal: [
-      { label: 'Aadhaar Card', value: 'AADHAAR' },
+      { label: 'Aadhaar Front', value: 'AADHAAR_FRONT' },
+      { label: 'Aadhaar Back', value: 'AADHAAR_BACK' },
       { label: 'PAN Card', value: 'PAN' }
     ],
     Visit: [

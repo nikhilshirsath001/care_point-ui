@@ -16,13 +16,11 @@ import { HttpParams } from '@angular/common/http';
 export class PatientService {
   private readonly apiService = inject(ApiService);
 
-  public createPatient(
-    patient: PatientModel,
-  ): Observable<ApiResponse<PatientModel>> {
+  public createPatient(patient: FormData): Observable<ApiResponse<any>> {
     return this.apiService.postObservable(
       API_ENDPOINTS.PATIENTS.CREATE,
       patient,
-    ) as Observable<ApiResponse<PatientModel> | any>;
+    ) as Observable<ApiResponse<any> | any>;
   }
 
   public getAllPatients(
@@ -50,20 +48,27 @@ export class PatientService {
     return this.apiService.getObservable(API_ENDPOINTS.PATIENTS.SEARCH, params);
   }
 
-  public updatePatient(patientId: number, patient: PatientModel): Observable<ApiResponse<PatientModel>> {
+  public updatePatient(
+    patientId: number,
+    patient: any,
+  ): Observable<ApiResponse<any>> {
+    // const params = new HttpParams()
+    //   .set('patientId', patientId.toString());
 
-      // const params = new HttpParams()
-      //   .set('patientId', patientId.toString());
-
-      return this.apiService.putObservable(`${API_ENDPOINTS.PATIENTS.UPDATE}/${patientId}`, patient
-      ) as Observable<ApiResponse<PatientModel>>;
-    }
-    
-  deletePatient( patientId: number) {
-    const params = new HttpParams().set('patientId', patientId.toString());
-    return this.apiService.deleteObservable(API_ENDPOINTS.PATIENTS.DELETE, params);
+    return this.apiService.putObservable(
+      `${API_ENDPOINTS.PATIENTS.UPDATE}/${patientId}`,
+      patient,
+    ) as Observable<ApiResponse<any>>;
   }
-  
+
+  deletePatient(patientId: number) {
+    const params = new HttpParams().set('patientId', patientId.toString());
+    return this.apiService.deleteObservable(
+      API_ENDPOINTS.PATIENTS.DELETE,
+      params,
+    );
+  }
+
   isPatientExists(abhaId: string) {
     const params = new HttpParams().set('abhaId', abhaId);
     return this.apiService.getObservable(API_ENDPOINTS.PATIENTS.EXISTS, params);
@@ -71,6 +76,9 @@ export class PatientService {
 
   getPatientByPatientId(patientId: any) {
     const params = new HttpParams().set('patientId', patientId);
-    return this.apiService.getObservable(API_ENDPOINTS.PATIENTS.GET_BY_PATIENT_ID, params);
+    return this.apiService.getObservable(
+      API_ENDPOINTS.PATIENTS.GET_BY_PATIENT_ID,
+      params,
+    );
   }
 }

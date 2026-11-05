@@ -2,8 +2,8 @@ import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './layout/main-layout/main-layout/main-layout.component';
 import { LoginComponent } from './auth/login/page/login/login.component';
 import { MainDashboardComponent } from './features/dashborad/pages/main-dashboard/main-dashboard.component';
-//   import { EMR_ROUTES } from './features/emr/routes/emr.routes';
-
+import { permissionGuard } from './core/guards/permission.guard';//   import { EMR_ROUTES } from './features/emr/routes/emr.routes';
+import { authGuard } from './core/auth/auth.guard';
 export const routes: Routes = [
   // Login
   {
@@ -19,8 +19,11 @@ export const routes: Routes = [
 
   // Main application layout
   {
-    path: 'main',
-    component: MainLayoutComponent,
+  path: 'main',
+  component: MainLayoutComponent,
+  canActivate: [authGuard],
+  canActivateChild: [permissionGuard],
+
 
     children: [
       // Dashboard / Home

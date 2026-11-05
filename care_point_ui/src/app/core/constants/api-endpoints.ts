@@ -32,6 +32,8 @@ export const API_ENDPOINTS = {
     GET_ALL_FLOOR: `${HMIS_BASE}/floor/get-all`,
     GET_ALL_BEDS: `${HMIS_BASE}/bed/get-all`,
     GET_ALL_ROOMS: `${HMIS_BASE}/wardroom/get-all`,
+    GET_WARDS_BY_FLOOR: `${HMIS_BASE}/ward/floor`,
+    GET_BEDS_BY_ROOM: `${HMIS_BASE}/bed/room`,
 
     DELETE_WARD: `${HMIS_BASE}/ward/delete`,
     DELETE_FLOOR: `${HMIS_BASE}/floor/delete`,
@@ -63,6 +65,9 @@ export const API_ENDPOINTS = {
     BASE: '/staff',
     GET_ALL: '/staff',
     CREATE: '/staff',
+    UPDATE: '/staff/{staffId}',
+    DELETE: '/staff/{staffId}',
+    CHANGE_STATUS: '/staff/{staffId}/status',
   },
 
   PROCEDURE: {
@@ -131,5 +136,10 @@ export const API_NAVIGATION = {
     BASE: `${API_NAVIGATION_BASE}/patient`,
     CREATE: `${API_NAVIGATION_BASE}/patient/create`,
     LIST: `${API_NAVIGATION_BASE}/patient`,
+  },
+  STAFF: {
+    BASE: `${API_NAVIGATION_BASE}/staff`,
+    CREATE: `${API_NAVIGATION_BASE}/staff/create`,
+    LIST: `${API_NAVIGATION_BASE}/staff`,
   },
 } as const;

@@ -1,0 +1,329 @@
+<div>
+  <section class="form-card" [hidden]="currentStep() !== 1">
+    <nav class="compact-stepper" aria-label="Registration progress">
+      @for (step of steps; track step.id) {
+        <div class="compact-step-item">
+          <button
+            type="button"
+            class="compact-step"
+            [class.active]="currentStep() === step.id"
+            [class.completed]="currentStep() > step.id"
+            [attr.title]="step.label"
+            [attr.aria-label]="step.label"
+            [attr.aria-current]="currentStep() === step.id ? 'step' : null"
+            (click)="currentStep() > step.id ? goToStep(step.id) : null"
+          >
+            @if (currentStep() > step.id) {
+              ✓
+            } @else {
+              {{ step.id }}
+            }
+          </button>
+
+          @if (!$last) {
+            <span
+              class="compact-step-line"
+              [class.completed-line]="currentStep() > step.id"
+            ></span>
+          }
+        </div>
+      }
+    </nav>
+
+    <app-dynamic-form
+      [config]="patientFieldsConfig"
+      [mode]="isEditMode() ? 'edit' : 'create'"
+      [loading]="lookupLoading()"
+      [showActions]="false"
+      (formReady)="onPatientFormReady($event)"
+      (valueChanged)="onPatientFormChanged($event)"
+    ></app-dynamic-form>
+
+    <div class="subsection-title">
+      <span>Permanent Address</span>
+    </div>
+
+    <app-dynamic-form
+      [config]="addressFieldsConfig"
+      [mode]="isEditMode() ? 'edit' : 'create'"
+      [showActions]="false"
+      (formReady)="onPermanentAddressReady($event)"
+    ></app-dynamic-form>
+
+    @if (!communicationAddressSame) {
+      <div class="address-panel">
+        <h3>Communication Address</h3>
+
+        <p class="panel-description">
+          Enter the address where the patient can be contacted.
+        </p>
+
+        <app-dynamic-form
+          [config]="addressFieldsConfig"
+          [mode]="isEditMode() ? 'edit' : 'create'"
+          [showActions]="false"
+          (formReady)="onCommunicationAddressReady($event)"
+        ></app-dynamic-form>
+      </div>
+    }
+
+    <div class="subsection-title">
+      <span>Contact Person Details</span>
+    </div>
+
+    <app-dynamic-form
+      [config]="contactPersonFieldsConfig"
+      [mode]="isEditMode() ? 'edit' : 'create'"
+      [showActions]="false"
+      (formReady)="onContactPersonReady($event)"
+    ></app-dynamic-form>
+
+    @if (showSubscriber) {
+      <div class="subsection-title">
+        <span>Subscriber Details</span>
+      </div>
+
+      <app-dynamic-form
+        [config]="subscriberFieldsConfig"
+        [mode]="isEditMode() ? 'edit' : 'create'"
+        [loading]="lookupLoading()"
+        [showActions]="false"
+        (formReady)="onSubscriberReady($event)"
+      ></app-dynamic-form>
+    }
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-outline" (click)="reset()">
+        Reset
+      </button>
+      <button type="button" class="btn btn-outline" (click)="cancel()">
+        Cancel
+      </button>
+      <span class="action-spacer"></span>
+
+      <button type="button" class="btn btn-primary" (click)="next()">
+        Next
+        <span>→</span>
+      </button>
+    </div>
+  </section>
+
+  <section class="form-card" [hidden]="currentStep() !== 2">
+    <nav class="compact-stepper" aria-label="Registration progress">
+      @for (step of steps; track step.id) {
+        <div class="compact-step-item">
+          <button
+            type="button"
+            class="compact-step"
+            [class.active]="currentStep() === step.id"
+            [class.completed]="currentStep() > step.id"
+            [attr.title]="step.label"
+            [attr.aria-label]="step.label"
+            [attr.aria-current]="currentStep() === step.id ? 'step' : null"
+            (click)="currentStep() > step.id ? goToStep(step.id) : null"
+          >
+            @if (currentStep() > step.id) {
+              ✓
+            } @else {
+              {{ step.id }}
+            }
+          </button>
+
+          @if (!$last) {
+            <span
+              class="compact-step-line"
+              [class.completed-line]="currentStep() > step.id"
+            ></span>
+          }
+        </div>
+      }
+    </nav>
+
+    <app-dynamic-form
+      [config]="insuranceFieldsConfig"
+      [mode]="isEditMode() ? 'edit' : 'create'"
+      [loading]="lookupLoading()"
+      [showActions]="false"
+      (formReady)="onInsuranceFormReady($event)"
+    ></app-dynamic-form>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-outline" (click)="previous()">
+        ← Previous
+      </button>
+
+      <span class="action-spacer"></span>
+
+            @if (isEditMode()) {
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="submitting()"
+          (click)="submitUpdate()"
+        >
+          @if (submitting()) { Updating... } @else { Update Patient }
+        </button>
+      } @else {
+        <button type="button" class="btn btn-primary" (click)="next()">
+          Next <span>→</span>
+        </button>
+      }
+    </div>
+  </section>
+
+  <section class="form-card" [hidden]="currentStep() !== 3">
+    <nav class="compact-stepper" aria-label="Registration progress">
+      @for (step of steps; track step.id) {
+        <div class="compact-step-item">
+          <button
+            type="button"
+            class="compact-step"
+            [class.active]="currentStep() === step.id"
+            [class.completed]="currentStep() > step.id"
+            [attr.title]="step.label"
+            [attr.aria-label]="step.label"
+            [attr.aria-current]="currentStep() === step.id ? 'step' : null"
+            (click)="currentStep() > step.id ? goToStep(step.id) : null"
+          >
+            @if (currentStep() > step.id) {
+              ✓
+            } @else {
+              {{ step.id }}
+            }
+          </button>
+
+          @if (!$last) {
+            <span
+              class="compact-step-line"
+              [class.completed-line]="currentStep() > step.id"
+            ></span>
+          }
+        </div>
+      }
+    </nav>
+
+    <div class="document-heading">
+      <h3>Patient Documents</h3>
+    </div>
+
+    <div class="document-list">
+      @for (doc of documents(); track doc.documentType) {
+        <article class="document-row">
+          <div class="document-row-icon">
+            <i class="pi pi-file-check"></i>
+          </div>
+
+          <div class="document-row-info">
+            <strong>{{ doc.label }}</strong>
+            <small>{{ getDocumentHint(doc.documentType) }}</small>
+          </div>
+
+          <label class="document-upload">
+            <i class="pi pi-cloud-upload"></i>
+
+            <input
+              type="file"
+              required = "{{ doc.documentType === 'AADHAR_FRONT' }}"
+              [disabled]="submitting()"
+              [accept]="
+                doc.documentType === 'PASSPORT_PHOTO'
+                  ? '.jpg,.jpeg,.png'
+                  : '.pdf,.jpg,.jpeg,.png'
+              "
+              (change)="onFileSelected($event, doc.documentType)"
+            />
+          </label>
+
+          @if (doc.fileName) {
+            <div class="document-selected-file">
+              @if (doc.previewUrl) {
+                <img [src]="doc.previewUrl" alt="Selected document preview" />
+              }
+
+              <div class="file-copy">
+                <strong>{{ doc.fileName }}</strong>
+
+                <small>
+                  {{
+                    doc.existingDocumentId
+                      ? "Existing metadata (file not downloaded)"
+                      : "Ready to upload on submit"
+                  }}
+                </small>
+              </div>
+
+              <button
+                type="button"
+                class="text-action danger"
+                [disabled]="submitting()"
+                (click)="removeDocument(doc.documentType)"
+              >
+                Remove
+              </button>
+            </div>
+          }
+          
+          @if (getDocumentError(doc.documentType); as docError) {
+                <div class="document-error" role="alert">
+                <i class="pi pi-exclamation-circle"></i>
+                {{ docError }}
+                </div>
+            }
+
+          <!-- @if (getDocumentError(doc.documentType); as docError) {
+            <div class="document-error" role="alert">
+              {{ docError }}
+            </div>
+          } -->
+
+          <div class="document-row-footer">
+            <span>
+              {{ doc.fileName ? "File selected" : "PDF / JPG / PNG" }}
+            </span>
+
+            <label class="document-browse">
+              {{ doc.fileName ? "Replace file" : "Choose file" }}
+
+              <input
+                type="file"
+                [disabled]="submitting()"
+                [accept]="
+                  doc.documentType === 'PASSPORT_PHOTO'
+                    ? '.jpg,.jpeg,.png'
+                    : '.pdf,.jpg,.jpeg,.png'
+                "
+                (change)="onFileSelected($event, doc.documentType)"
+              />
+            </label>
+          </div>
+        </article>
+      }
+    </div>
+
+    <div class="form-actions">
+      <button
+        type="button"
+        class="btn btn-outline"
+        [disabled]="submitting()"
+        (click)="previous()"
+      >
+        ← Previous
+      </button>
+
+      <span class="action-spacer"></span>
+
+      <button
+        type="button"
+        class="btn btn-primary"
+        [disabled]="submitting()"
+        (click)="submitRegistration()"
+      >
+        @if (submitting()) {
+          Submitting...
+        } @else {
+          Submit Registration
+        }
+      </button>
+    </div>
+  </section>
+</div>

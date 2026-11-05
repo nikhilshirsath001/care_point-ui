@@ -1,0 +1,1142 @@
+<div class="infrastructure-page">
+  <div class="page-header">
+    <div class="header-title">
+      <div class="header-icon">
+        <i class="pi pi-building"></i>
+      </div>
+
+      <div>
+        <h2>Infrastructure Management</h2>
+        <p>Manage hospital floors, wards, rooms and beds</p>
+      </div>
+    </div>
+
+    <button
+      class="btn btn-primary"
+      *ngIf="activeLevel === 'floors'"
+      (click)="openCreateFloor()"
+    >
+      <i class="pi pi-plus"></i>
+      Add Floor
+    </button>
+
+    <button
+      class="btn btn-primary"
+      *ngIf="activeLevel === 'wards'"
+      (click)="openCreateWard()"
+    >
+      <i class="pi pi-plus"></i>
+      Add Ward
+    </button>
+
+    <button
+      class="btn btn-primary"
+      *ngIf="activeLevel === 'rooms'"
+      (click)="openCreateRoom()"
+    >
+      <i class="pi pi-plus"></i>
+      Add Room
+    </button>
+
+    <button
+      class="btn btn-primary"
+      *ngIf="activeLevel === 'beds'"
+      (click)="openCreateBed()"
+    >
+      <i class="pi pi-plus"></i>
+      Add Bed
+    </button>
+  </div>
+
+  <div class="statistics-grid">
+    <div class="stat-card">
+      <div class="stat-icon floor-stat">
+        <i class="pi pi-building"></i>
+      </div>
+
+      <div>
+        <span>Total Floors</span>
+        <h3>{{ floors.length }}</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon ward-stat">
+        <i class="pi pi-th-large"></i>
+      </div>
+
+      <div>
+        <span>Total Wards</span>
+        <h3>{{ wards.length }}</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon room-stat">
+        <i class="pi pi-home"></i>
+      </div>
+
+      <div>
+        <span>Total Rooms</span>
+        <h3>{{ rooms.length }}</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon bed-stat">
+        <i class="pi pi-heart"></i>
+      </div>
+
+      <div>
+        <span>Total Beds</span>
+        <h3>{{ totalBeds }}</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon available-stat">
+        <i class="pi pi-check-circle"></i>
+      </div>
+
+      <div>
+        <span>Available Beds</span>
+        <h3>{{ availableBeds }}</h3>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon occupied-stat">
+        <i class="pi pi-user"></i>
+      </div>
+
+      <div>
+        <span>Occupied Beds</span>
+        <h3>{{ occupiedBeds }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="navigation-card">
+    <div class="navigation-heading">
+      <h3>Infrastructure Navigation</h3>
+      <p>Navigate through the hospital infrastructure hierarchy.</p>
+    </div>
+
+    <div class="step-navigation">
+      
+      <button
+        class="step-item"
+        [class.active]="activeLevel === 'floors'"
+        [class.completed]="context.floorId !== null"
+        (click)="navigateTo('floors')"
+      >
+        <span class="step-number">1</span>
+        <i class="pi pi-building"></i>
+        Floors
+      </button>
+
+      <div class="step-connector"></div>
+
+      <button
+        class="step-item"
+        [class.active]="activeLevel === 'wards'"
+        [class.completed]="context.wardId !== null"
+        [disabled]="!context.floorId"
+        (click)="navigateTo('wards')"
+      >
+        <span class="step-number">2</span>
+        <i class="pi pi-th-large"></i>
+        Wards
+      </button>
+
+      <div class="step-connector"></div>
+
+      <button
+        class="step-item"
+        [class.active]="activeLevel === 'rooms'"
+        [class.completed]="context.roomId !== null"
+        [disabled]="!context.wardId"
+        (click)="navigateTo('rooms')"
+      >
+        <span class="step-number">3</span>
+        <i class="pi pi-home"></i>
+        Rooms
+      </button>
+
+      <div class="step-connector"></div>
+
+      <button
+        class="step-item"
+        [class.active]="activeLevel === 'beds'"
+        [disabled]="!context.roomId"
+        (click)="navigateTo('beds')"
+      >
+        <span class="step-number">4</span>
+        <i class="pi pi-heart"></i>
+        Beds
+      </button>
+    </div>
+
+    <div class="selected-hierarchy">
+      <div class="hierarchy-label">
+        <i class="pi pi-sitemap"></i>
+        Current Location:
+      </div>
+
+      <div class="hierarchy-path">
+        <button class="hierarchy-link" (click)="navigateTo('floors')">
+          Hospital
+        </button>
+
+        <i class="pi pi-angle-right" *ngIf="context.floorName"> </i>
+
+        <button
+          class="hierarchy-link"
+          [disabled]="!context.floorId"
+          (click)="navigateTo('wards')"
+        >
+          {{ context.floorName || "Floors" }}
+        </button>
+
+        <i class="pi pi-angle-right" *ngIf="context.wardName"> </i>
+
+        <button
+          class="hierarchy-link"
+          [disabled]="!context.wardId"
+          (click)="navigateTo('rooms')"
+        >
+          {{ context.wardName || "Wards" }}
+        </button>
+
+        <i class="pi pi-angle-right" *ngIf="context.roomNumber"> </i>
+
+        <span class="current-level" *ngIf="context.roomNumber">
+          Room {{ context.roomNumber }}
+        </span>
+
+        <span class="current-level" *ngIf="!context.floorName">
+          All Floors
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-card">
+    <div class="content-toolbar">
+      <div class="toolbar-title-row">
+        <button
+          class="back-button"
+          *ngIf="activeLevel !== 'floors'"
+          (click)="goBack()"
+          title="Go Back"
+        >
+          <i class="pi pi-arrow-left"></i>
+        </button>
+
+        <div>
+          <h3>{{ getLevelTitle() }}</h3>
+
+          <p>{{ currentDataCount }} records found</p>
+        </div>
+      </div>
+
+      <div class="toolbar-actions">
+        <div class="search-box">
+          <i class="pi pi-search"></i>
+
+          <input type="text" placeholder="Search..." [(ngModel)]="searchTerm" />
+
+          <i class="pi pi-times" *ngIf="searchTerm" (click)="searchTerm = ''">
+          </i>
+        </div>
+
+        <select
+          class="filter-select"
+          *ngIf="activeLevel === 'beds'"
+          [(ngModel)]="selectedBedFilter"
+        >
+          <option *ngFor="let filter of bedFilters" [value]="filter.value">
+            {{ filter.label }}
+          </option>
+        </select>
+
+        <div class="view-toggle">
+          <button
+            type="button"
+            [class.active]="viewMode === 'grid'"
+            (click)="setView('grid')"
+            title="Grid View"
+          >
+            <i class="pi pi-th-large"></i>
+          </button>
+
+          <button
+            type="button"
+            [class.active]="viewMode === 'list'"
+            (click)="setView('list')"
+            title="List View"
+          >
+            <i class="pi pi-list"></i>
+          </button>
+        </div>
+
+        <button
+          class="icon-button"
+          (click)="refreshCurrentLevel()"
+          title="Refresh"
+        >
+          <i class="pi pi-refresh"></i>
+        </button>
+      </div>
+    </div>
+    <div class="loading-state" *ngIf="loading">
+      <i class="pi pi-spin pi-spinner"></i>
+      <span>Loading infrastructure data...</span>
+    </div>
+
+    <ng-container *ngIf="!loading && activeLevel === 'floors'">
+      <div
+        class="record-grid"
+        *ngIf="viewMode === 'grid' && filteredFloors.length > 0"
+      >
+        <div class="record-card" *ngFor="let floor of filteredFloors">
+          <div class="record-card-header">
+            <div class="record-icon floor-record-icon">
+              <i class="pi pi-building"></i>
+            </div>
+
+            <span
+              class="status-pill active-status"
+              *ngIf="floor.active !== false"
+            >
+              Active
+            </span>
+          </div>
+
+          <div class="record-information">
+            <h4>{{ floor.floorName }}</h4>
+
+            <p>Floor Number: {{ floor.floorNumber }}</p>
+          </div>
+
+          <!-- <div class="record-metrics">
+            <div>
+              <strong>
+                {{ getFloorWardCount(floor) }}
+              </strong>
+
+              <span>Wards</span>
+            </div>
+          </div> -->
+
+          <div class="record-actions">
+            <button class="btn btn-primary" (click)="selectFloor(floor)">
+              <i class="pi pi-eye"></i>
+              View Wards
+            </button>
+
+            <button
+              class="icon-button"
+              (click)="openEditFloor(floor)"
+              title="Edit Floor"
+            >
+              <i class="pi pi-pencil"></i>
+            </button>
+
+            <button
+              class="icon-button delete-button"
+              (click)="deleteFloor(floor)"
+              title="Delete Floor"
+            >
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="table-wrapper"
+        *ngIf="viewMode === 'list' && filteredFloors.length > 0"
+      >
+        <table class="management-table">
+          <thead>
+            <tr>
+              <th>Floor Name</th>
+              <th>Floor Number</th>
+              <th>Total Wards</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let floor of filteredFloors">
+              <td>{{ floor.floorName }}</td>
+
+              <td>{{ floor.floorNumber }}</td>
+
+              <td>{{ getFloorWardCount(floor) }}</td>
+
+              <td>
+                <span class="status-pill active-status">
+                  {{ floor.active === false ? "Inactive" : "Active" }}
+                </span>
+              </td>
+
+              <td>
+                <div class="table-actions">
+                  <button
+                    class="icon-button"
+                    (click)="selectFloor(floor)"
+                    title="View Wards"
+                  >
+                    <i class="pi pi-eye"></i>
+                  </button>
+
+                  <button
+                    class="icon-button"
+                    (click)="openEditFloor(floor)"
+                    title="Edit"
+                  >
+                    <i class="pi pi-pencil"></i>
+                  </button>
+
+                  <button
+                    class="icon-button delete-button"
+                    (click)="deleteFloor(floor)"
+                    title="Delete"
+                  >
+                    <i class="pi pi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty-state" *ngIf="filteredFloors.length === 0">
+        <div class="empty-icon">
+          <i class="pi pi-building"></i>
+        </div>
+
+        <h3>No Floors Found</h3>
+
+        <p>
+          {{
+            searchTerm
+              ? "No floors match your search."
+              : "Start by adding your first hospital floor."
+          }}
+        </p>
+
+        <button
+          class="btn btn-primary"
+          *ngIf="!searchTerm"
+          (click)="openCreateFloor()"
+        >
+          <i class="pi pi-plus"></i>
+          Add First Floor
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!loading && activeLevel === 'wards'">
+      <div
+        class="record-grid"
+        *ngIf="viewMode === 'grid' && filteredWards.length > 0"
+      >
+        <div class="record-card" *ngFor="let ward of filteredWards">
+          <div class="record-card-header">
+            <div class="record-icon ward-record-icon">
+              <i class="pi pi-th-large"></i>
+            </div>
+
+            <span
+              class="status-pill active-status"
+              *ngIf="ward.active !== false"
+            >
+              Active
+            </span>
+          </div>
+
+          <div class="record-information">
+            <h4>{{ ward.wardName }}</h4>
+
+            <p>
+              {{ ward.wardType || "General Ward" }}
+            </p>
+          </div>
+
+          <!-- <div class="record-metrics">
+            <div>
+              <strong>
+                {{ getWardRoomCount(ward.wardId) }}
+              </strong>
+
+              <span>Rooms</span>
+            </div>
+
+            <div>
+              <strong>
+                {{ getWardBedCount(ward.wardId) }}
+              </strong>
+
+              <span>Beds</span>
+            </div>
+          </div> -->
+
+          <div class="record-actions">
+            <button class="btn btn-primary" (click)="selectWard(ward)">
+              <i class="pi pi-eye"></i>
+              View Rooms
+            </button>
+
+            <button
+              class="icon-button"
+              (click)="openEditWard(ward)"
+              title="Edit Ward"
+            >
+              <i class="pi pi-pencil"></i>
+            </button>
+
+            <button
+              class="icon-button delete-button"
+              (click)="deleteWard(ward)"
+              title="Delete Ward"
+            >
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="table-wrapper"
+        *ngIf="viewMode === 'list' && filteredWards.length > 0"
+      >
+        <table class="management-table">
+          <thead>
+            <tr>
+              <th>Ward Name</th>
+              <th>Ward Type</th>
+              <th>Total Rooms</th>
+              <th>Total Beds</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let ward of filteredWards">
+              <td>{{ ward.wardName }}</td>
+
+              <td>{{ ward.wardType || "General Ward" }}</td>
+
+              <td>
+                {{ getWardRoomCount(ward.wardId) }}
+              </td>
+
+              <td>
+                {{ getWardBedCount(ward.wardId) }}
+              </td>
+
+              <td>
+                <span class="status-pill active-status">
+                  {{ ward.active === false ? "Inactive" : "Active" }}
+                </span>
+              </td>
+
+              <td>
+                <div class="table-actions">
+                  <button
+                    class="icon-button"
+                    (click)="selectWard(ward)"
+                    title="View Rooms"
+                  >
+                    <i class="pi pi-eye"></i>
+                  </button>
+
+                  <button
+                    class="icon-button"
+                    (click)="openEditWard(ward)"
+                    title="Edit"
+                  >
+                    <i class="pi pi-pencil"></i>
+                  </button>
+
+                  <button
+                    class="icon-button delete-button"
+                    (click)="deleteWard(ward)"
+                    title="Delete"
+                  >
+                    <i class="pi pi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty-state" *ngIf="filteredWards.length === 0">
+        <div class="empty-icon">
+          <i class="pi pi-th-large"></i>
+        </div>
+
+        <h3>No Wards Found</h3>
+
+        <p>
+          {{
+            searchTerm
+              ? "No wards match your search."
+              : "There are no wards available for this floor."
+          }}
+        </p>
+
+        <button
+          class="btn btn-primary"
+          *ngIf="!searchTerm"
+          (click)="openCreateWard()"
+        >
+          <i class="pi pi-plus"></i>
+          Add First Ward
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!loading && activeLevel === 'rooms'">
+      <div
+        class="record-grid"
+        *ngIf="viewMode === 'grid' && filteredRooms.length > 0"
+      >
+        <div class="record-card" *ngFor="let room of filteredRooms">
+          <div class="record-card-header">
+            <div class="record-icon room-record-icon">
+              <i class="pi pi-home"></i>
+            </div>
+
+            <span class="status-pill active-status"> Active </span>
+          </div>
+
+          <div class="record-information">
+            <h4>Room {{ room.roomNumber }}</h4>
+
+            <p>
+              {{ room.roomType || "General Room" }}
+            </p>
+          </div>
+
+          <div class="room-bed-summary">
+            <div class="room-bed-icon">
+              <i class="pi pi-heart"></i>
+            </div>
+
+            <div>
+              <strong> {{ getRoomBedCount(room.roomId) }} Beds </strong>
+
+              <span> Total beds in this room </span>
+            </div>
+          </div>
+
+          <div class="record-actions">
+            <button class="btn btn-primary" (click)="selectRoom(room)">
+              <i class="pi pi-eye"></i>
+              View Beds
+            </button>
+
+            <button
+              class="icon-button"
+              (click)="openEditRoom(room)"
+              title="Edit Room"
+            >
+              <i class="pi pi-pencil"></i>
+            </button>
+
+            <button
+              class="icon-button delete-button"
+              (click)="deleteRoom(room)"
+              title="Delete Room"
+            >
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="table-wrapper"
+        *ngIf="viewMode === 'list' && filteredRooms.length > 0"
+      >
+        <table class="management-table">
+          <thead>
+            <tr>
+              <th>Room Number</th>
+              <th>Room Type</th>
+              <th>Total Beds</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let room of filteredRooms">
+              <td>
+                <strong>{{ room.roomNumber }}</strong>
+              </td>
+
+              <td>
+                {{ room.roomType || "General Room" }}
+              </td>
+
+              <td>
+                {{ getRoomBedCount(room.roomId) }}
+              </td>
+
+              <td>
+                <span class="status-pill active-status"> Active </span>
+              </td>
+
+              <td>
+                <div class="table-actions">
+                  <button
+                    class="icon-button"
+                    (click)="selectRoom(room)"
+                    title="View Beds"
+                  >
+                    <i class="pi pi-eye"></i>
+                  </button>
+
+                  <button
+                    class="icon-button"
+                    (click)="openEditRoom(room)"
+                    title="Edit Room"
+                  >
+                    <i class="pi pi-pencil"></i>
+                  </button>
+
+                  <button
+                    class="icon-button delete-button"
+                    (click)="deleteRoom(room)"
+                    title="Delete Room"
+                  >
+                    <i class="pi pi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty-state" *ngIf="filteredRooms.length === 0">
+        <div class="empty-icon">
+          <i class="pi pi-home"></i>
+        </div>
+
+        <h3>No Rooms Found</h3>
+
+        <p>
+          {{
+            searchTerm
+              ? "No rooms match your search."
+              : "There are no rooms available in this ward."
+          }}
+        </p>
+
+        <button
+          class="btn btn-primary"
+          *ngIf="!searchTerm"
+          (click)="openCreateRoom()"
+        >
+          <i class="pi pi-plus"></i>
+          Add First Room
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!loading && activeLevel === 'beds'">
+      <div class="bed-statistics">
+        <div class="bed-stat">
+          <span class="bed-stat-dot available-dot"></span>
+
+          <div>
+            <strong>{{ availableBeds }}</strong>
+            <span>Available</span>
+          </div>
+        </div>
+
+        <div class="bed-stat">
+          <span class="bed-stat-dot occupied-dot"></span>
+
+          <div>
+            <strong>{{ occupiedBeds }}</strong>
+            <span>Occupied</span>
+          </div>
+        </div>
+
+        <div class="bed-stat">
+          <span class="bed-stat-dot reserved-dot"></span>
+
+          <div>
+            <strong>{{ getStatusCount("RESERVED") }}</strong>
+            <span>Reserved</span>
+          </div>
+        </div>
+
+        <div class="bed-stat">
+          <span class="bed-stat-dot maintenance-dot"></span>
+
+          <div>
+            <strong>
+              {{ getStatusCount("MAINTENANCE") + getStatusCount("BLOCKED") }}
+            </strong>
+
+            <span>Unavailable</span>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="bed-grid"
+        *ngIf="viewMode === 'grid' && filteredBeds.length > 0"
+      >
+        <div
+          class="bed-card"
+          *ngFor="let bed of filteredBeds"
+          [ngClass]="getBedColor(bed.status)"
+        >
+          <div class="bed-card-header">
+            <i class="pi pi-heart"></i>
+
+            <span class="status-pill" [ngClass]="getBedColor(bed.status)">
+              {{ bed.status | titlecase }}
+            </span>
+          </div>
+
+          <h4>Bed {{ bed.bedNumber }}</h4>
+
+          <p>Bed ID: {{ bed.id || bed.id || "N/A" }}</p>
+
+          <div class="bed-card-actions">
+            <button
+              class="btn btn-primary btn-sm"
+              *ngIf="bed.status === 'AVAILABLE'"
+              (click)="openAssignment(bed)"
+            >
+              <i class="pi pi-user-plus"></i>
+              Assign
+            </button>
+
+            <button
+              class="btn btn-outline-secondary btn-sm"
+              *ngIf="bed.status === 'OCCUPIED'"
+              disabled
+            >
+              <i class="pi pi-user"></i>
+              Occupied
+            </button>
+
+            <button
+              class="btn btn-outline-primary btn-sm"
+              (click)="openEditBed(bed)"
+            >
+              <i class="pi pi-pencil"></i>
+              Edit
+            </button>
+
+            <button
+              class="icon-button delete-button"
+              (click)="deleteBed(bed)"
+              title="Delete Bed"
+            >
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="table-wrapper"
+        *ngIf="viewMode === 'list' && filteredBeds.length > 0"
+      >
+        <table class="management-table">
+          <thead>
+            <tr>
+              <th>Bed Number</th>
+              <th>Bed ID</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let bed of filteredBeds">
+              <td>
+                <strong>{{ bed.bedNumber }}</strong>
+              </td>
+
+              <td>
+                {{ bed.id || bed.id || "N/A" }}
+              </td>
+
+              <td>
+                <span class="status-pill" [ngClass]="getBedColor(bed.status)">
+                  {{ bed.status | titlecase }}
+                </span>
+              </td>
+
+              <td>
+                <div class="table-actions">
+                  <button
+                    class="icon-button"
+                    *ngIf="bed.status === 'AVAILABLE'"
+                    (click)="openAssignment(bed)"
+                    title="Assign Patient"
+                  >
+                    <i class="pi pi-user-plus"></i>
+                  </button>
+
+                  <button
+                    class="icon-button"
+                    (click)="openEditBed(bed)"
+                    title="Edit Bed"
+                  >
+                    <i class="pi pi-pencil"></i>
+                  </button>
+
+                  <button
+                    class="icon-button delete-button"
+                    (click)="deleteBed(bed)"
+                    title="Delete Bed"
+                  >
+                    <i class="pi pi-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="empty-state" *ngIf="filteredBeds.length === 0">
+        <div class="empty-icon">
+          <i class="pi pi-heart"></i>
+        </div>
+
+        <h3>No Beds Found</h3>
+
+        <p>
+          {{
+            searchTerm || selectedBedFilter !== "ALL"
+              ? "No beds match the selected search or filter."
+              : "There are no beds available in this room."
+          }}
+        </p>
+
+        <button
+          class="btn btn-primary"
+          *ngIf="!searchTerm && selectedBedFilter === 'ALL'"
+          (click)="openCreateBed()"
+        >
+          <i class="pi pi-plus"></i>
+          Add First Bed
+        </button>
+      </div>
+    </ng-container>
+    <p-dialog
+      [(visible)]="showFloorForm"
+      [modal]="true"
+      [draggable]="false"
+      [resizable]="false"
+      [closable]="true"
+      [style]="{ width: '550px' }"
+      [breakpoints]="{ '768px': '95vw' }"
+      [header]="floorFormMode === 'create' ? 'Create Floor' : 'Edit Floor'"
+      (onHide)="onFloorCancelled()"
+    >
+      <app-floor-form
+        [mode]="floorFormMode"
+        [floor]="selectedFloor"
+        (saved)="onFloorSaved()"
+        (cancelled)="onFloorCancelled()"
+      >
+      </app-floor-form>
+    </p-dialog>
+    <p-dialog
+      [(visible)]="showWardForm"
+      [modal]="true"
+      [draggable]="false"
+      [resizable]="false"
+      [closable]="true"
+      [style]="{ width: '550px' }"
+      [breakpoints]="{ '768px': '95vw' }"
+      [header]="wardFormMode === 'create' ? 'Create Ward' : 'Edit Ward'"
+      (onHide)="onWardCancelled()"
+    >
+      <app-ward-form
+        [mode]="wardFormMode"
+        [ward]="selectedWard"
+        (saved)="onWardSaved()"
+        (cancelled)="onWardCancelled()"
+      >
+      </app-ward-form>
+    </p-dialog>
+    <p-dialog
+      [(visible)]="showRoomForm"
+      [modal]="true"
+      [draggable]="false"
+      [resizable]="false"
+      [closable]="true"
+      [style]="{ width: '550px' }"
+      [breakpoints]="{ '768px': '95vw' }"
+      [header]="roomFormMode === 'create' ? 'Create Room' : 'Edit Room'"
+      (onHide)="onRoomCancelled()"
+    >
+      <app-room-form
+        [mode]="roomFormMode"
+        [room]="selectedRoom"
+        (saved)="onRoomSaved()"
+        (cancelled)="onRoomCancelled()"
+      >
+      </app-room-form>
+    </p-dialog>
+    <p-dialog
+      [(visible)]="showBedForm"
+      [modal]="true"
+      [draggable]="false"
+      [resizable]="false"
+      [closable]="true"
+      [style]="{ width: '650px' }"
+      [breakpoints]="{ '768px': '95vw' }"
+      [header]="bedFormMode === 'create' ? 'Create Bed' : 'Edit Bed'"
+      (onHide)="onBedCancelled()"
+    >
+      <app-dynamic-form
+        [config]="formConfig"
+        [data]="selectedBed || {}"
+        [loading]="saving"
+        (formSubmit)="onBedSubmit($event)"
+        (fieldChange)="onBedFieldChange($event)"
+        (cancelled)="onBedCancelled()"
+      >
+      </app-dynamic-form>
+    </p-dialog>
+    <!-- <p-dialog
+      [(visible)]="showAssignmentDialog"
+      [modal]="true"
+      [draggable]="false"
+      [resizable]="false"
+      [closable]="true"
+      [style]="{ width: '500px' }"
+      [breakpoints]="{ '768px': '95vw' }"
+      header="Assign Patient to Bed"
+    >
+      <div class="assignment-form">
+        <div class="assignment-location">
+          <i class="pi pi-map-marker"></i>
+
+          <div>
+            <strong> Bed {{ selectedBed?.bedNumber }} </strong>
+
+            <span>
+              Floor: {{ context.floorName || "N/A" }} | Ward:
+              {{ context.wardName || "N/A" }} | Room:
+              {{ context.roomNumber || "N/A" }}
+            </span>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="patientId"> Patient ID <span>*</span> </label>
+
+          <input
+            id="patientId"
+            type="text"
+            class="form-control"
+            placeholder="Enter patient ID"
+            [(ngModel)]="assignment.patientId"
+            name="patientId"
+            required
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="admissionId"> Admission ID <span>*</span> </label>
+
+          <input
+            id="admissionId"
+            type="text"
+            class="form-control"
+            placeholder="Enter admission ID"
+            [(ngModel)]="assignment.admissionId"
+            name="admissionId"
+            required
+          />
+        </div>
+
+        <div class="form-field">
+          <label for="assignmentNotes"> Additional Notes </label>
+
+          <textarea
+            id="assignmentNotes"
+            class="form-control"
+            rows="3"
+            placeholder="Enter additional notes..."
+            [(ngModel)]="assignment.notes"
+            name="assignmentNotes"
+          >
+          </textarea>
+        </div>
+
+        <div class="assignment-warning">
+          <i class="pi pi-info-circle"></i>
+
+          <span>
+            Patient assignment API is not configured yet. Bed status will not be
+            changed until the backend confirms a successful assignment.
+          </span>
+        </div>
+
+        <div class="dialog-actions">
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="showAssignmentDialog = false"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="
+              !assignment.patientId.trim() || !assignment.admissionId.trim()
+            "
+            (click)="submitAssignment()"
+          >
+            <i class="pi pi-user-plus"></i>
+            Assign Patient
+          </button>
+        </div>
+      </div>
+    </p-dialog> -->
+    
+    <p-dialog
+      [(visible)]="showAssignmentDialog"
+      [modal]="true"
+      [draggable]="false"
+      [resizable]="false"
+      [closable]="true"
+      > 
+       <app-patient-search
+    [searchFn]="searchPatientFn"
+    [config]="patientSearchConfig"
+    (patientSelected)="onPatientSelected($event)">
+  </app-patient-search>
+      
+    
+    </p-dialog>
+  </div>
+</div>
+

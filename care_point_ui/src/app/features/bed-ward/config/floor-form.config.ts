@@ -33,12 +33,12 @@ export const FLOOR_FORM_CONFIG: DynamicFormConfig = {
       placeholder: 'Enter floor description',
       col: 'col-12',
     },
-    {
-      name: 'active',
-      label: 'Active',
-      type: 'checkbox',
-      defaultValue: true,
-      col: 'col-12',
-    },
+    // {
+    //   name: 'active',
+    //   label: 'Active',
+    //   type: 'checkbox',
+    //   defaultValue: true,
+    //   col: 'col-12',
+    // },
   ],
 };

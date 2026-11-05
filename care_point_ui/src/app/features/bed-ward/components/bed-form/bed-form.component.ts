@@ -1,5 +1,16 @@
+
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
+
+import { finalize } from 'rxjs';
+
 import { DynamicFormComponent } from '../../../../shared/dynamic-form/dynamic-form.component';
 import { Bed } from '../../models/bed.model';
 import { DynamicFormConfig } from '../../../../core/models/dynamic-form.model';
@@ -8,345 +19,216 @@ import { BedWardService } from '../../services/bed-ward.service';
 
 @Component({
   selector: 'app-bed-form',
-  imports: [  
-    CommonModule,
-    DynamicFormComponent
-  ],
+  standalone: true,
+  imports: [CommonModule, DynamicFormComponent],
   templateUrl: './bed-form.component.html',
-  styleUrl: './bed-form.component.css'
+  styleUrl: './bed-form.component.css',
 })
-export class BedFormComponent  implements OnChanges {
+export class BedFormComponent implements OnChanges {
 
+  @Input() mode: 'create' | 'edit' = 'create';
+  @Input() bed: Bed | null = null;
 
-  // =========================================================
-  // INPUTS
-  // =========================================================
-
-  @Input()
-  mode: 'create' | 'edit' = 'create';
-
-
-  @Input()
-  bed: Bed | null = null;
-
-
-  // =========================================================
-  // OUTPUTS
-  // =========================================================
-
-  @Output()
-  saved = new EventEmitter<void>();
-
-
-  @Output()
-  cancelled = new EventEmitter<void>();
-
-
-  // =========================================================
-  // FORM
-  // =========================================================
-
-  formConfig: DynamicFormConfig = {
-    ...BED_FORM_CONFIG,
-
-    fields: BED_FORM_CONFIG.fields.map(
-      field => ({
-        ...field,
-
-        options: field.options
-          ? [...field.options]
-          : undefined
-      })
-    )
-  };
-
+  @Output() saved = new EventEmitter<void>();
+  @Output() cancelled = new EventEmitter<void>();
 
   loading = false;
 
+  private selectedWardId: number | null = null;
+  private roomRequestId = 0;
 
-  constructor(
-    private bedWardService: BedWardService
-  ) {}
+  formConfig: DynamicFormConfig = {
+    ...BED_FORM_CONFIG,
+    fields: BED_FORM_CONFIG.fields.map(field => ({
+      ...field,
+      options: field.options ? [...field.options] : undefined,
+    })),
+  };
 
+  constructor(private bedWardService: BedWardService) {}
 
-  // =========================================================
-  // INPUT CHANGE
-  // =========================================================
-
-  ngOnChanges(
-    changes: SimpleChanges
-  ): void {
-
-    if (
-      changes['mode'] ||
-      changes['bed']
-    ) {
-
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['mode'] || changes['bed']) {
       this.prepareForm();
-
     }
-
   }
-
-
-  // =========================================================
-  // PREPARE FORM
-  // =========================================================
 
   private prepareForm(): void {
+    this.selectedWardId = null;
+    this.roomRequestId++;
 
+    this.resetFormOptions();
     this.loadWardOptions();
-
   }
 
+  private resetFormOptions(): void {
+    const wardField = this.getField('wardId');
+    const roomField = this.getField('roomId');
 
-  // =========================================================
-  // LOAD WARDS
-  // =========================================================
+    if (wardField) wardField.options = [];
+    if (roomField) roomField.options = [];
+  }
+
+  private getField(name: string) {
+    return this.formConfig.fields.find(field => field.name === name);
+  }
 
   private loadWardOptions(): void {
+    this.bedWardService.getAllWards().subscribe({
+      next: (response: any) => {
 
-    // this.bedWardService
-    //   .getWards()
-    //   .subscribe({
+        const wards = response?.data ?? [];
+        const wardField = this.getField('wardId');
 
-    //     next: (response) => {
+        if (!wardField) {
+          console.error('Ward field not found');
+          return;
+        }
 
-    //       const wards =
-    //         response?.data ?? [];
+        wardField.options = wards
+          .filter((ward: any) => ward.active)
+          .map((ward: any) => ({
+            label: ward.wardName,
+            value: Number(ward.wardId),
+          }));
 
-    //       const field =
-    //         this.formConfig.fields.find(
-    //           field =>
-    //             field.name === 'wardId'
-    //         );
+        if (this.mode === 'edit' && this.bed?.wardId) {
+          this.selectedWardId = Number(this.bed.wardId);
 
-    //       if (field) {
-
-    //         field.options =
-    //           wards.map(
-    //             (ward: any) => ({
-
-    //               label: ward.name,
-
-    //               value: ward.id
-
-    //             })
-    //           );
-
-    //       }
-
-
-    //       /*
-    //        * If editing a bed,
-    //        * load rooms for its ward.
-    //        */
-
-    //       if (
-    //         this.mode === 'edit' &&
-    //         this.bed?.wardId
-    //       ) {
-
-    //         this.loadRoomOptions(
-    //           this.bed.wardId
-    //         );
-
-    //       }
-
-    //     },
-
-    //     error: (error:any) => {
-
-    //       console.error(
-    //         'Failed to load wards',
-    //         error
-    //       );
-
-    //     }
-
-    //   });
-
+          this.loadRoomOptions(this.selectedWardId);
+        }
+      },
+      error: error => {
+        console.error('Failed to load wards', error);
+      },
+    });
   }
 
+  onFieldChange(formData: Record<string, any>): void {
 
-  // =========================================================
-  // LOAD ROOMS
-  // =========================================================
+    const wardId = Number(formData['wardId']);
 
-  private loadRoomOptions(
-    wardId: number
-  ): void {
+    if (!wardId || wardId === this.selectedWardId) {
+      return;
+    }
 
-    // this.bedWardService
-    //   .getRoomsByWard(wardId)
-    //   .subscribe({
+    this.selectedWardId = wardId;
 
-    //     next: (response) => {
+    const roomField = this.getField('roomId');
 
-    //       const rooms =
-    //         response?.data ?? [];
+    if (roomField) {
+      roomField.options = [];
+    }
 
-    //       const field =
-    //         this.formConfig.fields.find(
-    //           field =>
-    //             field.name === 'roomId'
-    //         );
-
-    //       if (field) {
-
-    //         field.options =
-    //           rooms.map(
-    //             (room: any) => ({
-
-    //               label:
-    //                 room.roomNumber,
-
-    //               value:
-    //                 room.id
-
-    //             })
-    //           );
-
-    //       }
-
-    //     },
-
-    //     error: (error) => {
-
-    //       console.error(
-    //         'Failed to load rooms',
-    //         error
-    //       );
-
-    //     }
-
-    //   });
-
+    this.loadRoomOptions(wardId);
   }
 
+  private loadRoomOptions(wardId: number): void {
 
-  // =========================================================
-  // FORM SUBMIT
-  // =========================================================
+    const requestId = ++this.roomRequestId;
+    const roomField = this.getField('roomId');
 
-  onSubmit(
-    formData: Record<string, any>
-  ): void {
+    if (roomField) {
+      roomField.options = [];
+    }
+
+    this.bedWardService.getRoomBaseOnWardId(wardId).subscribe({
+      next: (response: any) => {
+
+        if (requestId !== this.roomRequestId) return;
+
+        const rooms = response?.data ?? [];
+
+        if (roomField) {
+          roomField.options = rooms.map((room: any) => ({
+            label: room.roomNumber,
+            value: Number(room.roomId),
+          }));
+        }
+      },
+      error: error => {
+        if (requestId === this.roomRequestId) {
+          console.error('Failed to load rooms', error);
+        }
+      },
+    });
+  }
+
+  onSubmit(formData: Record<string, any>): void {
+
+    if (this.loading) return;
+
+    const payload = {
+      roomId: Number(formData['roomId']),
+      bedNumber: String(formData['bedNumber'] ?? '').trim(),
+      status: formData['status'],
+    };
+
+    if (!payload.roomId || !payload.bedNumber || !payload.status) {
+      console.error('Please fill all required fields.');
+      return;
+    }
 
     this.loading = true;
 
-
     if (this.mode === 'create') {
-
-      this.createBed(formData);
-
+      this.createBed(payload);
     } else {
-
-      this.updateBed(formData);
-
+      this.updateBed(payload);
     }
-
   }
 
+  private createBed(payload: {
+    roomId: number;
+    bedNumber: string;
+    status: string;
+  }): void {
 
-  // =========================================================
-  // CREATE BED
-  // =========================================================
-
-  private createBed(
-    formData: Record<string, any>
-  ): void {
-
-    // this.bedWardService
-    //   .createBed(
-    //     formData as Bed
-    //   )
-    //   .subscribe({
-
-    //     next: () => {
-
-    //       this.loading = false;
-
-    //       this.saved.emit();
-
-    //     },
-
-    //     error: (error) => {
-
-    //       this.loading = false;
-
-    //       console.error(
-    //         'Failed to create bed',
-    //         error
-    //       );
-
-    //     }
-
-    //   });
-
+    this.bedWardService
+      .createBed(payload)
+      .pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: () => {
+          console.log('Bed created successfully');
+          this.saved.emit();
+        },
+        error: error => {
+          console.error('Failed to create bed:', error);
+        },
+      });
   }
 
+  private updateBed(payload: {
+    roomId: number;
+    bedNumber: string;
+    status: string;
+  }): void {
 
-  // =========================================================
-  // UPDATE BED
-  // =========================================================
+    const bedId =
+      (this.bed as any)?.bedId ??
+      (this.bed as any)?.id;
 
-  private updateBed(
-    formData: Record<string, any>
-  ): void {
-
-    if (!this.bed?.id) {
-
-      console.error(
-        'Bed ID is missing'
-      );
-
+    if (bedId == null) {
       this.loading = false;
-
+      console.error('Cannot update bed: Bed ID is missing.', this.bed);
       return;
-
     }
 
-
-    // this.bedWardService
-    //   .updateBed(
-    //     this.bed.id,
-    //     formData as Bed
-    //   )
-    //   .subscribe({
-
-    //     next: () => {
-
-    //       this.loading = false;
-
-    //       this.saved.emit();
-
-    //     },
-
-    //     error: (error) => {
-
-    //       this.loading = false;
-
-    //       console.error(
-    //         'Failed to update bed',
-    //         error
-    //       );
-
-    //     }
-
-    //   });
-
+    this.bedWardService
+      .updateBed(bedId, payload)
+      .pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: () => {
+          console.log('Bed updated successfully');
+          this.saved.emit();
+        },
+        error: error => {
+          console.error('Failed to update bed:', error);
+        },
+      });
   }
-
-
-  // =========================================================
-  // CANCEL
-  // =========================================================
 
   onCancel(): void {
-
     this.cancelled.emit();
-
   }
-
 }

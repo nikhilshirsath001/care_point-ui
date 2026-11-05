@@ -1,105 +1,103 @@
-import { TableColumn } from "../../../../shared/shared-table/shared-table.component";
+import { TableColumn } from '../../../../shared/shared-table/shared-table.component';
 
-export const PATIENT_COLUMNS: TableColumn[]= [
+export const PATIENT_COLUMNS: TableColumn[] = [
+  // {
+  //   field: '__index',
+  //   header: 'S.No',
+  //   type: 'number',
+  //   width: '80px',
+  //   exportable: false
+  // },
 
   {
-    field: '__index',
-    header: 'S.No',
-    type: 'number',
-    width: '80px',
-    exportable: false
+    field: 'patientMrNumber',
+    header: 'MR Number',
+    sortable: true,
   },
 
   {
-    field: 'abhaId',
-    header: 'ABHA ID',
-    sortable: true
-  },
-
-  {
-    field: 'firstName',
-    header: 'First Name',
-    sortable: true
-  },
-
-  {
-    field: 'lastName',
-    header: 'Last Name',
-    sortable: true
-  },
-
-  {
-    field: 'dateOfBirth',
-    header: 'Date of Birth',
-    type: 'date',
-    sortable: true
+    field: 'patientName',
+    header: 'Patient Name',
+    sortable: true,
   },
 
   {
     field: 'gender',
     header: 'Gender',
-    sortable: true
+    sortable: true,
   },
 
   {
-    field: 'bloodGroup',
-    header: 'Blood Group',
-    sortable: true
+    field: 'patientDob',
+    header: 'Date of Birth',
+    type: 'date',
+    sortable: true,
   },
 
   {
-    field: 'phone',
-    header: 'Phone',
-    sortable: true
+    field: 'patientMob',
+    header: 'Mobile Number',
+    sortable: true,
   },
 
   {
-    field: 'email',
-    header: 'Email',
-    sortable: true
+    field: 'abhaNumber',
+    header: 'ABHA Number',
+    sortable: true,
   },
 
-  {
-    field: 'address',
-    header: 'Address',
-    sortable: true
-  },
+  // {
+  //   field: 'bloodGroup',
+  //   header: 'Blood Group',
+  //   sortable: true,
+  // },
+// 
+  // {
+  //   field: 'email',
+  //   header: 'Email',
+  //   sortable: true,
+  // },
+
+  // {
+  //   field: 'address',
+  //   header: 'Address',
+  //   sortable: true,
+  // },
+
+  // {
+  //   field: 'city',
+  //   header: 'City',
+  //   sortable: true,
+  // },
+
+  // {
+  //   field: 'state',
+  //   header: 'State',
+  //   sortable: true,
+  // },
+
+  // {
+  //   field: 'pincode',
+  //   header: 'Pincode',
+  //   sortable: true,
+  // },
+
+  // {
+  //   field: 'emergencyContactName',
+  //   header: 'Emergency Contact',
+  //   sortable: true,
+  // },
 
   {
-    field: 'city',
-    header: 'City',
-    sortable: true
-  },
-
-  {
-    field: 'state',
-    header: 'State',
-    sortable: true
-  },
-
-  {
-    field: 'pincode',
-    header: 'Pincode',
-    sortable: true
-  },
-
-  {
-    field: 'emergencyContactName',
-    header: 'Emergency Contact',
-    sortable: true
-  },
-
-  {
-    field: 'emergencyContactPhone',
-    header: 'Emergency Phone',
-    sortable: true
+    field: 'contactPerson.mobileNumber',
+    header: 'Contact Person Mobile',
+    // sortable: true,
   },
 
   {
     field: 'actions',
     header: 'Actions',
     type: 'action',
-    width: '150px'
-  }
-
+    width: '150px',
+  },
 ];

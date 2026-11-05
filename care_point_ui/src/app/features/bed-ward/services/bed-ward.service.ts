@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from '../../../core/services/api.service';
 import { API_ENDPOINTS } from '../../../core/constants/api-endpoints';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -12,12 +13,25 @@ export class BedWardService {
     return this.apiService.getObservable(API_ENDPOINTS.BED_WARD.GET_ALL_WARDS);
   }
 
+  getWardsByFloor(floorName: string) {
+    const params = new HttpParams().set('floor', floorName);
+    return this.apiService.getObservable(
+      `${API_ENDPOINTS.BED_WARD.GET_WARDS_BY_FLOOR}`, params
+    );
+  }
+
   getAllRooms() {
     return this.apiService.getObservable(API_ENDPOINTS.BED_WARD.GET_ALL_ROOMS);
   }
 
   getAllBeds() {
     return this.apiService.getObservable(API_ENDPOINTS.BED_WARD.GET_ALL_BEDS);
+  }
+
+  getBedsByRoom(roomId: number) {
+    return this.apiService.getObservable(
+      `${API_ENDPOINTS.BED_WARD.GET_BEDS_BY_ROOM}/${roomId}`
+    );
   }
 
   getAllFloors() {
@@ -87,7 +101,7 @@ export class BedWardService {
 
   updateBed(id: number, obj: any) {
     return this.apiService.putObservable(
-      `${API_ENDPOINTS.BED_WARD.UPDATE_BED}?bedId=${id}`,
+      `${API_ENDPOINTS.BED_WARD.UPDATE_BED}/${id}`,
       obj,
     );
   }

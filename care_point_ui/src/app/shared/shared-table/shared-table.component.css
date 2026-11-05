@@ -1,14 +1,15 @@
+
 /* =========================================================
    MAIN CARD
 ========================================================= */
 
 .table-card {
   width: 100%;
-  background: #ffffff;
-  border: 1px solid #e9ecef;
-  border-radius: 16px;
+  background: #FFFFFF;
+  border: 1px solid #EAEFF2;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: none;
 }
 
 
@@ -22,9 +23,8 @@
   justify-content: space-between;
   gap: 20px;
   padding: 20px 24px;
-
-  border-bottom: 1px solid #edf0f2;
-  background: #ffffff;
+  border-bottom: 1px solid #EAEFF2;
+  background: #FFFFFF;
 }
 
 .table-title-section {
@@ -36,28 +36,24 @@
 .table-icon {
   width: 44px;
   height: 44px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  border-radius: 12px;
-
-  background: #eef5ff;
-  color: #2563eb;
-
+  border-radius: 10px;
+  background: #E8EFFD;
+  color: #3867D6;
   font-size: 18px;
 }
 
 .table-title {
   font-size: 18px;
   font-weight: 700;
-  color: #1f2937;
+  color: #1E293B;
 }
 
 .table-subtitle {
   font-size: 13px;
-  color: #6b7280;
+  color: #64748B;
 }
 
 
@@ -76,9 +72,20 @@
   height: 40px;
 }
 
+/* Export - Secondary action */
+
 .export-btn {
+  background: #E8EFFD !important;
+  color: #3867D6 !important;
+  border: 1px solid #D5E2FA !important;
   border-radius: 8px;
+  transition: background 0.2s ease;
 }
+
+.export-btn:hover {
+  background: #DCE7FA !important;
+}
+
 
 
 /* =========================================================
@@ -89,13 +96,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   gap: 20px;
-
   padding: 14px 24px;
-
-  background: #fafbfc;
-  border-bottom: 1px solid #edf0f2;
+  background: #FFFFFF;
+  border-bottom: 1px solid #EAEFF2;
 }
 
 .search-wrapper {
@@ -107,28 +111,35 @@
   position: absolute;
   left: 13px;
   top: 50%;
-
   transform: translateY(-50%);
-
-  color: #9ca3af;
+  color: #64748B;
   z-index: 2;
 }
 
 .search-input {
   width: 100%;
   padding-left: 38px;
-
   border-radius: 8px;
-  border: 1px solid #dfe3e8;
-
+  border: 1px solid #EAEFF2;
   font-size: 14px;
+  color: #1E293B;
+  background: #FFFFFF;
 }
 
 .search-input:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.12);
+  border-color: #3867D6;
+  box-shadow: 0 0 0 2px rgba(56, 103, 214, 0.12);
+  outline: none;
 }
 
+.search-input::placeholder {
+  color: #94A3B8;
+}
+
+
+/* =========================================================
+   RECORD COUNT
+========================================================= */
 
 .record-count {
   display: flex;
@@ -138,24 +149,19 @@
 
 .record-label {
   font-size: 13px;
-  color: #6b7280;
+  color: #64748B;
 }
 
 .record-number {
   min-width: 28px;
   height: 28px;
-
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-
   padding: 0 8px;
-
   border-radius: 14px;
-
-  background: #eaf2ff;
-  color: #2563eb;
-
+  background: #E8EFFD;
+  color: #3867D6;
   font-size: 12px;
   font-weight: 700;
 }
@@ -175,11 +181,11 @@
 }
 
 
-/* Header */
+/* TABLE HEADER */
 
 :host ::ng-deep .hms-table .p-datatable-thead > tr > th {
-  background: #f8fafc;
-  color: #475569;
+  background: #F5F7F8 !important;
+  color: #475569 !important;
 
   font-size: 12px;
   font-weight: 700;
@@ -189,37 +195,46 @@
 
   padding: 14px 16px;
 
-  border-bottom: 1px solid #e5e7eb;
+  border: none !important;
+  border-bottom: 1px solid #EAEFF2 !important;
 
   white-space: nowrap;
 }
 
 
-/* Body */
+/* TABLE BODY */
 
 :host ::ng-deep .hms-table .p-datatable-tbody > tr > td {
   padding: 14px 16px;
 
   font-size: 14px;
+  color: #1E293B;
 
-  color: #374151;
+  background: #FFFFFF !important;
 
-  border-bottom: 1px solid #f0f2f5;
+  border: none !important;
+  border-bottom: 1px solid #EAEFF2 !important;
 
   vertical-align: middle;
-
   white-space: nowrap;
 }
 
+/* Remove last row separator */
 
-/* Hover */
+:host ::ng-deep .hms-table .p-datatable-tbody > tr:last-child > td {
+  border-bottom: none !important;
+}
 
-:host ::ng-deep .hms-table .p-datatable-tbody > tr:hover {
-  background: #f8fbff !important;
+/* ROW HOVER */
+
+:host ::ng-deep .hms-table .p-datatable-tbody > tr:hover > td {
+  background: #F5F7F8 !important;
 }
 
 
-/* Column */
+/* =========================================================
+   COLUMN
+========================================================= */
 
 .column-header {
   display: flex;
@@ -228,25 +243,23 @@
 }
 
 
-/* Text */
+/* =========================================================
+   TEXT
+========================================================= */
 
 .table-text {
-  color: #374151;
+  color: #1E293B;
 }
-
-
-/* Number */
 
 .table-number {
   font-weight: 600;
-  color: #1f2937;
+  color: #1E293B;
+  font-variant-numeric: tabular-nums;
 }
 
-
-/* Date */
-
 .table-date {
-  color: #64748b;
+  color: #64748B;
+  font-variant-numeric: tabular-nums;
 }
 
 
@@ -261,15 +274,15 @@
 }
 
 .view-btn {
-  color: #2563eb !important;
+  color: #3867D6 !important;
 }
 
 .edit-btn {
-  color: #f59e0b !important;
+  color: #D97706 !important;
 }
 
 .delete-btn {
-  color: #ef4444 !important;
+  color: #D9383A !important;
 }
 
 
@@ -282,17 +295,16 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-
   font-size: 13px;
   font-weight: 600;
 }
 
 .boolean-active {
-  color: #16a34a;
+  color: #059669;
 }
 
 .boolean-inactive {
-  color: #dc2626;
+  color: #D9383A;
 }
 
 
@@ -302,42 +314,32 @@
 
 .empty-state {
   padding: 50px 20px;
-
   text-align: center;
 }
 
 .empty-icon {
   width: 60px;
   height: 60px;
-
   margin: 0 auto 14px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 50%;
-
-  background: #f1f5f9;
-  color: #94a3b8;
-
+  background: #F5F7F8;
+  color: #64748B;
   font-size: 24px;
 }
 
 .empty-state h6 {
   margin-bottom: 5px;
-
   font-size: 15px;
   font-weight: 700;
-
-  color: #334155;
+  color: #1E293B;
 }
 
 .empty-state p {
   margin: 0;
-
-  color: #94a3b8;
-
+  color: #64748B;
   font-size: 13px;
 }
 
@@ -348,23 +350,26 @@
 
 :host ::ng-deep .hms-table .p-paginator {
   padding: 12px 16px;
-
-  border-top: 1px solid #edf0f2;
-  border-bottom: 0;
-
-  background: #ffffff;
+  border: none !important;
+  border-top: 1px solid #EAEFF2 !important;
+  background: #FFFFFF;
 }
 
 :host ::ng-deep .hms-table .p-paginator .p-paginator-page {
   min-width: 34px;
   height: 34px;
-
   border-radius: 8px;
+  color: #64748B;
+}
+
+:host ::ng-deep .hms-table .p-paginator .p-paginator-page:hover {
+  background: #E8EFFD;
+  color: #3867D6;
 }
 
 :host ::ng-deep .hms-table .p-paginator .p-paginator-page.p-highlight {
-  background: #2563eb;
-  color: #ffffff;
+  background: #3867D6 !important;
+  color: #FFFFFF !important;
 }
 
 
@@ -377,7 +382,6 @@
   .table-header {
     align-items: flex-start;
     flex-direction: column;
-
     padding: 16px;
   }
 
@@ -389,7 +393,6 @@
   .table-toolbar {
     flex-direction: column;
     align-items: stretch;
-
     padding: 12px 16px;
   }
 
@@ -421,7 +424,6 @@
   :host ::ng-deep .hms-table .p-datatable-tbody > tr > td {
     padding: 12px;
   }
-
 }
 
 
@@ -443,13 +445,75 @@
     padding: 10px 14px;
   }
 
-  .export-btn {
+  .export-btn,
+  .create-btn {
     width: 40px;
     height: 40px;
   }
 
-  .export-btn .p-button-label {
+  .export-btn .p-button-label,
+  .create-btn .p-button-label {
     display: none;
   }
+}
 
+/* =========================================================
+   BUTTON COLOR HOVER EFFECTS
+========================================================= */
+
+/* Export Button */
+.export-btn {
+  transition: all 0.3s ease;
+}
+
+.export-btn:hover {
+  background: #2563eb !important;
+  color: #FFFFFF !important;
+  border-color: #2563eb !important;
+}
+
+
+.create-btn {
+  background: #d6f5e2 !important;
+  border-color: #aaebc2 !important;
+  color: #15803D !important;
+  transition: all 0.3s ease;
+}
+
+.create-btn:hover {
+  background: #15803D !important;
+  color: #FFFFFF !important;
+  border-color: #15803D !important;
+}
+
+/* View Button */
+.view-btn {
+  transition: all 0.3s ease;
+}
+
+.view-btn:hover {
+  background: #2563eb !important;
+  color: #FFFFFF !important;
+}
+
+
+/* Edit Button */
+.edit-btn {
+  transition: all 0.3s ease;
+}
+
+.edit-btn:hover {
+  background: #F59E0B !important;
+  color: #FFFFFF !important;
+}
+
+
+/* Delete Button */
+.delete-btn {
+  transition: all 0.3s ease;
+}
+
+.delete-btn:hover {
+  background: #EF4444 !important;
+  color: #FFFFFF !important;
 }

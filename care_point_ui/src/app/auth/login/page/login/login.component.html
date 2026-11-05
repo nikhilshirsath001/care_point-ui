@@ -65,7 +65,7 @@
         Password
       </label>
 
-      <div class="input-wrapper password-wrapper">
+      <div class="password-wrapper">
         <i class="pi pi-lock input-icon"></i>
 
         <p-password
@@ -119,16 +119,12 @@
 
     <!-- Login Button -->
     <button
-      pButton
-      type="submit"
-      label="Login"
-      icon="pi pi-sign-in"
-      iconPos="right"
-      class="login-button w-100"
-      [disabled]="formGroup.invalid"
-    >
-    Login
-    </button>
+  type="button"
+  class="login-button w-100"
+  (click)="login($event)"
+>
+  Login
+</button>
 
   </form>
 

@@ -102,7 +102,7 @@
         if (field) {
           field.options = patients.map((patient: any) => ({
             label:
-              `${patient.firstName ?? ''} ${patient.lastName ?? ''}`.trim(),
+              `${patient.patientName ?? ''}`.trim(),
             value: patient.patientId
           }));
 

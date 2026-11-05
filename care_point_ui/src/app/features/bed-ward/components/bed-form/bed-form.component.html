@@ -1,3 +1,4 @@
+
 <app-dynamic-form
   [config]="formConfig"
   [data]="bed"
@@ -5,5 +6,6 @@
   [loading]="loading"
   (submitted)="onSubmit($event)"
   (cancelled)="onCancel()"
+  (valueChanged)="onFieldChange($event)"
 >
 </app-dynamic-form>

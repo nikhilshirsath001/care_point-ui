@@ -1,0 +1,285 @@
+
+<div class="page-container">
+
+  <div class="page-header">
+    <div>
+      <h2>Bed Management</h2>
+      <p>Manage hospital floors, wards, rooms and beds</p>
+    </div>
+  </div>
+
+  <!-- FLOOR AND WARD SELECTION -->
+  <div class="selection-card">
+    <div class="selection-grid">
+
+      <div class="selection-field">
+        <label>Select Floor</label>
+
+        <select
+          class="form-select"
+          [value]="selectedFloorId ?? ''"
+          (change)="onFloorChange(
+            $any($event.target).value
+              ? +$any($event.target).value
+              : null
+          )"
+        >
+          <option value="">Choose Floor</option>
+
+          @for (floor of floors; track floor.floorId) {
+            <option [value]="floor.floorId">
+              {{ floor.floorName }}
+            </option>
+          }
+        </select>
+
+        @if (loadingFloors) {
+          <small>Loading floors...</small>
+        }
+      </div>
+
+      <div class="selection-field">
+        <label>Select Ward</label>
+
+        <select
+          class="form-select"
+          [disabled]="!selectedFloorId || loadingWards"
+          [value]="selectedWardId ?? ''"
+          (change)="onWardChange(
+            $any($event.target).value
+              ? +$any($event.target).value
+              : null
+          )"
+        >
+          <option value="">Choose Ward</option>
+
+          @for (ward of wards; track ward.wardId) {
+            <option [value]="ward.wardId">
+              {{ ward.wardName }}
+            </option>
+          }
+        </select>
+
+        @if (loadingWards) {
+          <small>Loading wards...</small>
+        }
+      </div>
+
+    </div>
+  </div>
+
+  @if (selectedWardId) {
+
+    <!-- STATISTICS -->
+    <div class="statistics-grid">
+
+      <div class="stat-card">
+        <div class="stat-icon total-icon">
+          <i class="pi pi-th-large"></i>
+        </div>
+        <div>
+          <span>Total Beds</span>
+          <h3>{{ totalBeds }}</h3>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon available-icon">
+          <i class="pi pi-check-circle"></i>
+        </div>
+        <div>
+          <span>Available</span>
+          <h3>{{ getStatusCount('AVAILABLE') }}</h3>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon occupied-icon">
+          <i class="pi pi-user"></i>
+        </div>
+        <div>
+          <span>Occupied</span>
+          <h3>{{ getStatusCount('OCCUPIED') }}</h3>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon reserved-icon">
+          <i class="pi pi-calendar"></i>
+        </div>
+        <div>
+          <span>Reserved</span>
+          <h3>{{ getStatusCount('RESERVED') }}</h3>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ROOM TOOLBAR -->
+    <div class="room-toolbar">
+
+      <div>
+        <h3>Rooms & Beds</h3>
+        <p>Choose a bed to view or edit its details</p>
+      </div>
+
+      <div class="filter-field">
+        <label>Filter Beds</label>
+
+        <select
+          class="form-select"
+          [(ngModel)]="selectedFilter"
+        >
+          @for (filter of filters; track filter.value) {
+            <option [value]="filter.value">
+              {{ filter.label }}
+            </option>
+          }
+        </select>
+      </div>
+
+    </div>
+
+    <!-- LOADING -->
+    @if (loadingRooms) {
+
+      <div class="loading-state">
+        <i class="pi pi-spin pi-spinner"></i>
+        Loading rooms and beds...
+      </div>
+
+    } @else {
+
+      <!-- ROOM GRID -->
+      <div class="room-grid">
+
+        @for (room of filteredRooms; track room.roomId) {
+
+          <div class="room-card">
+
+            <div class="room-header">
+
+              <div>
+                <h4>Room {{ room.roomNumber }}</h4>
+                <small>{{ room.roomType }}</small>
+              </div>
+
+              <span class="bed-count">
+                {{ room.beds.length }} Beds
+              </span>
+
+            </div>
+
+            <!-- BEDS -->
+            <div class="bed-grid">
+
+              @for (
+                bed of room.beds;
+                track bed.bedId ?? bed.id ?? bed.bedNumber;
+              ) {
+
+                <button
+                  type="button"
+                  class="bed-item"
+                  (click)="openEditForm(bed, room)"
+                  [title]="'B-' + (bed.bedNumber || bed.id || bed.bedId) + ' - ' + bed.status"
+                >
+
+                  <i
+                    class="pi pi-bed"
+                    [ngClass]="getBedColor(bed.status)"
+                  ></i>
+
+                  <span class="bed-number">
+                    B-{{ bed.bedNumber || bed.id || bed.bedId }}
+                  </span>
+
+                  <span
+                    class="bed-status"
+                    [ngClass]="getBedColor(bed.status)"
+                  >
+                    {{ bed.status }}
+                  </span>
+
+                </button>
+
+              } @empty {
+
+                <div class="empty-beds">
+                  No beds found for this filter
+                </div>
+
+              }
+
+            </div>
+
+            <!-- ADD BED -->
+            <div class="room-footer">
+
+              <button
+                type="button"
+                class="btn btn-sm btn-outline-primary"
+                (click)="openCreateForm(room)"
+              >
+                <i class="pi pi-plus"></i>
+                Add Bed
+              </button>
+
+            </div>
+
+          </div>
+
+        } @empty {
+
+          <div class="empty-state">
+            No rooms available in this ward.
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+  } @else {
+
+    <!-- INITIAL STATE -->
+    <div class="initial-state">
+
+      <i class="pi pi-building"></i>
+
+      <h3>Select a Floor and Ward</h3>
+
+      <p>
+        Choose a floor first, then select a ward to view its rooms and beds.
+      </p>
+
+    </div>
+
+  }
+
+  <!-- BED DIALOG -->
+  <p-dialog
+  [(visible)]="showForm"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{
+    width: '750px',
+    maxWidth: '95vw'
+  }"
+  [header]="formMode === 'create' ? 'Create Bed' : 'Edit Bed'"
+>
+  <app-dynamic-form
+    [config]="formConfig"
+    [data]="selectedBed"
+    [mode]="formMode"
+    [loading]="saving"
+    (submitted)="onSubmit($event)"
+    (cancelled)="onFormCancelled()"
+    (valueChanged)="onFieldChange($event)"
+  >
+  </app-dynamic-form>
+</p-dialog>
+
+</div>

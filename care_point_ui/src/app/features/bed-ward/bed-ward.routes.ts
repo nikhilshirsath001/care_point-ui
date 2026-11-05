@@ -12,15 +12,22 @@ export const BED_WARD_ROUTES: Routes = [
   {
     path: 'beds',
     loadComponent: () =>
-      import('./pages/beds/beds.component')
-        .then(m => m.BedsComponent)
+      import('./pages/bed-list/bed-list.component')
+        .then(m => m.BedListComponent)
   },
 
   {
     path: 'allocation',
     loadComponent: () =>
-      import('./pages/allocation/allocation.component')
-        .then(m => m.AllocationComponent)
-  }
+      import('./pages/infrastructure-management/infrastructure-management.component')
+        .then(m => m.InfrastructureManagementComponent)
+  },
+
+  // {
+  //   path: 'allocation',
+  //   loadComponent: () =>
+  //     import('./pages/allocation/allocation.component')
+  //       .then(m => m.AllocationComponent)
+  // }
 
 ];

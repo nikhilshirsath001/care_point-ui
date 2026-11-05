@@ -1,18 +1,10 @@
+
 export interface Bed {
-
   id?: number;
-
-  bedNumber: string;
-
-  bedType: string;
-
-  wardId: number;
-
   roomId: number;
-
-  floor: number;
-
+  wardId?: number;
+  bedNumber: string;
   status: string;
-
-  active: boolean;
+  bedType?: string;
+  floor?: number;
 }

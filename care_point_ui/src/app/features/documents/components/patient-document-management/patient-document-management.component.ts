@@ -35,7 +35,7 @@ import { PatientDocumentUploadComponent } from '../patient-document-upload/patie
 })
 export class PatientDocumentManagementComponent implements OnInit, OnChanges {
   @Input({ required: true }) patientId!: number;
-  @Input() patient: PatientInfo | null = null;
+  @Input() patient: any | null = null;
   @Input({ required: true }) uploadedBy!: number;
   @Input() canProfileShow: boolean = true;
   @ViewChild('uploadInput') uploadInput!: ElementRef<HTMLInputElement>;
@@ -568,13 +568,12 @@ export class PatientDocumentManagementComponent implements OnInit, OnChanges {
   get patientName(): string {
     if (!this.patient) return '';
 
-    if (this.patient.fullName) {
-      return this.patient.fullName;
+    if (this.patient.patientName) {
+      return this.patient.patientName;
     }
 
     return [
-      this.patient.firstName,
-      this.patient.lastName
+      this.patient.patientName,
     ]
       .filter(Boolean)
       .join(' ');
