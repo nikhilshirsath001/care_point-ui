@@ -65,6 +65,9 @@ export const API_ENDPOINTS = {
     BASE: '/staff',
     GET_ALL: '/staff',
     CREATE: '/staff',
+    UPDATE: '/staff/{staffId}',
+    DELETE: '/staff/{staffId}',
+    CHANGE_STATUS: '/staff/{staffId}/status',
   },
 
   PROCEDURE: {
@@ -133,5 +136,10 @@ export const API_NAVIGATION = {
     BASE: `${API_NAVIGATION_BASE}/patient`,
     CREATE: `${API_NAVIGATION_BASE}/patient/create`,
     LIST: `${API_NAVIGATION_BASE}/patient`,
+  },
+  STAFF: {
+    BASE: `${API_NAVIGATION_BASE}/staff`,
+    CREATE: `${API_NAVIGATION_BASE}/staff/create`,
+    LIST: `${API_NAVIGATION_BASE}/staff`,
   },
 } as const;

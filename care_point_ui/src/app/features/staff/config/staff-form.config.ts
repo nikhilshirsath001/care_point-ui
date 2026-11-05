@@ -5,7 +5,7 @@ import { DetailField } from '../../../shared/shared-details/shared-details.compo
 export const STAFF_FORM_CONFIG: DynamicFormConfig = {
   title: 'Staff',
 
-  submitLabel: 'Save Staff',
+  submitLabel: 'Staff',
 
   cancelLabel: 'Cancel',
 

@@ -29,6 +29,9 @@ export interface SharedTableConfig {
   canUploadDocuments?: boolean;
   canCreateNewRecord?: boolean;
   canViewDocuments?: boolean;
+  canDelete?: boolean;
+  canActivate?: boolean;
+  canDeactivate?: boolean;
 }
 
 @Component({
@@ -65,6 +68,7 @@ export class SharedTableComponent {
     showRefresh: true,
     loading: false,
     emptyMessage: 'No records found',
+    canDelete: true,
   };
 
   @Output() pageChange = new EventEmitter<{
@@ -88,6 +92,10 @@ export class SharedTableComponent {
   @Output() createNewRecord = new EventEmitter<void>();
 
   @Output() viewDocuments = new EventEmitter<any>();
+
+  @Output() activate = new EventEmitter<any>();
+
+  @Output() deactivate = new EventEmitter<any>();
 
   onPageChange(event: TablePageEvent): void {
     const first = event.first ?? 0;
@@ -233,7 +241,7 @@ export class SharedTableComponent {
     this.searchValue = value;
     const searchText = value.trim();
     // if (searchText.length >= 5) {
-      this.searchRecord.emit(searchText);
+    this.searchRecord.emit(searchText);
     // } else if (searchText.length === 0 || searchText.length <= 5) {
     //   this.searchRecord.emit('');
     // }
@@ -241,5 +249,13 @@ export class SharedTableComponent {
 
   getSerialNumber(rowIndex: number): number {
     return this.currentFirst + rowIndex + 1;
+  }
+
+  onActivate(row: any): void {
+    this.activate.emit(row);
+  }
+
+  onDeactivate(row: any): void {
+    this.deactivate.emit(row);
   }
 }
