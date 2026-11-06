@@ -1,0 +1,184 @@
+<div class="container-fluid py-3">
+
+  <div class="mb-4">
+    <h2 class="mb-1">Create Bill</h2>
+    <p class="text-muted mb-0">
+      Select a patient, add services, and review charges before saving.
+    </p>
+  </div>
+
+  <form [formGroup]="billForm" (ngSubmit)="createBill()">
+
+    <!-- Patient -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+
+        <app-patient-search
+          *ngIf="!selectedPatient"
+          [config]="patientSearchConfig"
+          [searchFn]="searchPatientFn"
+          (patientSelected)="onPatientSelected($event)">
+        </app-patient-search>
+
+        <div
+          *ngIf="selectedPatient"
+          class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+          <div>
+            <div class="text-muted small text-uppercase">Selected patient</div>
+            <h5 class="mb-0">{{ selectedPatient.patientName }}</h5>
+            <span class="text-muted small">
+              Patient ID: {{ selectedPatient.patientId }}
+            </span>
+          </div>
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="changePatient()">
+            Change Patient
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Visit details -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title mb-3">Visit Details</h5>
+
+        <div class="row g-3">
+
+          <div class="col-md-6">
+            <label for="visitId" class="form-label fw-semibold">Visit ID</label>
+            <input
+              id="visitId"
+              type="number"
+              class="form-control"
+              formControlName="visitId"
+              placeholder="Enter visit ID" />
+          </div>
+
+          <div class="col-md-6" *ngIf="selectedPatient">
+            <label for="admissionId" class="form-label fw-semibold">Admission</label>
+
+            <select
+              id="admissionId"
+              class="form-select"
+              formControlName="admissionId"
+              [disabled]="loadingAdmissions || admissions.length === 0">
+              <option [ngValue]="null">Select admission</option>
+              <option
+                *ngFor="let admission of admissions"
+                [ngValue]="admission.admissionId">
+                Admission #{{ admission.admissionId }}
+                - {{ admission.admissionDate | date: 'dd/MM/yyyy' }}
+              </option>
+            </select>
+
+            <div class="form-text" *ngIf="loadingAdmissions">
+              Loading admissions...
+            </div>
+            <div class="form-text" *ngIf="!loadingAdmissions && admissions.length === 0">
+              No admissions found for this patient.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Bill items -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title mb-3">Bill Items</h5>
+
+        <!-- Add a service -->
+        <div class="row g-3 align-items-end mb-3">
+          <div class="col-md-7">
+            <label class="form-label fw-semibold">Service</label>
+            <select #svc class="form-select">
+              <option value="">Select service</option>
+              <option
+                *ngFor="let service of services"
+                [value]="service.serviceId">
+                {{ service.serviceName }} - {{ service.defaultPrice }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">Quantity</label>
+            <input #qty type="number" class="form-control" value="1" min="1" />
+          </div>
+
+          <div class="col-md-2">
+            <button
+              type="button"
+              class="btn btn-primary w-100"
+              (click)="addService(svc.value, qty.value); svc.value = ''; qty.value = '1'">
+              Add Service
+            </button>
+          </div>
+        </div>
+
+        <!-- Added services -->
+        <app-shared-table
+          [title]="'Bill Items'"
+          [columns]="itemColumns"
+          [data]="itemRows"
+          [totalRecords]="itemRows.length"
+          [config]="itemTableConfig"
+          (delete)="onDeleteItem($event)">
+        </app-shared-table>
+
+        <p class="text-end fw-semibold mt-3 mb-0">
+          Subtotal: {{ subtotal }}
+        </p>
+
+      </div>
+    </div>
+
+    <!-- Charges -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <h5 class="card-title mb-3">Charges</h5>
+
+        <div class="row g-3">
+
+          <div class="col-md-6">
+            <label for="discount" class="form-label fw-semibold">Discount</label>
+            <input
+              id="discount"
+              type="number"
+              class="form-control"
+              formControlName="discount"
+              min="0" />
+          </div>
+
+          <div class="col-md-6">
+            <label for="tax" class="form-label fw-semibold">Tax</label>
+            <input
+              id="tax"
+              type="number"
+              class="form-control"
+              formControlName="tax"
+              min="0" />
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="d-flex justify-content-end">
+      <button
+        type="submit"
+        class="btn btn-success px-4"
+        [disabled]="billForm.invalid">
+        Create Bill
+      </button>
+    </div>
+
+  </form>
+</div>

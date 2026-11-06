@@ -1,0 +1,49 @@
+
+<div class="bill-list-container">
+
+  <h2>All Bills</h2>
+
+  <p-table
+    [value]="bills"
+    [loading]="loading"
+    [tableStyle]="{ 'min-width': '60rem' }"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Bill Number</th>
+        <th>Patient ID</th>
+        <th>Bill Date</th>
+        <th>Subtotal</th>
+        <th>Discount</th>
+        <th>Tax</th>
+        <th>Total Amount</th>
+        <th>Paid Amount</th>
+        <th>Balance</th>
+        <th>Status</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-bill>
+      <tr>
+        <td>{{ bill.billNo }}</td>
+        <td>{{ bill.patientId }}</td>
+        <td>{{ bill.billDate | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ bill.subtotal | currency: 'INR' }}</td>
+        <td>{{ bill.discount | currency: 'INR' }}</td>
+        <td>{{ bill.tax | currency: 'INR' }}</td>
+        <td>{{ bill.totalAmount | currency: 'INR' }}</td>
+        <td>{{ bill.paidAmount | currency: 'INR' }}</td>
+        <td>{{ bill.balanceAmount | currency: 'INR' }}</td>
+        <td>{{ bill.status }}</td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="10">No bills found.</td>
+      </tr>
+    </ng-template>
+
+  </p-table>
+
+</div>

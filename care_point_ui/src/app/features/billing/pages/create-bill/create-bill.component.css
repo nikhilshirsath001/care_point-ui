@@ -1,0 +1,66 @@
+
+.create-bill-container {
+  padding: 24px;
+  background: #fff;
+  border-radius: 8px;
+
+  h2 {
+    margin-bottom: 24px;
+  }
+
+  h3 {
+    margin: 24px 0 16px;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+
+  label {
+    font-weight: 500;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+
+  small {
+    color: #dc3545;
+  }
+}
+
+.bill-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr auto;
+  align-items: end;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+button {
+  padding: 9px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background: #0d6efd;
+  color: #fff;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+@media (max-width: 768px) {
+  .bill-item {
+    grid-template-columns: 1fr;
+  }
+}
