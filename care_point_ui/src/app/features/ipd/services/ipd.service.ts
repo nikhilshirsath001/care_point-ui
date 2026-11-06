@@ -46,6 +46,19 @@ export class IpdService {
     );
   }
 
+
+  getAdmissionsByPatientId(patientId: number) {
+  const params = new HttpParams()
+    .set('patientId', patientId)
+    .set('page', 0)
+    .set('size', 100);
+
+  return this.apiService.getObservable(
+    API_ENDPOINTS.IPD.BASE,
+    params,
+  );
+}
+
   getAllMedications() {
     return this.apiService.getObservable(API_ENDPOINTS.MEDICATION.GET_ALL);
   }

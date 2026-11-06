@@ -2,8 +2,9 @@ import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './layout/main-layout/main-layout/main-layout.component';
 import { LoginComponent } from './auth/login/page/login/login.component';
 import { MainDashboardComponent } from './features/dashborad/pages/main-dashboard/main-dashboard.component';
-import { permissionGuard } from './core/guards/permission.guard';//   import { EMR_ROUTES } from './features/emr/routes/emr.routes';
+import { permissionGuard } from './core/guards/permission.guard';
 import { authGuard } from './core/auth/auth.guard';
+
 export const routes: Routes = [
   // Login
   {
@@ -64,21 +65,21 @@ export const routes: Routes = [
           ),
       },
 
-      // EMR module
-      // {
-      //   path: 'emr',
-      //   loadChildren: () =>
-      //     import('./features/')
-      //       .then(m => m.EMR_ROUTES)
-      // },
+      //EMR module
+      {
+        path: 'emr',
+        loadChildren: () =>
+          import('./features/emr/routes/emr.routes')
+            .then(m => m.EMR_ROUTES)
+      },
 
       // Add other modules here
-      // {
-      //   path: 'billing',
-      //   loadChildren: () =>
-      //     import('./features/billing/billing.routes')
-      //       .then(m => m.BILLING_ROUTES)
-      // },
+      {
+        path: 'billing',
+        loadChildren: () =>
+          import('./features/billing/routes/billing.routes')
+            .then(m => m.BILLING_ROUTES)
+      },
 
       // Add other modules here
       {
@@ -96,6 +97,9 @@ export const routes: Routes = [
             (m) => m.MEDICATION_ROUTES,
           ),
       },
+
+
+
       {
         path: 'administrator',
         loadChildren: () =>

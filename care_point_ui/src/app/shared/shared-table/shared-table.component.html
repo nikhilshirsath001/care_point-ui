@@ -1,8 +1,12 @@
 <div>
+
   <!-- ================= TOOLBAR ================= -->
   <div class="table-toolbar">
+
     @if (config.searchable) {
+
       <div class="search-wrapper">
+
         <i class="pi pi-search search-icon"></i>
 
         <input
@@ -11,12 +15,15 @@
           placeholder="Search records..."
           [(ngModel)]="searchValue"
           (input)="onSearch(searchValue)"
-          class="search-input"
-        />
+          class="search-input" />
+
       </div>
+
     }
 
+
     <div class="table-actions">
+
       @if (config.showRefresh) {
         <button
           pButton
@@ -24,20 +31,31 @@
           icon="pi pi-refresh"
           class="p-button-outlined p-button-secondary table-action-btn"
           pTooltip="Refresh"
-          (click)="onRefresh()"
-        ></button>
+          (click)="onRefresh()">
+        </button>
       }
+
 
       @if (config.canCreateNewRecord) {
         <button
           pButton
           type="button"
           icon="pi pi-plus"
-          label="Create {{ removeSFromRecordName(title) }}"
+          label= 'Create {{removeSFromRecordName(title)}}'
           class="p-button-success create-btn"
-          (click)="onCreateNewRecord()"
-        ></button>
+          (click)="onCreateNewRecord()">
+        </button>
       }
+      @if (config.canCreateClinicalData) {
+  <button
+    pButton
+    type="button"
+    icon="pi pi-plus"
+    label="Create Clinical Data"
+    class="p-button-success create-btn"
+    (click)="onCreateClinicalData()">
+  </button>
+}
 
       @if (config.exportable) {
         <button
@@ -46,14 +64,18 @@
           icon="pi pi-file-excel"
           label="Export"
           class="p-button-success export-btn"
-          (click)="onDownloadExcel()"
-        ></button>
+          (click)="onDownloadExcel()">
+        </button>
       }
+
     </div>
+
   </div>
+
 
   <!-- ================= TABLE ================= -->
   <div class="table-container">
+
     <p-table
       #dt
       [columns]="columns"
@@ -61,17 +83,17 @@
       [paginator]="config.paginator"
       [rows]="config.rows"
       [rowsPerPageOptions]="config.rowsPerPageOptions"
-      [totalRecords]="totalRecords"
-      [lazy]="true"
+	    [totalRecords]="totalRecords"
+  	  [lazy]="true"
       [loading]="config.loading"
       [showGridlines]="false"
       [stripedRows]="true"
       [rowHover]="true"
       responsiveLayout="scroll"
       styleClass="hms-table"
-      (onPage)="onPageChange($event)"
-    >
-      <!-- ================= HEADER ================= -->
+	    (onPage)="onPageChange($event)" >
+
+
       <ng-template #header let-columns>
         <tr>
           @for (col of columns; track col.field) {
@@ -163,7 +185,7 @@
                     pButton
                     type="button"
                     icon="pi pi-eye"
-                    class="p-button-rounded p-button-text view-btn"
+                    class="p-button-rounded p-button-text view-btn view-eye-btn"
                     pTooltip="View"
                     (click)="onView(rowData)"
                   ></button>
@@ -199,6 +221,28 @@
                     (click)="onEdit(rowData)"
                   ></button>
 
+
+                  <!-- <button
+                    pButton
+                    type="button"
+                    icon="pi pi-trash"
+                    class="p-button-rounded p-button-text delete-btn"
+                    pTooltip="Delete"
+                    (click)="onDelete(rowData)">
+                  </button> -->
+
+
+
+                  @if (config.canViewHistory) {
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-arrow-right"
+                    pTooltip="View History"
+                    class="p-button-rounded p-button-text view-btn"
+                    (click)="onViewHistory(rowData)">
+                  </button>
+                 }
                   @if (config.canDelete !== false) {
                     <button
                       pButton
@@ -219,6 +263,8 @@
                       (click)="onActivate(rowData)"
                     ></button>
                   }
+
+
                   @if (config.canDeactivate) {
                     <button
                       pButton
@@ -229,6 +275,8 @@
                       (click)="onDeactivate(rowData)"
                     ></button>
                   }
+
+
                 </div>
               }
             </td>
@@ -262,6 +310,12 @@
           <span class="record-number">{{ totalRecords || data.length }}</span>
         </div>
       </ng-template>
+  <ng-template #paginatorleft>
+    <div class="record-label">
+      <span>Total Records</span>
+      <span class="record-number">{{ totalRecords || data.length }}</span>
+    </div>
+  </ng-template>
     </p-table>
   </div>
 </div>

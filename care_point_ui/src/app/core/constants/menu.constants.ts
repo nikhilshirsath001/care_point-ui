@@ -35,35 +35,35 @@ export const MENU_ITEMS: MenuItem[] = [
     icon: 'pi pi-file-edit',
     items: [
       {
-        label: 'Clinical Records',
+        label: 'Medical Records',
         icon: 'pi pi-folder-open',
         routerLink: ['/main/emr'],
         permission: 'MEDICAL_RECORD_READ',
       },
-      {
-        label: 'Medical History',
-        icon: 'pi pi-history',
-        routerLink: ['/main/emr/history'],
-        permission: 'MEDICAL_RECORD_READ',
-      },
-      {
-        label: 'Diagnosis',
-        icon: 'pi pi-heart',
-        routerLink: ['/main/emr/diagnosis'],
-        permission: 'DIAGNOSIS_READ',
-      },
-      {
-        label: 'Medications & Treatment',
-        icon: 'pi pi-plus-circle',
-        routerLink: ['/main/emr/treatment'],
-        permission: 'PATIENT_TREATMENT_READ',
-      },
-      {
-        label: 'Investigations',
-        icon: 'pi pi-search',
-        routerLink: ['/main/emr/investigations'],
-        permission: 'MEDICAL_RECORD_READ',
-      },
+      // {
+      //   label: 'Medical History',
+      //   icon: 'pi pi-history',
+      //   routerLink: ['/main/emr/history'],
+      //   permission: 'MEDICAL_RECORD_READ',
+      // },
+      // {
+      //   label: 'Diagnosis',
+      //   icon: 'pi pi-heart',
+      //   routerLink: ['/main/emr/diagnosis'],
+      //   permission: 'DIAGNOSIS_READ',
+      // },
+      // {
+      //   label: 'Medications & Treatment',
+      //   icon: 'pi pi-plus-circle',
+      //   routerLink: ['/main/emr/treatment'],
+      //   permission: 'PATIENT_TREATMENT_READ',
+      // },
+      // {
+      //   label: 'Investigations',
+      //   icon: 'pi pi-search',
+      //   routerLink: ['/main/emr/investigations'],
+      //   permission: 'MEDICAL_RECORD_READ',
+      // },
     ],
   },
   {
@@ -102,6 +102,13 @@ export const MENU_ITEMS: MenuItem[] = [
         routerLink: ['/main/ipd/discharge'],
         permission: 'DISCHARGE_READ',
       },
+
+      {
+  label: 'Discharged Patients',
+  icon: 'pi pi-list',
+  routerLink: ['/main/ipd/discharge-list'],
+  permission: 'DISCHARGE_READ'
+},
     ],
   },
 
@@ -140,42 +147,45 @@ export const MENU_ITEMS: MenuItem[] = [
   },
 
   // 7. Financial Management
-  {
-    label: 'Billing',
-    icon: 'pi pi-wallet',
-    items: [
-      {
-        label: 'Billing List',
-        icon: 'pi pi-list',
-        routerLink: ['/main/billing'],
-        permission: 'BILL_READ',
-      },
-      {
-        label: 'Create Bill',
-        icon: 'pi pi-file-plus',
-        routerLink: ['/main/billing/create'],
-        permission: 'BILL_CREATE',
-      },
-      {
-        label: 'Payments & Receipts',
-        icon: 'pi pi-credit-card',
-        routerLink: ['/main/billing/payments'],
-        permission: 'PAYMENT_READ',
-      },
-      {
-        label: 'Refunds & Adjustments',
-        icon: 'pi pi-refresh',
-        routerLink: ['/main/billing/refunds'],
-        permission: 'PAYMENT_READ',
-      },
-      {
-        label: 'Billing History',
-        icon: 'pi pi-history',
-        routerLink: ['/main/billing/history'],
-        permission: 'BILL_READ',
-      },
-    ],
-  },
+
+    {
+  label: 'Billing',
+  icon: 'pi pi-wallet',
+  items: [
+    {
+      label: 'Billing List',
+      icon: 'pi pi-list',
+      routerLink: ['/main/billing/list'],
+      permission: 'BILL_READ',
+    },
+    {
+      label: 'Create Bill',
+      icon: 'pi pi-file-plus',
+      routerLink: ['/main/billing/create'],
+      permission: 'BILL_CREATE',
+    },
+  ],
+},
+  //     {
+  //       label: 'Payments & Receipts',
+  //       icon: 'pi pi-credit-card',
+  //       routerLink: ['/main/billing/payments'],
+  //       permission: 'PAYMENT_READ',
+  //     },
+  //     {
+  //       label: 'Refunds & Adjustments',
+  //       icon: 'pi pi-refresh',
+  //       routerLink: ['/main/billing/refunds'],
+  //       permission: 'PAYMENT_READ',
+  //     },
+  //     {
+  //       label: 'Billing History',
+  //       icon: 'pi pi-history',
+  //       routerLink: ['/main/billing/history'],
+  //       permission: 'BILL_READ',
+  //     },
+  //   ],
+  // },
 
   // 8. Reports & Analytics
   {

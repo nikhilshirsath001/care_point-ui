@@ -1,1 +1,63 @@
-<p>discharge works!</p>
+<div class="discharge-container">
+
+  <ng-container *ngIf="!selectedPatient">
+
+    <app-patient-search
+      [config]="patientSearchConfig"
+      [searchFn]="searchPatientFn"
+      (patientSelected)="onPatientSelected($event)">
+    </app-patient-search>
+
+    <div class="mt-4">
+      <app-shared-table
+        [title]="'Currently Admitted'"
+        [subtitle]="'Click the eye icon to start a discharge'"
+        [columns]="admittedColumns"
+        [data]="admittedRows"
+        [totalRecords]="admittedRows.length"
+        [config]="admittedConfig"
+        (view)="onSelectAdmitted($event)">
+      </app-shared-table>
+    </div>
+
+  </ng-container>
+
+  <ng-container *ngIf="selectedPatient">
+
+    <div
+      class="d-flex align-items-center justify-content-between flex-wrap gap-3 mb-3">
+      <div>
+        <div class="text-muted small text-uppercase">Selected patient</div>
+        <h5 class="mb-0">{{ selectedPatient.patientName }}</h5>
+        <span class="text-muted small">
+          Patient ID: {{ selectedPatient.patientId }}
+        </span>
+      </div>
+
+      <button
+        type="button"
+        class="btn btn-outline-secondary"
+        (click)="changePatient()">
+        Change Patient
+      </button>
+    </div>
+
+    <div *ngIf="loadingAdmissions" class="text-muted mb-3">
+      Loading admissions...
+    </div>
+
+    <div *ngIf="!loadingAdmissions && noAdmissions" class="alert alert-warning">
+      This patient has no active admission to discharge.
+    </div>
+
+    <app-dynamic-form
+      *ngIf="!loadingAdmissions && !noAdmissions"
+      [config]="formConfig"
+      [loading]="loading"
+      (submitted)="onSubmit($event)"
+      (cancelled)="onCancel()">
+    </app-dynamic-form>
+
+  </ng-container>
+
+</div>

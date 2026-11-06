@@ -1,0 +1,11 @@
+<div class="discharge-container">
+  <app-shared-table
+    [columns]="dischargeColumns"
+    [data]="dischargeList"
+    [title]="'Discharged Patients'"
+    [subtitle]="'List of discharged patients'"
+    [config]="dischargeTableConfig"
+    [totalRecords]="dischargeList.length"
+    (refresh)="getAllDischarges()">
+  </app-shared-table>
+</div>

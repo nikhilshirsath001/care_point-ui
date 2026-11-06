@@ -1,0 +1,4 @@
+:host ::ng-deep .edit-btn,
+:host ::ng-deep .delete-btn {
+  display: none;
+}

@@ -26,6 +26,14 @@ export const API_ENDPOINTS = {
     CREATE_PRESCRIPTION: '/medication/prescription',
   },
 
+DISCHARGE: {
+  CREATE: '/hmis/discharge/create',
+  GET_ALL: '/hmis/discharge/get-all',
+  GET_BY_ID: '/hmis/discharge/get-by-id',
+  UPDATE: '/hmis/discharge/update',
+  DELETE: '/hmis/discharge/delete'
+},
+
   BED_WARD: {
     BASE: HMIS_BASE,
     GET_ALL_WARDS: `${HMIS_BASE}/ward/get-all`,
@@ -90,7 +98,15 @@ export const API_ENDPOINTS = {
       GET_ALL: '/services/service/service-category',
       CREATE: '/services/service/service-category',
     },
+
   },
+
+
+    BILL: {
+      BASE: '/billing',
+      BILLS: '/billing/bills',
+      CREATE: '/billing/bills',
+    },
   MEDICATION: {
     BASE: MED_BASE,
     GET_ALL: `${MED_BASE}/medications`,

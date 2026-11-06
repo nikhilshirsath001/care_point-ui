@@ -28,6 +28,8 @@ export interface SharedTableConfig {
   emptyMessage?: string;
   canUploadDocuments?: boolean;
   canCreateNewRecord?: boolean;
+  canViewHistory?: boolean;
+  canCreateClinicalData?: boolean;
   canViewDocuments?: boolean;
   canDelete?: boolean;
   canActivate?: boolean;
@@ -68,6 +70,8 @@ export class SharedTableComponent {
     showRefresh: true,
     loading: false,
     emptyMessage: 'No records found',
+    canViewHistory: true,
+
     canDelete: true,
   };
 
@@ -96,6 +100,11 @@ export class SharedTableComponent {
   @Output() activate = new EventEmitter<any>();
 
   @Output() deactivate = new EventEmitter<any>();
+
+  @Output() viewHistory = new EventEmitter<any>();
+
+  @Output() createClinicalData = new EventEmitter<void>();
+
 
   onPageChange(event: TablePageEvent): void {
     const first = event.first ?? 0;
@@ -143,6 +152,14 @@ export class SharedTableComponent {
     this.viewDocuments.emit(row);
   }
 
+  onViewHistory(row: any): void {
+    this.viewHistory.emit(row);
+  }
+
+  onCreateClinicalData(): void {
+  this.createClinicalData.emit();
+}
+
   getStatusSeverity(
     status: string,
   ): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
@@ -150,35 +167,36 @@ export class SharedTableComponent {
       .trim()
       .toLowerCase();
 
-    switch (normalizedStatus) {
-      case 'active':
-      case 'approved':
-      case 'completed':
-      case 'success':
-        return 'success';
+  switch (normalizedStatus) {
 
-      case 'pending':
-      case 'processing':
-        return 'warn';
+    case 'active':
+    case 'approved':
+    case 'completed':
+    case 'success':
+      return 'success';
 
-      case 'inactive':
-      case 'cancelled':
-      case 'rejected':
-      case 'failed':
-        return 'danger';
+    case 'pending':
+    case 'processing':
+      return 'warn';
 
-      case 'new':
-        return 'info';
+    case 'inactive':
+    case 'cancelled':
+    case 'rejected':
+    case 'failed':
+      return 'danger';
 
-      default:
-        return 'secondary';
-    }
+    case 'new':
+      return 'info';
+
+    default:
+      return 'secondary';
   }
+}
 
-  getFieldValue(row: any, field: string): any {
-    if (!row || !field) {
-      return null;
-    }
+getFieldValue(row: any, field: string): any {
+  if (!row || !field) {
+    return null;
+  }
 
     return field.split('.').reduce((value, key) => value?.[key], row);
   }
@@ -241,7 +259,7 @@ export class SharedTableComponent {
     this.searchValue = value;
     const searchText = value.trim();
     // if (searchText.length >= 5) {
-    this.searchRecord.emit(searchText);
+      this.searchRecord.emit(searchText);
     // } else if (searchText.length === 0 || searchText.length <= 5) {
     //   this.searchRecord.emit('');
     // }
