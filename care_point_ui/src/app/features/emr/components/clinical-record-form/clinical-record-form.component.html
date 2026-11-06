@@ -1,0 +1,118 @@
+
+<div style="width: 100%;">
+
+  <!-- Patient ID -->
+  <div style="margin-bottom: 20px;">
+
+    <label
+      for="patientId"
+      style="display: block; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 8px;">
+      Patient ID
+    </label>
+
+    <div style="display: flex; align-items: center; gap: 12px;">
+
+      <input
+        pInputText
+        type="number"
+        id="patientId"
+        name="enteredPatientId"
+        [(ngModel)]="enteredPatientId"
+        (ngModelChange)="onPatientIdChange()"
+        placeholder="Enter Patient ID"
+        min="1"
+        style="flex: 1; min-width: 0;"
+      />
+
+      <button
+        pButton
+        type="button"
+        label="Load Visits"
+        icon="pi pi-search"
+        class="p-button-success"
+        (click)="loadVisits()"
+        [disabled]="!enteredPatientId || enteredPatientId <= 0 || visitsLoading">
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Patient Visit -->
+  <div style="margin-bottom: 24px;">
+
+    <label
+      for="visitSelect"
+      style="display: block; font-size: 13px; font-weight: 600; color: #475569; margin-bottom: 8px;">
+      Patient Visit
+    </label>
+
+    <select
+      id="visitSelect"
+      name="visitSelect"
+      class="p-inputtext p-component"
+      [(ngModel)]="selectedVisitId"
+      (ngModelChange)="onVisitChange()"
+      [disabled]="!enteredPatientId || visitsLoading || visits.length === 0"
+      style="width: 100%;">
+
+      <option [ngValue]="null">Select a visit</option>
+
+      <option
+        *ngFor="let visit of visits"
+        [ngValue]="visit.visitId">
+        Visit #{{ visit.visitId }}
+        — {{ visit.visitDate || 'Date unavailable' }}
+        — {{ visit.visitType }}
+      </option>
+
+    </select>
+
+    <small
+      *ngIf="visitsLoading"
+      style="display: block; margin-top: 6px; color: #64748B;">
+      Loading patient visits...
+    </small>
+
+    <small
+      *ngIf="!visitsLoading && enteredPatientId && visits.length === 0"
+      style="display: block; margin-top: 6px; color: #D9383A;">
+      No visits found for this patient.
+    </small>
+
+  </div>
+
+  <!-- Selected Visit Details -->
+  <div
+    *ngIf="selectedVisit as visit"
+    style="background: #F5F7F8; border: 1px solid #EAEFF2; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+
+    <h4 style="font-size: 15px; color: #1E293B; margin: 0 0 12px;">
+      Visit Details
+    </h4>
+
+    <p>
+      <strong>Visit ID:</strong>
+      {{ visit.visitId }}
+    </p>
+
+    <p>
+      <strong>Doctor:</strong>
+      {{ (visit.doctorFirstName || '') + ' ' + (visit.doctorLastName || '') }}
+    </p>
+
+    <p>
+      <strong>Diagnosis:</strong>
+      {{ visit.diagnosisName || 'No diagnosis assigned' }}
+    </p>
+
+  </div>
+
+  <!-- Medical Record Form -->
+  <app-dynamic-form
+    [config]="formConfig"
+    [loading]="loading || visitsLoading"
+    (submitted)="onFormSubmit($event)"
+    (cancelled)="onFormCancel()">
+  </app-dynamic-form>
+
+</div>

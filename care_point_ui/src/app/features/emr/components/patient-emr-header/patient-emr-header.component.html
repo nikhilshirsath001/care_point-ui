@@ -1,0 +1,36 @@
+<div class="page-container">
+
+  <app-shared-table
+    [title]="'Electronic Medical Records'"
+    [subtitle]="'View patient history or create clinical data.'"
+    [columns]="patientColumns"
+    [data]="pagedPatients()"
+    [totalRecords]="filteredPatients().length"
+    [config]="tableConfig"
+    (pageChange)="onPageChange($event)"
+    (searchRecord)="onSearch($event)"
+    (refresh)="onRefresh()"
+    (view)="openPatientHistory($event)"
+    (viewHistory)="openPatientHistory($event)"
+    (createClinicalData)="createClinicalRecord()"
+    (edit)="onEditPatient($event)"
+    (delete)="onDeletePatient($event)">
+  </app-shared-table>
+
+  <p-dialog
+    header="Create Clinical Data"
+    [(visible)]="showClinicalRecordForm"
+    [modal]="true"
+    [style]="{ width: '650px' }"
+    [closable]="true"
+    (onHide)="closeClinicalRecordForm()">
+
+    <app-clinical-record-form 
+      *ngIf="showClinicalRecordForm"
+      (saved)="onClinicalRecordSaved()"
+      (cancelled)="closeClinicalRecordForm()">
+    </app-clinical-record-form>
+
+  </p-dialog>
+
+</div>

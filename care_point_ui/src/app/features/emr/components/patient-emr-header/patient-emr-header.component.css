@@ -1,0 +1,27 @@
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.page-container {
+  width: 100%;
+  padding: 0;
+}
+
+.page-container h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.page-container p {
+  font-size: 0.95rem;
+} 
+:host ::ng-deep .edit-btn {
+  display: none;
+}
+
+:host ::ng-deep .edit-btn,
+:host ::ng-deep .view-eye-btn {
+  display: none;
+}

@@ -1,0 +1,234 @@
+
+<div class="emr-container">
+
+  <ng-container *ngIf="selectedPatientId">
+
+    <div class="emr-header">
+      <div class="patient-heading">
+        <h2>Medical Records</h2>
+        <p>Patient medical history and clinical information</p>
+      </div>
+
+      <button
+        pButton
+        type="button"
+        icon="pi pi-arrow-left"
+        label="Back to Patients"
+        class="p-button-outlined p-button-secondary back-button"
+        (click)="goBack()">
+      </button>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="selectedPatient" class="patient-info-card">
+
+      <div class="patient-name-item">
+        <span class="info-label">PATIENT NAME</span>
+        <strong class="patient-name">
+          {{ selectedPatient.patientName || '-' }}
+        </strong>
+      </div>
+
+      <div>
+        <span class="info-label">PATIENT ID</span>
+        <strong>{{ selectedPatient.patientId ?? selectedPatient.id }}</strong>
+      </div>
+
+      <div>
+        <span class="info-label">ABHA ID</span>
+        <strong>{{ selectedPatient.abhaId || '-' }}</strong>
+      </div>
+
+      <div>
+        <span class="info-label">GENDER</span>
+        <strong>{{ selectedPatient.gender || '-' }}</strong>
+      </div>
+
+      <div>
+         <span class="info-label">CONTACT NUMBER</span>
+         <strong>{{ selectedPatient.phone || '-' }}</strong>
+</div>
+
+      <div>
+        <span class="info-label">DATE OF BIRTH</span>
+        <strong>
+          {{
+            selectedPatient.dateOfBirth
+              ? (selectedPatient.dateOfBirth | date:'dd MMM yyyy')
+              : '-'
+          }}
+        </strong>
+      </div>
+
+    </div>
+
+    <div class="emr-tabs">
+
+      <button
+        pButton
+        type="button"
+        label="Clinical Records"
+        icon="pi pi-file"
+        [class.active-tab]="activeSection === 'clinical-records'"
+        [outlined]="activeSection !== 'clinical-records'"
+        (click)="changeSection('clinical-records')">
+      </button>
+
+      <button
+        pButton
+        type="button"
+        label="Diagnosis"
+        icon="pi pi-heart"
+        [class.active-tab]="activeSection === 'diagnosis'"
+        [outlined]="activeSection !== 'diagnosis'"
+        (click)="changeSection('diagnosis')">
+      </button>
+
+      <button
+        pButton
+        type="button"
+        label="Procedures"
+        icon="pi pi-list"
+        [class.active-tab]="activeSection === 'procedures'"
+        [outlined]="activeSection !== 'procedures'"
+        (click)="changeSection('procedures')">
+      </button>
+
+      <button
+        pButton
+        type="button"
+        label="Medications"
+        icon="pi pi-plus-circle"
+        [class.active-tab]="activeSection === 'medications'"
+        [outlined]="activeSection !== 'medications'"
+        (click)="changeSection('medications')">
+      </button>
+
+    </div>
+
+    <div *ngIf="loading" class="loading-message">
+      <i class="pi pi-spin pi-spinner"></i>
+      Loading medical records...
+    </div>
+
+    <!-- Clinical Records -->
+    <div
+      *ngIf="activeSection === 'clinical-records' && !loading"
+       class="section-container">
+
+      <div class="section-header">
+        <div>
+          <h3>Clinical Records</h3>
+          <p>Patient clinical notes and medical record history</p>
+        </div>
+        </div>
+
+      <app-shared-table
+        [title]="'Clinical Records'"
+        [subtitle]="'Patient clinical history'"
+        [columns]="clinicalRecordColumns"
+        [data]="clinicalRecordRows"
+        [config]="tableConfig"
+        (refresh)="refreshCurrentSection()">
+
+      </app-shared-table>
+
+    </div>
+     
+
+    <!-- Diagnosis -->
+    <div
+      *ngIf="activeSection === 'diagnosis' && !loading"
+      class="section-container">
+
+      <div class="section-header">
+        <div>
+          <h3>Diagnosis</h3>
+          <p>Review the patient's recorded diagnoses</p>
+        </div>
+      </div>
+
+      <app-shared-table
+        [title]="'Diagnosis'"
+        [subtitle]="'Patient diagnosis history'"
+        [columns]="diagnosisColumns"
+        [data]="diagnosisRows"
+        [config]="tableConfig"
+        (refresh)="refreshCurrentSection()">
+
+      </app-shared-table>
+
+    </div>
+
+    <!-- Procedures -->
+    <div
+      *ngIf="activeSection === 'procedures' && !loading"
+      class="section-container">
+
+      <div class="section-header">
+        <div>
+          <h3>Procedures</h3>
+          <p>Review the patient's recorded medical procedures</p>
+        </div>
+      </div>
+
+      <app-shared-table
+        [title]="'Procedures'"
+        [subtitle]="'Patient procedure history'"
+        [columns]="procedureColumns"
+        [data]="procedureRows"
+        [config]="tableConfig"
+        (refresh)="refreshCurrentSection()">
+
+      </app-shared-table>
+
+    </div>
+
+    <!-- Medications -->
+    <div
+      *ngIf="activeSection === 'medications' && !loading"
+      class="section-container">
+
+      <div class="section-header">
+        <div>
+          <h3>Medications</h3>
+          <p>Review the patient's prescriptions and medication history</p>
+        </div>
+      </div>
+
+      <app-shared-table
+        [title]="'Medications'"
+        [subtitle]="'Patient medication history'"
+        [columns]="medicationColumns"
+        [data]="medicationRows"
+        [config]="tableConfig"
+        (refresh)="refreshCurrentSection()">
+
+      </app-shared-table>
+
+    </div>
+
+    <!-- <p-dialog
+      header="Add Clinical Record"
+      [(visible)]="showClinicalRecordForm"
+      [modal]="true"
+      [closable]="true"
+      [draggable]="false"
+      [resizable]="false"
+      [style]="{ width: '750px', maxWidth: '95vw' }"
+      (onHide)="closeClinicalRecordForm()">
+
+      <app-clinical-record-form
+        *ngIf="showClinicalRecordForm"
+        (saved)="onClinicalRecordSaved()"
+        (cancelled)="closeClinicalRecordForm()">
+      </app-clinical-record-form>
+
+    </p-dialog> -->
+
+  </ng-container>
+
+</div>

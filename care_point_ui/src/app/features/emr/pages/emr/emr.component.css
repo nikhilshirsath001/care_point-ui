@@ -1,0 +1,283 @@
+
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  color: #1f2937;
+}
+
+.emr-container {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 24px 32px;
+}
+
+/* Page heading */
+.emr-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.patient-heading h2 {
+  margin: 0 0 4px;
+  color: #334155;
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.patient-heading p {
+  margin: 0;
+  color: #8491a3;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Compact back button */
+.back-button {
+  flex-shrink: 0;
+  min-height: 34px;
+  padding: 6px 12px !important;
+  border-radius: 7px !important;
+  font-size: 12px !important;
+}
+
+/* Patient information card */
+.patient-info-card {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px 32px;
+  padding: 25px 28px;
+  margin-bottom: 26px;
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.patient-info-card > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  min-width: 0;
+}
+
+.info-label {
+  color: #8491a3;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.55px;
+}
+
+.patient-info-card strong {
+  color: #334155;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.patient-info-card .patient-name {
+  color: #0f766e;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+/* EMR navigation tabs */
+.emr-tabs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-bottom: 20px;
+  margin-bottom: 26px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.emr-tabs button {
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.emr-tabs button.active-tab {
+  background: #087f8c;
+  border-color: #087f8c;
+  color: #ffffff;
+}
+
+.emr-tabs button:not(.active-tab) {
+  background: #ffffff;
+  border-color: #dfe5eb;
+  color: #475569;
+}
+
+.emr-tabs button:not(.active-tab):hover {
+  background: #f0f9fa;
+  border-color: #087f8c;
+  color: #087f8c;
+}
+
+/* EMR section */
+.section-container {
+  width: 100%;
+  min-width: 0;
+  margin-bottom: 28px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.section-header h3 {
+  margin: 0 0 6px;
+  color: #1f2937;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.section-header p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.section-header button {
+  flex-shrink: 0;
+  min-height: 40px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* Keep shared table styling consistent.
+   Allow long clinical values to wrap inside this page. */
+:host ::ng-deep .emr-container .table-card {
+  width: 100%;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+:host ::ng-deep .emr-container .table-header {
+  padding: 18px 22px;
+}
+
+:host ::ng-deep .emr-container .table-toolbar {
+  padding: 12px 22px;
+}
+
+:host ::ng-deep .emr-container .hms-table .p-datatable-thead > tr > th {
+  white-space: normal;
+  line-height: 1.5;
+}
+
+:host ::ng-deep .emr-container .hms-table .p-datatable-tbody > tr > td {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  vertical-align: top;
+  line-height: 1.65;
+  min-width: 110px;
+}
+
+/* Loading and errors */
+.loading-message {
+  padding: 28px;
+  color: #64748b;
+  text-align: center;
+  font-size: 14px;
+}
+
+.loading-message .pi {
+  margin-right: 8px;
+}
+
+.error-message {
+  padding: 14px 18px;
+  margin-bottom: 22px;
+  color: #b91c1c;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 9px;
+  font-size: 14px;
+}
+
+/* Responsive layout */
+@media (max-width: 1100px) {
+  .emr-container {
+    padding: 22px;
+  }
+
+  .patient-info-card {
+    gap: 22px;
+    padding: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .emr-container {
+    padding: 18px 14px;
+  }
+
+  .patient-info-card {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .emr-tabs {
+    gap: 8px;
+  }
+
+  .emr-tabs button {
+    flex: 1 1 auto;
+  }
+
+  .section-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  :host ::ng-deep .emr-container .table-header {
+    padding: 16px;
+  }
+
+  :host ::ng-deep .emr-container .table-toolbar {
+    padding: 12px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .emr-header {
+    align-items: flex-start;
+  }
+
+  .patient-heading h2 {
+    font-size: 19px;
+  }
+
+  .back-button {
+    padding: 6px 9px !important;
+  }
+
+  .patient-info-card {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
